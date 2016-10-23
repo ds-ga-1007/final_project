@@ -1,0 +1,22 @@
+Redo naming convention Sunday (A)
+EASY: 
+Implement crossentropy perf fcn (V)
+Implement softmax transfer fcn (to use with cross entropy to output layer) (A)
+Implement purelin transfer fcn (to use as output layer for regression) (V)
+Add test functions (A/L)
+Add Constant learning rate (choose optimization algorithm) (V)
+
+Medium:
+Add hyperparameter optimization functions
+Automatic k-fold validation (A)
+End training if objective function met//not changing // num_epochs reaches (L - Done)
+
+Largest assignments
+Graph training accuracy over time. Maybe allow user to click to end training? Matlab has this feature.
+Visualize network automatically
+Redo predict to do forward pass with matrix math instead of for loop (A)
+Read data using pandas (build api/apply to clean then non-clean numeric and non-numeric data)
+Add recurrent connections (backprop length passed in as parameter)
+implement convolutional layer
+Implement pooling layer
+Implement ADAM convex optimization algo for backpropogation
