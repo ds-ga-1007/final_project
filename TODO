@@ -1,22 +1,45 @@
-Redo naming convention Sunday (A)
-EASY: 
-Implement crossentropy perf fcn (V)
-Implement softmax transfer fcn (to use with cross entropy to output layer) (A)
-Implement purelin transfer fcn (to use as output layer for regression) (V)
-Add test functions (A/L)
-Add Constant learning rate (choose optimization algorithm) (V)
+Viola: 
+Implement crossentropy perf fcn
+Implement softmax transfer fcn (to use with cross entropy to output layer)
+Implement purelin transfer fcn (to use as output layer for regression)
+Add regression test function (test all test functions, track their accuracies, make sure their accuracies stay in low range)
+Write documentations for interfaces and all functions and parameters used by users
+Write documentation for all internal functions
 
-Medium:
+Lee:
 Add hyperparameter optimization functions
 Automatic k-fold validation (A)
 End training if objective function met//not changing // num_epochs reaches (L - Done)
+Implement ADAM convex optimization algo for backpropogation
+  AdaDelta, RMSprop(for RNNs)
 
-Largest assignments
+Andy
+Read data using pandas (build api/apply to clean then non-clean numeric and non-numeric data)
+  Implement a basic X, Y= pd_wrapper.read_to_learnable('file')
+  handle inputs specifying where the output variable is
+Data Imputation
+  Throw away any rows with Null values
+  Replace null values with constant
+  Replace null values with column averages
+  KNN imputation of Null values
+  
+Other
+Redo predict to do forward pass with matrix math instead of for loop
+
+Notes:
+Lees idea:
+X, Y= pd_wrapper.read_to_learnable('file')
+Net =  NN_UF(X=X, Y=Y, hidden=[100])
+
+Andy idea about pickle:
+if filetype(file) == csv: initial_vals = pd.read_csv(file) elif filetype(file) == pickle: init_vals = pd.read_pickle(file)
+
+Later on:
 Graph training accuracy over time. Maybe allow user to click to end training? Matlab has this feature.
 Visualize network automatically
-Redo predict to do forward pass with matrix math instead of for loop (A)
-Read data using pandas (build api/apply to clean then non-clean numeric and non-numeric data)
+
+Maybe outside scope of class:
 Add recurrent connections (backprop length passed in as parameter)
 implement convolutional layer
 Implement pooling layer
-Implement ADAM convex optimization algo for backpropogation
+Parralelize mini-batch/batch
