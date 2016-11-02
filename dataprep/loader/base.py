@@ -1,14 +1,23 @@
 
-from abc import *
+from abc import ABCMeta, abstractmethod
 
 
-class Loader(metaclass=ABCMeta):
+class Metadata(object, metaclass=ABCMeta):
+    '''
+    Abstract base class for representing metadata of a dataset.
+
+    This class (and all subclasses) should be read-only.
+    '''
+    pass
+
+
+class Loader(object, metaclass=ABCMeta):
     '''
     Abstract base class for loading a file and converting the data into
     desired representation.
     '''
     def __init__(self, metadata=None):
-        self._dataframe = None
+        self._dataset = None
         self._metadata = metadata
 
     @abstractmethod
@@ -62,18 +71,28 @@ class Loader(metaclass=ABCMeta):
         '''
         return None
 
-    @abstractproperty
+    @abstractmethod
+    def _load_metadata(self):
+        '''
+        Internal function for figuring out the metadata automatically.
+
+        The subclasses provide the implementation of this method.
+
+        (Must never be called from outside)
+        '''
+        return None
+
+    @property
     def metadata(self):
         '''
         read-only
-            The metadata of this dataset, including but not limited to
-                * Schema
-                * Record count
-                * For categorical fields, the set of possible categories and
-                  their encodings.
+            The metadata of this dataset.
 
         See also
         --------
             load, load_test : method
+            Metadata        : class
         '''
-        return None
+        if self._metadata is None:
+            self._metadata = self._load_metadata()
+        return self._metadata

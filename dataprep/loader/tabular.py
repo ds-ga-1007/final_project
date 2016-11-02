@@ -40,6 +40,67 @@ class TabularColumnType(Enum):
     explicit_categorical = 4
 
 
+class TabularColumnMetadata(Metadata):
+    '''
+    The (concrete) class representing metadata of a column in a tabular
+    dataset.  It is the base element of a TabularMetadata instance.
+    '''
+    def __init__(self, t):
+        self._type = t
+
+    @property
+    def type_(self):
+        '''
+        TabularColumnType, read-only
+            Column type
+        (FIXME is this property needed?  Because the column type information
+        is also available in the subclasses)
+        '''
+        return self._type
+
+
+class TabularCategoricalColumnMetadata(TabularColumnMetadata):
+    '''
+    Subclass for representing the metadata of a categorical feature.
+    '''
+    # TODO
+    pass
+
+
+class TabularNumericColumnMetadata(TabularColumnMetadata):
+    '''
+    Subclass for representing the metadata of a numeric feature.
+    '''
+    # TODO
+    pass
+
+
+class TabularOrderedCategoricalColumnMetadata(TabularColumnMetadata):
+    '''
+    Subclass for representing the metadata of an ordered-categorical feature.
+    '''
+    # TODO
+    pass
+
+
+class TabularExplicitCategoricalColumnMetadata(TabularColumnMetadata):
+    '''
+    Subclass for representing the metadata of a categorical feature with
+    "unknown" as an explicit category.
+    '''
+    # TODO
+    pass
+
+
+class TabularMetadata(Metadata):
+    '''
+    The class for representing metadata of a tabular dataset.  It is
+    basically a (read-only) list of TabularColumnMetadata's.
+    '''
+    # TODO
+    pass
+
+
 class TabularLoader(Loader):
     '''
     Abstract base class for loading tabular data from a file.
@@ -66,6 +127,8 @@ class TabularLoader(Loader):
         --------
             TabularColumnType
         '''
+        if self._schema is None:
+            self._schema = self._guess_schema()
         return self._schema
 
     @schema.setter
@@ -89,3 +152,18 @@ class TabularLoader(Loader):
     def target(self, t):
         # TODO: type checks
         self._target = t
+
+    def _guess_schema(self):
+        '''
+        Internal function of guessing the schema for a tabular dataset.
+        '''
+        # We don't want to guess the schema after setting it, do we?
+        assert self._schema is None
+
+        if self._dataset is None:
+            raise AttributeError("schema not set and dataset not loaded")
+        raise NotImplementedError("schema guessing is NYI")
+
+    def _load_metadata(self):
+        if self._dataset is None:
+            raise AttributeError("dataset not loaded")
