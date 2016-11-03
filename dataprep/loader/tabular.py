@@ -2,6 +2,7 @@
 from .base import *
 
 from enum import Enum
+import numpy as NP
 
 
 class TabularColumnType(Enum):
@@ -23,6 +24,10 @@ class TabularColumnType(Enum):
     ordered_categorical
         A column containing categorical values with an order relationship.
         The order must be specified by user.
+        Currently, real values are converted to categories by rounding to
+        the closest possible integer, while categories are always converted
+        to integers 0..n-1, where n is the number of categories.
+        Novel categories are not allowed in this case.
     explicit_categorical
         Like "categorical", but with novel categories as a separate "unknown"
         class.  So an N-valued categorical field is always encoded into a
@@ -45,42 +50,73 @@ class TabularColumnMetadata(Metadata):
     The (concrete) class representing metadata of a column in a tabular
     dataset.  It is the base element of a TabularMetadata instance.
     '''
-    def __init__(self, t):
-        self._type = t
+    def __init__(self, t, a):
+        '''
+        t : TabularColumnType
+        a : numpy.ndarray (1D), or pandas.Series
+        '''
+        self.type_ = t
 
-    @property
-    def type_(self):
+    def is_categorical(self):
         '''
-        TabularColumnType, read-only
-            Column type
-        (FIXME is this property needed?  Because the column type information
-        is also available in the subclasses)
+        Test whether a column contains categorical features, including
+        "ordered categorical" and "explicit categorical".
+
+        When a metadata contains information for categorical features,
+        one can check the following member variables for further details:
+            num_categories : int
+                Number of (known) categories
+            encoding : dict of (object, int) or (object, numpy.ndarray)
+                Mapping between each category and its internal
+                representation.  Note that in case of "explicit categorical"
+                features, unknown categories have the key 'None'.
+
+        Returns
+        -------
+        categorical : bool
         '''
-        return self._type
+        return self.type_ in [
+                TabularColumnType.categorical,
+                TabularColumnType.ordered_categorical,
+                TabularColumnType.explicit_categorical,
+                ]
 
 
 class TabularCategoricalColumnMetadata(TabularColumnMetadata):
     '''
     Subclass for representing the metadata of a categorical feature.
     '''
-    # TODO
-    pass
+    def __init__(self, t, a):
+        super().__init__(t, a)
+        assert self.type_ == TabularColumnType.categorical
+
+        #: Number of categories
+        self.num_categories = NP.unique(a).shape[0]
+        #: dict : mapping between categories and internal representations
+        self.encoding = dict(zip(a, NP.eye(self.num_categories)))
 
 
 class TabularNumericColumnMetadata(TabularColumnMetadata):
     '''
     Subclass for representing the metadata of a numeric feature.
     '''
-    # TODO
-    pass
+    def __init__(self, t, a):
+        super().__init__(t, a)
+        assert self.type_ == TabularColumnType.numeric
 
 
 class TabularOrderedCategoricalColumnMetadata(TabularColumnMetadata):
     '''
     Subclass for representing the metadata of an ordered-categorical feature.
     '''
-    # TODO
-    pass
+    def __init__(self, t, a, order):
+        super().__init__(t, a)
+        assert self.type_ == TabularColumnType.ordered_categorical
+
+        #: Number of categories
+        self.num_categories = NP.unique(a).shape[0]
+        #: dict : mapping between categories and internal representations
+        self.encoding = dict(zip(a, NP.arange(self.num_categories)))
 
 
 class TabularExplicitCategoricalColumnMetadata(TabularColumnMetadata):
@@ -88,8 +124,16 @@ class TabularExplicitCategoricalColumnMetadata(TabularColumnMetadata):
     Subclass for representing the metadata of a categorical feature with
     "unknown" as an explicit category.
     '''
-    # TODO
-    pass
+    def __init__(self, t, a):
+        super().__init__(t, a)
+        assert self.type_ == TabularColumnType.explicit_categorical
+
+        #: Number of categories
+        self.num_categories = NP.unique(a).shape[0] # excluding unknown
+
+        a = NP.concatenate([a, [None]])
+        #: dict : mapping between categories and internal representations
+        self.encoding = dict(zip(a, NP.eye(self.num_categories + 1)))
 
 
 class TabularMetadata(Metadata):
@@ -163,7 +207,3 @@ class TabularLoader(Loader):
         if self._dataset is None:
             raise AttributeError("schema not set and dataset not loaded")
         raise NotImplementedError("schema guessing is NYI")
-
-    def _load_metadata(self):
-        if self._dataset is None:
-            raise AttributeError("dataset not loaded")

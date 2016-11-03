@@ -6,7 +6,8 @@ class Metadata(object, metaclass=ABCMeta):
     '''
     Abstract base class for representing metadata of a dataset.
 
-    This class (and all subclasses) should be read-only.
+    This class (and all subclasses) should be read-only.  One should
+    *never* change any content inside once the instances are created.
     '''
     pass
 
@@ -16,22 +17,20 @@ class Loader(object, metaclass=ABCMeta):
     Abstract base class for loading a file and converting the data into
     desired representation.
     '''
-    def __init__(self, metadata=None):
+    def __init__(self):
         self._dataset = None
-        self._metadata = metadata
 
     @abstractmethod
-    def load(self, filename):
+    def load(self, filename, metadata=None):
         '''
         Load the dataset from file name provided.
 
-        Changes the metadata of the loader to match the underlying dataset.
-
         Returns
         -------
-        X, Y : numpy.ndarray
+        X, Y, m : numpy.ndarray, numpy.ndarray, Metadata instance
             X contains the encoded training set, and Y contains the training
-            target variables.
+            target variables.  m is a Metadata instance useful for reading
+            the test set (see Examples section)
 
         Examples
         --------
@@ -43,20 +42,19 @@ class Loader(object, metaclass=ABCMeta):
                 TabularColumnType.numeric,
                 TabularColumnType.numeric,
                 ]
-        >>> trainX, trainY = csvloader.load('train.csv')
-        >>> testX, testY = csvloader.load_test('test.csv')
+        >>> trainX, trainY, metadata = csvloader.load('train.csv')
+        >>> testX, testY = csvloader.load_test('test.csv', metadata)
 
         See also
         --------
-            metadata  : property
             load_test : method
         '''
         return None
 
     @abstractmethod
-    def load_test(self, filename):
+    def load_test(self, filename, metadata):
         '''
-        Load the dataset from file name, with the same metadata.
+        Load the dataset from file name, with the given metadata.
 
         Returns
         -------
@@ -66,33 +64,6 @@ class Loader(object, metaclass=ABCMeta):
 
         See also
         --------
-            metadata : property
             load     : method
         '''
         return None
-
-    @abstractmethod
-    def _load_metadata(self):
-        '''
-        Internal function for figuring out the metadata automatically.
-
-        The subclasses provide the implementation of this method.
-
-        (Must never be called from outside)
-        '''
-        return None
-
-    @property
-    def metadata(self):
-        '''
-        read-only
-            The metadata of this dataset.
-
-        See also
-        --------
-            load, load_test : method
-            Metadata        : class
-        '''
-        if self._metadata is None:
-            self._metadata = self._load_metadata()
-        return self._metadata
