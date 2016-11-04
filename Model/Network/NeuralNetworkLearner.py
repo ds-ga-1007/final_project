@@ -1,14 +1,16 @@
-import sys
 import copy
+import sys
+
 import numpy as np
-import nn_helper as helper
+
+from Model import nn_helper as helper
 
 
 class nnp(object):
 
     def __init__(self, layers, trans='sigmoid', perf_fcn='mse',
                  reg=0, netstruc='ff'):
-        self.Yscale, self.Yoffset = [0, 0]
+        #self.Yscale, self.Yoffset = [0, 0]
         self.best_perf = np.inf
         self.layers = layers
         self.reg = reg
