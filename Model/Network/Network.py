@@ -4,7 +4,7 @@ class network(object):
         self._set_layers(trans_fcns, layer_sizes)
 
     def _set_layers(self, trans_fcns, layer_sizes):
-        self._layers = []
+        self.layers = []
         self.layers_sizes = layer_sizes
         self.trans_fcns = trans_fcns
         self.num_layers = layer_sizes.shape[1]
@@ -18,6 +18,14 @@ class network(object):
         layer_size = self._get_one_layer_size(layer_idx)
         fcn = self._get_one_trans_fcn(layer_idx)
         self._add_layer(fcn, layer_size)
+
+    @property
+    def layers(self):
+        return self._layers
+
+    @layers.setter
+    def layers(self, layer_list):
+        self._layers = layer_list
 
     @property
     def num_layers(self):
