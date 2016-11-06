@@ -1,4 +1,5 @@
-import Model.Network.FullyConnectedLayer as layer
+from Model.Network.ConnectionActivationLayer import ConnectionActivationLayer
+
 class network(object):
     def __init__(self, trans_fcns, layer_sizes):
         self._set_layers(trans_fcns, layer_sizes)
@@ -11,21 +12,39 @@ class network(object):
         self._init_layers()
 
     def _init_layers(self):
-        for layer_idx in range(self._get_num_layers()):
+        for layer_idx in range(self._get_num_layers() - 1):
             self._add_one_layer(layer_idx)
 
     def _add_one_layer(self, layer_idx):
-        layer_size = self._get_one_layer_size(layer_idx)
+        num_in = self._get_one_layer_size(layer_idx)
+        num_out = self._get_one_layer_size(layer_idx+1)
         fcn = self._get_one_trans_fcn(layer_idx)
-        self._add_layer(fcn, layer_size)
+        self.add_one_layer(fcn, num_in, num_out)
+
+    def _get_one_layer_size(self, idx):
+        return self._layer_sizes[idx]
+
+    def _get_one_trans_fcn(self, idx):
+        return self._get_trans_fcns()[idx]
+
+    def add_one_layer(self, fcn, num_in, num_out):
+        self.layers.append(ConnectionActivationLayer(fcn = fcn, num_in = num_in, num_out = num_out)
+
+    def feed_forward(self, X):
+        act_vals = X
+        for layer in self.layers:
+            layer.propogate_forward(act_vals)
+            act_vals = layer.act_vals
+
+    def feed_forward_one_layer(self, layer, act_vals):
 
     @property
     def layers(self):
         return self._layers
 
     @layers.setter
-    def layers(self, layer_list):
-        self._layers = layer_list
+    def layers(self, layers):
+        self._layers = layers
 
     @property
     def num_layers(self):
@@ -50,12 +69,3 @@ class network(object):
     @trans_fcns.setter
     def trans_fcns(self, trans_fcns):
         self._trans_fcns = trans_fcns
-
-    def _get_one_layer_size(self, idx):
-        return self._layer_sizes[idx]
-
-    def _get_one_trans_fcn(self, idx):
-        return self._get_trans_fcns()[idx]
-
-    def _add_layer(self, fcn, layer_size):
-        self._layers.append(layer.layer(fcn = fcn, width = layer_size))

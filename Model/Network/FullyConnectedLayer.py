@@ -1,25 +1,31 @@
+import numpy as np
 
 class FullyConnectedLayer():
-    
-    def __init__(self, fcn, width):
-        self.trans_fcn = fcn
-        self.width = width
+
+    def __init__(self, num_in, num_out):
+        self.num_in = num_in
+        self.num_out = num_out
+        self._init_weights(std = 0.1)
 
     @property
-    def trans_fcn(self):
-        return self._trans_fcn
+    def num_in(self):
+        return self._num_in
 
-    @trans_fcn.setter
-    def trans_fcn(self, fcn):
-        self._trans_fcn = fcn
-    
-    def apply_trans_fcn(self, vect):
-        return self.trans_fcn(vect)
+    @num_in.setter
+    def num_in(self, num_in):
+        self._num_in = num_in
 
     @property
-    def width(self):
-        return self._width
+    def num_out(self):
+        return self._num_out
 
-    @width.setter
-    def width(self, width):
-        self._width = width
+    @num_out.setter
+    def num_out(self, num_out):
+        self._num_out = num_out
+
+    def _init_weights(self, std):
+        self._weights = np.random.randn(self.num_in + 1, self.num_out) * std
+
+    def propogate_forward(self, X):
+        return np.matmul(X, self.weights)
+
