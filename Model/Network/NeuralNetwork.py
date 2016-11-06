@@ -5,7 +5,6 @@ import numpy as np
 
 from Model import nn_helper as helper
 
-
 class nnp(object):
 
     def __init__(self, layers, trans='sigmoid', perf_fcn='mse',

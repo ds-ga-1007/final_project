@@ -36,8 +36,6 @@ class network(object):
             layer.propogate_forward(act_vals)
             act_vals = layer.act_vals
 
-    def feed_forward_one_layer(self, layer, act_vals):
-
     @property
     def layers(self):
         return self._layers

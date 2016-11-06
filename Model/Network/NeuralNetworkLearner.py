@@ -32,3 +32,4 @@ class NeuralNetworkLearner(object):
 
     def train_one_epoch(self, X, Y):
         self.network.feed_forward(X)
+        error = self.loss_fcn(X, Y)
