@@ -7,14 +7,14 @@ import sys
 class ConnectionActivationLayer(Layer):
 
     def __init__(self, fcn, fcn_p, num_in, num_out):
+        Layer.__init__(self, num_in)
         self.FullyConnectedLayer = FullyConnectedLayer(
             num_in = num_in, num_out = num_out)
 
         self.ActivationLayer = ActivationLayer(
-            fcn = fcn, fcn_p = fcn_p, width = num_out)
+            fcn = fcn, fcn_p = fcn_p, num_in= num_out)
 
         self.act_vals = [0]*num_out
-        self.num_in = num_in
         self.num_out = num_out
 
     def propogate_forward(self, X):

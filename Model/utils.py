@@ -2,6 +2,12 @@ import numpy as np
 import sys
 from Model.NetworkFunction import NetworkFunction
 
+GRADIENT_DESCENT = 0
+MOMENTUM_BP = 1
+
+
+MOMENTUM_DECAY = 0.99
+
 STOP_TRAIN = -1
 cat = np.concatenate
 

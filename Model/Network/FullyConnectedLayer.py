@@ -5,10 +5,9 @@ from Model.Network.Layer import Layer
 class FullyConnectedLayer(Layer):
 
     def __init__(self, num_in, num_out):
-        self.num_in = num_in
+        Layer.__init__(self, num_in, has_bias=True)
         self.num_out = num_out
         self._init_weights(std = 1)
-        self.hasBias = True
 
     def _init_weights(self, std):
         self._weights = np.random.randn(self.num_in, self.num_out) * std

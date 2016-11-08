@@ -12,3 +12,10 @@ class Layer(object):
     @has_bias.setter
     def has_bias(self, has_bias):
         self._has_bias = has_bias
+    @property
+    def num_in(self):
+        return self._num_in
+
+    @num_in.setter
+    def num_in(self, num_in):
+        self._num_in = num_in

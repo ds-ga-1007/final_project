@@ -3,12 +3,15 @@ from Model.Network.ConnectionActivationLayer import ConnectionActivationLayer
 from Model import utils
 
 class Network(object):
-    def __init__(self, layer_sizes, trans_fcns, loss_fcn):
+    def __init__(self, layer_sizes, trans_fcns='sigmoid', loss_fcn='mse', reg_const = 1e-3,
+                 learn_alg = utils.MOMENTUM_BP):
+        self.reg_const = reg_const
         trans_fcns = utils.get_trans(trans_fcns = trans_fcns, num_layers = len(layer_sizes) - 1)
         self.loss_fcn = utils.get_loss(loss_fcn)
-        self._set_layers(trans_fcns, layer_sizes)
+        self._init_layers_and_deltas(trans_fcns, layer_sizes)
+        self.learn_alg = learn_alg
 
-    def _set_layers(self, trans_fcns, layer_sizes):
+    def _init_layers_and_deltas(self, trans_fcns, layer_sizes):
         self.layers = []
         self.layer_sizes = layer_sizes
         self.trans_fcns = trans_fcns
@@ -78,22 +81,34 @@ class Network(object):
         for delta_idx in range(len(self.layer_deltas) - 1, 0, -1):
             self.prop_back_one_layer(delta_idx)
 
+
+    def get_weight_deltas_for_active_algorithm(self, old_weights, backprop_error):
+        if self.learn_alg == utils.GRADIENT_DESCENT:
+            return backprop_error
+        if self.learn_alg == utils.MOMENTUM_BP:
+            return old_weights * utils.MOMENTUM_DECAY + backprop_error
+
     def _calc_edge_deltas(self, X):
-        input_activation_with_bias = utils.vect_with_bias(X)
+        layer_activation_with_bias = utils.vect_with_bias(X)
         for layer_index in range(self.num_layers - 1):
             output_gradient = self.layer_deltas[layer_index]
             weight_error = utils.get_weight_error(
-                            input_activation = input_activation_with_bias,
+                            input_activation = layer_activation_with_bias,
                             output_gradient = output_gradient)
-            self.weight_deltas[layer_index] = weight_error +
-            input = self.layers[layer_index].act_vals
-            input_activation_with_bias = utils.vect_with_bias(input)
+            current_edge_weight_values = self.layers[layer_index].FullyConnectedLayer.weights
+            weight_error_with_reg = weight_error + self.reg_const * current_edge_weight_values.T
+            updated_weight_deltas = self.get_weight_deltas_for_active_algorithm(
+                                        old_weights = self.weight_deltas[layer_index],
+                                        backprop_error = weight_error_with_reg.T)
+            self.weight_deltas[layer_index] = updated_weight_deltas
+            layer_activation = self.layers[layer_index].act_vals
+            layer_activation_with_bias = utils.vect_with_bias(layer_activation)
 
     def _update_weights_gradient_descent(self):
         for idx in range(len(self.layers)):
             fullyconnectedlayer = self.layers[idx].FullyConnectedLayer
             weights = fullyconnectedlayer.weights
-            delta_update = self.weight_deltas[idx].T
+            delta_update = self.weight_deltas[idx]
             fullyconnectedlayer.weights = weights - delta_update * 0.1
             #self.layers[idx].FullyConnectedLayer.weights = weights - delta_update * 0.1
 
@@ -174,3 +189,19 @@ class Network(object):
     @loss_fcn.setter
     def loss_fcn(self, loss_fcn):
         self._loss_fcn = loss_fcn
+
+    @property
+    def reg_const(self):
+        return self._reg_const
+
+    @reg_const.setter
+    def reg_const(self, reg_const):
+        self._reg_const = reg_const
+
+    @property
+    def learn_alg(self):
+        return self._learn_alg
+
+    @learn_alg.setter
+    def learn_alg(self, learn_alg):
+        self._learn_alg = learn_alg

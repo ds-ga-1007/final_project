@@ -2,10 +2,11 @@ from Model.Network.Layer import Layer
 
 class ActivationLayer(Layer):
     
-    def __init__(self, fcn, fcn_p, width):
+    def __init__(self, fcn, fcn_p, num_in):
+        Layer.__init__(self, num_in, has_bias=True)
         self.trans_fcn = fcn
         self.trans_fcn_p = fcn_p
-        self.width = width
+        self.num_in = num_in
 
     def apply_trans_fcn(self, vect):
         return self.trans_fcn(vect)
@@ -30,10 +31,10 @@ class ActivationLayer(Layer):
         self._trans_fcn_p = trans_fcn_p
 
     @property
-    def width(self):
-        return self._width
+    def num_in(self):
+        return self._num_in
 
-    @width.setter
-    def width(self, width):
-        self._width = width
+    @num_in.setter
+    def num_in(self, num_in):
+        self._num_in = num_in
 
