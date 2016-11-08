@@ -10,7 +10,7 @@ class FullyConnectedLayer(Layer):
         self._init_weights(std = 1)
 
     def _init_weights(self, std):
-        self._weights = np.random.randn(self.num_in, self.num_out) * std
+        self._weights = np.random.randn(self.num_in, self.num_out) * std/np.sqrt(self.num_in)
 
     def propogate_forward(self, X):
         return np.matmul(X, self.weights)

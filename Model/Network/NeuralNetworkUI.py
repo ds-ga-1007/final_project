@@ -10,11 +10,11 @@ from Model.Network.NeuralNetworkLearner import NeuralNetworkLearner
 class NeuralNetworkUI(object):
 
     def __init__(self, layers, trans_fcns='sigmoid', loss_fcn='mse', reg_const = 1e-3,
-                 learn_alg = utils.MOMENTUM_BP):
+                 learn_alg = utils.MOMENTUM_BP, learning_rate = 1e-3):
         #MAKE THIS LOOK LIKE A PRIVATE VAREIABLE
         self.network = Network(layers, trans_fcns, loss_fcn, reg_const, learn_alg)
         self.neuralnetworklearner = \
-            NeuralNetworkLearner(network = self.network, learning_rate = 0.01)
+            NeuralNetworkLearner(network = self.network, learning_rate = learning_rate)
 
     def train(self, X, Y, epochs = 10):
         self.neuralnetworklearner.run_epochs(X, Y, epochs)

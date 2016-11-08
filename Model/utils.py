@@ -75,7 +75,7 @@ def get_one_trans(trans):
         sys.exit(0)
 
 def get_trans_list(trans):
-    return [get_one_trans[fcn] for fcn in trans]
+    return [get_one_trans(fcn) for fcn in trans]
 
 def get_trans(trans_fcns, num_layers):
     if isinstance(trans_fcns, str):
