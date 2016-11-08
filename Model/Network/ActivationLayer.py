@@ -1,5 +1,6 @@
+from Model.Network.Layer import Layer
 
-class ActivationLayer():
+class ActivationLayer(Layer):
     
     def __init__(self, fcn, fcn_p, width):
         self.trans_fcn = fcn

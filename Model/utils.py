@@ -8,6 +8,9 @@ cat = np.concatenate
 def vect_with_bias(nparr):
     return np.concatenate([nparr, [1]])
 
+def get_weight_error(input_activation, output_gradient):
+    return np.atleast_2d(input_activation) * np.atleast_2d(output_gradient).T
+
 def sigmoid(x):
     return 1.0 / (1.0 + np.exp(np.clip(-x, -50, 50)))
 
@@ -50,7 +53,7 @@ trans_fcns = {
 
 loss_fcns = {
               'mse': NetworkFunction(mse, mse_p),
-              }
+            }
 
 def print_y(y_predict, Y, dec=2):
     if y_predict.ndim > 1:

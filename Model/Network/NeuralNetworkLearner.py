@@ -12,10 +12,9 @@ class NeuralNetworkLearner(object):
 
     def _run_one_epoch(self, X, Y):
         self.network.train_one_epoch(X, Y)
-        self.network.update_weights()
-        error = self.network.evaluate_error(X, Y)
-        if error > self.best_network['error']:
-            pass
+        #error = self.network.evaluate_error(X, Y)
+        #if error > self.best_network['error']:
+        #    pass
 
     @property
     def network(self):

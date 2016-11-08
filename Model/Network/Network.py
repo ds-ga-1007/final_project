@@ -13,7 +13,8 @@ class Network(object):
         self.layer_sizes = layer_sizes
         self.trans_fcns = trans_fcns
         self.num_layers = len(layer_sizes)
-        self.deltas = []
+        self.layer_deltas = []
+        self.weight_deltas = []
         self._init_layers()
 
     def _init_layers(self):
@@ -34,11 +35,13 @@ class Network(object):
         return self.trans_fcns[idx]
 
     def add_one_layer_and_associated_delta(self, fcn, num_in, num_out):
-        layer = ConnectionActivationLayer(fcn = fcn.trans_fcn, fcn_p = fcn.trans_fcn_p,
-                            num_in = num_in, num_out = num_out)
+        layer = ConnectionActivationLayer(fcn = fcn.forward_fcn, fcn_p = fcn.derivative_fcn,
+                                          num_in = num_in, num_out = num_out)
         self._layers.append(layer)
-        delta_placeholder = np.zeros(num_out)
-        self._deltas.append(delta_placeholder)
+        layer_delta_placeholder = np.zeros(num_out)
+        weight_delta_placeholder = np.zeros([num_in, num_out])
+        self._layer_deltas.append(layer_delta_placeholder)
+        self._weight_deltas.append(weight_delta_placeholder)
 
     def feed_forward(self, X):
         act_vals = X
@@ -46,28 +49,57 @@ class Network(object):
             layer.propogate_forward(utils.vect_with_bias(act_vals))
             act_vals = layer.act_vals
 
-    def _compute_layer_derivative(self, idx):
+    def _layer_derivative(self, idx):
 
-        fullyconnectedlayer = self.layers[idx - 1].FullyConnectedLayer
+        fullyconnectedlayer = self.layers[idx].FullyConnectedLayer
         weight_vals = fullyconnectedlayer.get_weights_except_bias()
 
-        act_layer = self.layers[idx - 1].ActivationLayer
-        trans_prime = act_layer.trans_fcn_p
-        act_values_previous_layer = self.layers[idx-1].act_vals
+        prev_layer = self.layers[idx-1]
+        trans_prime = prev_layer.ActivationLayer.derivative_fcn
+        act_values_previous_layer = prev_layer.act_vals
         derivative_of_previous_activations = trans_prime(act_values_previous_layer)
 
-        return weight_vals.T * derivative_of_previous_activations
+        return np.sum(weight_vals.T * derivative_of_previous_activations,0)
 
     def prop_back_one_layer(self, delta_idx):
-        error_mat = np.dot(self.deltas[delta_idx],
-                        self._compute_layer_derivative(delta_idx - 1))
-        error =  np.sum(error_mat)
-        self.deltas[delta_idx - 1] = error
+        #layer_derivative = np.atleast_2d(self._layer_derivative(delta_idx))
+
+        fullyconnectedlayer = self.layers[delta_idx].FullyConnectedLayer
+        edge_weights = fullyconnectedlayer.get_weights_except_bias()
+
+        forward_error = self.layer_deltas[delta_idx]
+
+        edge_error = edge_weights * forward_error
+
+        self.layer_deltas[delta_idx - 1] = np.sum(edge_error, 1)
 
     def backpropagate(self, error):
-        self.deltas[-1] = error
-        for delta_idx in range(len(self.deltas) - 1, 0, -1):
+        self.layer_deltas[-1] = error
+        for delta_idx in range(len(self.layer_deltas) - 1, 0, -1):
             self.prop_back_one_layer(delta_idx)
+
+    def _calc_edge_deltas(self, X):
+        input_activation_with_bias = utils.vect_with_bias(X)
+        for layer_index in range(self.num_layers - 1):
+            output_gradient = self.layer_deltas[layer_index]
+            weight_error = utils.get_weight_error(
+                            input_activation = input_activation_with_bias,
+                            output_gradient = output_gradient)
+            self.weight_deltas[layer_index] = weight_error +
+            input = self.layers[layer_index].act_vals
+            input_activation_with_bias = utils.vect_with_bias(input)
+
+    def _update_weights_gradient_descent(self):
+        for idx in range(len(self.layers)):
+            fullyconnectedlayer = self.layers[idx].FullyConnectedLayer
+            weights = fullyconnectedlayer.weights
+            delta_update = self.weight_deltas[idx].T
+            fullyconnectedlayer.weights = weights - delta_update * 0.1
+            #self.layers[idx].FullyConnectedLayer.weights = weights - delta_update * 0.1
+
+    def _update_weights(self, X):
+        self._calc_edge_deltas(X)
+        self._update_weights_gradient_descent()
 
     def predict(self, X):
         self.feed_forward(X)
@@ -77,13 +109,14 @@ class Network(object):
         for xi, yi in zip(X, Y):
             self.feed_forward(xi)
             yhat = self.layers[-1].act_vals
-            error = self.loss_fcn.trans_fcn(yhat, yi)
-            self.backpropagate(error)
+            error_derivative = self.loss_fcn.derivative_fcn(yhat, yi)
+            self.backpropagate(error_derivative)
+            self._update_weights(xi)
 
     def evaluate_error(self, X, Y):
         self.feed_forward(X)
         yhat = self.layers[-1].act_vals
-        error = self.loss_fcn.trans_fcn(yhat, Y)
+        error = self.loss_fcn.forward_fcn(yhat, Y)
         return error
 
     @property
@@ -119,12 +152,20 @@ class Network(object):
         self._trans_fcns = trans_fcns
 
     @property
-    def deltas(self):
-        return self._deltas
+    def layer_deltas(self):
+        return self._layer_deltas
 
-    @deltas.setter
-    def deltas(self, deltas):
-        self._deltas = deltas
+    @layer_deltas.setter
+    def layer_deltas(self, layer_deltas):
+        self._layer_deltas = layer_deltas
+
+    @property
+    def weight_deltas(self):
+        return self._weight_deltas
+
+    @weight_deltas.setter
+    def weight_deltas(self, weight_deltas):
+        self._weight_deltas = weight_deltas
 
     @property
     def loss_fcn(self):

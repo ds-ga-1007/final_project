@@ -1,8 +1,10 @@
 from Model.Network.ActivationLayer import ActivationLayer
 from Model.Network.FullyConnectedLayer import FullyConnectedLayer
+from Model.Network.Layer import Layer
+
 import sys
 
-class ConnectionActivationLayer(object):
+class ConnectionActivationLayer(Layer):
 
     def __init__(self, fcn, fcn_p, num_in, num_out):
         self.FullyConnectedLayer = FullyConnectedLayer(

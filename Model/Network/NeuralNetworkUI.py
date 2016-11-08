@@ -19,7 +19,7 @@ class NeuralNetworkUI(object):
         self.neuralnetworklearner.run_epochs(X, Y, epochs)
 
     def predict(self, X):
-        self.network.predict(X)
+        return [self.network.predict(xi) for xi in X]
 
     @property
     def network(self):
