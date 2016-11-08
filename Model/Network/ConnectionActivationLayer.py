@@ -1,20 +1,26 @@
 from Model.Network.ActivationLayer import ActivationLayer
-from Model.Network.FullyConnectedLayer import FullyConnectionLayer
+from Model.Network.FullyConnectedLayer import FullyConnectedLayer
 import sys
 
 class ConnectionActivationLayer(object):
 
-    def __init__(self, fcn, num_in, num_out):
-        self.FullyConnectedLayer = FullyConnectionLayer(
+    def __init__(self, fcn, fcn_p, num_in, num_out):
+        self.FullyConnectedLayer = FullyConnectedLayer(
             num_in = num_in, num_out = num_out)
 
         self.ActivationLayer = ActivationLayer(
-            fcn = fcn, num_out = num_out)
+            fcn = fcn, fcn_p = fcn_p, width = num_out)
 
         self.act_vals = [0]*num_out
-
         self.num_in = num_in
         self.num_out = num_out
+
+    def propogate_forward(self, X):
+        if X.shape[0] != self.num_in:
+            print("error. Input X shape 1 is not self.num_in. Replace this error message")
+            sys.exit(0)
+        edge_output = self.FullyConnectedLayer.propogate_forward(X)
+        self.act_vals = self.ActivationLayer.apply_trans_fcn(edge_output)
 
     @property
     def num_in(self):
@@ -56,9 +62,3 @@ class ConnectionActivationLayer(object):
     def ActivationLayer(self, ActivationLayer):
         self._ActivationLayer = ActivationLayer
 
-    def propogate_forward(self, X):
-        if X.shape[1] != self.num_in:
-            print("error. Input X shape 1 is not self.num_in. Replace this error message")
-            sys.exit(0)
-        self.act_vals = self.ActivationLayer.propogate_forward(
-            self.FullyConnectedLayer.propogate_forward(X))

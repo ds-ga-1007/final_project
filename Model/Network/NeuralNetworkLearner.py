@@ -1,10 +1,21 @@
 import numpy as np
+import copy
 
 class NeuralNetworkLearner(object):
-    def __init__(self, network, loss_fcn, learning_rate):
+    def __init__(self, network, learning_rate):
         self.network = network
-        self.loss_fcn = loss_fcn
         self.learning_rate = learning_rate
+
+    def run_epochs(self, X, Y, epochs = 10):
+        for _ in range(epochs):
+            self._run_one_epoch(X, Y)
+
+    def _run_one_epoch(self, X, Y):
+        self.network.train_one_epoch(X, Y)
+        self.network.update_weights()
+        error = self.network.evaluate_error(X, Y)
+        if error > self.best_network['error']:
+            pass
 
     @property
     def network(self):
@@ -15,14 +26,6 @@ class NeuralNetworkLearner(object):
         self._network = network
 
     @property
-    def loss_fcn(self):
-        return self._loss_fcn
-
-    @loss_fcn.setter
-    def loss_fcn(self, loss_fcn):
-        self._loss_fcn = loss_fcn
-
-    @property
     def learning_rate(self):
         return self._learning_rate
 
@@ -30,6 +33,7 @@ class NeuralNetworkLearner(object):
     def learning_rate(self, learning_rate):
         self._learning_rate = learning_rate
 
-    def train_one_epoch(self, X, Y):
-        self.network.feed_forward(X)
-        error = self.loss_fcn(X, Y)
+    #Should I code it this way? I would rather use evaluate error, but that has hidden
+    #effects, or whatever the professor called it.
+
+
