@@ -33,12 +33,6 @@ class Network(object):
         fcn = self._get_one_trans_fcn(layer_idx)
         self.add_one_layer_and_associated_delta(fcn, num_in, num_out)
 
-    def _get_one_layer_size(self, idx):
-        return self.layer_sizes[idx]
-
-    def _get_one_trans_fcn(self, idx):
-        return self.trans_fcns[idx]
-
     def add_one_layer_and_associated_delta(self, fcn, num_in, num_out):
         layer = ConnectionActivationLayer(fcn = fcn.forward_fcn, fcn_p = fcn.derivative_fcn,
                                           num_in = num_in, num_out = num_out)
@@ -66,18 +60,14 @@ class Network(object):
         act_values_previous_layer = prev_layer.act_vals
         derivative_of_previous_activations = trans_prime(act_values_previous_layer)
 
-        return np.sum(weight_vals.T * derivative_of_previous_activations,0)
+        error_matrix_for_layer_nodes = weight_vals.T * derivative_of_previous_activations
+        return np.sum(error_matrix_for_layer_nodes, 0)
 
     def prop_back_one_layer(self, delta_idx):
-        #layer_derivative = np.atleast_2d(self._layer_derivative(delta_idx))
-
         fullyconnectedlayer = self.layers[delta_idx].FullyConnectedLayer
         edge_weights = fullyconnectedlayer.get_weights_except_bias()
-
         forward_error = self.layer_deltas[delta_idx]
-
         edge_error = edge_weights * forward_error
-
         self.layer_deltas[delta_idx - 1] = np.sum(edge_error, 1)
 
     def backpropagate(self, error):
@@ -86,84 +76,22 @@ class Network(object):
             self.prop_back_one_layer(delta_idx)
 
 
-
-
-    def get_weight_deltas_for_active_algorithm(self, old_weights, backprop_error):
-        if self.learn_alg == utils.GRADIENT_DESCENT:
-            return backprop_error
-        if self.learn_alg == utils.MOMENTUM_BP:
-            return old_weights * utils.MOMENTUM_DECAY + backprop_error
-
-    def _update_deltas_active_algorithm(self, layer_index, old_weights, backprop_error):
-
-        if self.learn_alg == utils.GRADIENT_DESCENT:
-            updated_weight_deltas = self.get_weight_deltas_for_active_algorithm(
-                                        old_weights = old_weights,
-                                        backprop_error = backprop_error)
-            self.weight_deltas[layer_index] = updated_weight_deltas
-
-        if self.learn_alg == utils.MOMENTUM_BP:
-            past_velocity = self.weight_velocity[layer_index]
-            force_on_weights = backprop_error
-            new_velocity = past_velocity * utils.MOMENTUM_DECAY + force_on_weights
-            self.weight_velocity[layer_index] = new_velocity
-            self.weight_deltas[layer_index] = self.weight_velocity[layer_index]
-
-
-    def _calc_edge_deltas(self, X):
-        layer_activation_with_bias = utils.vect_with_bias(X)
-        for layer_index in range(self.num_layers - 1):
-            output_gradient = self.layer_deltas[layer_index]
-            current_edge_weight_values = self.layers[layer_index].FullyConnectedLayer.weights
-            weight_error = utils.get_weight_error(
-                            input_activation = layer_activation_with_bias,
-                            output_gradient = output_gradient)
-            weight_error_with_reg = weight_error + self.reg_const * current_edge_weight_values.T
-
-            self._update_deltas_active_algorithm(
-                                        layer_index = layer_index,
-                                        old_weights = self.weight_deltas[layer_index],
-                                        backprop_error = weight_error_with_reg.T)
-
-            updated_weight_deltas = self.get_weight_deltas_for_active_algorithm(
-                                        old_weights = self.weight_deltas[layer_index],
-                                        backprop_error = weight_error_with_reg.T)
-            self.weight_deltas[layer_index] = updated_weight_deltas
-
-
-            layer_activation = self.layers[layer_index].act_vals
-            layer_activation_with_bias = utils.vect_with_bias(layer_activation)
-
-    def _update_weights_current_algorithm(self):
-        for idx in range(len(self.layers)):
-            fullyconnectedlayer = self.layers[idx].FullyConnectedLayer
-            weights = fullyconnectedlayer.weights
-            delta_update = self.weight_deltas[idx]
-            fullyconnectedlayer.weights = weights - delta_update * self.learning_rate
-
-            #self.layers[idx].FullyConnectedLayer.weights = weights - delta_update * 0.1
-
-    def _update_weights(self, X):
-        self._calc_edge_deltas(X)
-        self._update_weights_current_algorithm()
-
     def predict(self, X):
         self.feed_forward(X)
         return self.layers[-1].act_vals
-
-    def train_one_epoch(self, X, Y):
-        for xi, yi in zip(X, Y):
-            self.feed_forward(xi)
-            yhat = self.layers[-1].act_vals
-            error_derivative = self.loss_fcn.derivative_fcn(yhat, yi)
-            self.backpropagate(error_derivative)
-            self._update_weights(xi)
 
     def evaluate_error(self, X, Y):
         self.feed_forward(X)
         yhat = self.layers[-1].act_vals
         error = self.loss_fcn.forward_fcn(yhat, Y)
         return error
+
+
+    def _get_one_layer_size(self, idx):
+        return self.layer_sizes[idx]
+
+    def _get_one_trans_fcn(self, idx):
+        return self.trans_fcns[idx]
 
     @property
     def layers(self):
