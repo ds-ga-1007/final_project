@@ -79,16 +79,20 @@ class NeuralNetworkLearner(object):
             self.weight_velocity[layer_index] = new_velocity
             self.weight_deltas[layer_index] = self.weight_velocity[layer_index]
 
-
-    def _calc_edge_deltas(self, X):
-        layer_activation_with_bias = utils.vect_with_bias(X)
-        for layer_index in range(self.num_layers - 1):
+    def _get_weight_error_with_reg(self, layer_index, layer_activation_with_bias):
             output_gradient = self.layer_deltas[layer_index]
             current_edge_weight_values = self.layers[layer_index].FullyConnectedLayer.weights
             weight_error = utils.get_weight_error(
                             input_activation = layer_activation_with_bias,
                             output_gradient = output_gradient)
-            weight_error_with_reg = weight_error + self.reg_const * current_edge_weight_values.T
+            return weight_error + self.reg_const * current_edge_weight_values.T
+
+    def _calc_edge_deltas(self, X):
+        layer_activation_with_bias = utils.vect_with_bias(X)
+        for layer_index in range(self.num_layers - 1):
+
+            weight_error_with_reg = self._get_weight_error_with_reg(
+                                            layer_index, layer_activation_with_bias)
 
             self._update_deltas_active_algorithm(
                                         layer_index = layer_index,
@@ -98,6 +102,7 @@ class NeuralNetworkLearner(object):
             updated_weight_deltas = self.get_weight_deltas_for_active_algorithm(
                                         old_weights = self.weight_deltas[layer_index],
                                         backprop_error = weight_error_with_reg.T)
+
             self.weight_deltas[layer_index] = updated_weight_deltas
 
 
