@@ -1,18 +1,50 @@
-import sys
 import copy
+import sys
+
 import numpy as np
-import nn_helper as helper
+
+from Model import utils
+from Model.Network.Network import Network
+from Model.Network.NeuralNetworkLearner import NeuralNetworkLearner
+
+class NeuralNetworkUI(object):
+
+    def __init__(self, layers, trans_fcns='sigmoid', loss_fcn='mse', reg_const = 1e-3,
+                 learn_alg = utils.MOMENTUM_BP, learning_rate = 1e-3):
+        #MAKE THIS LOOK LIKE A PRIVATE VAREIABLE
+        self.network = Network(layers, trans_fcns, loss_fcn, reg_const, learn_alg)
+        self.neuralnetworklearner = \
+            NeuralNetworkLearner(network = self.network, learning_rate = learning_rate)
+
+    def train(self, X, Y, epochs = 10):
+        self.neuralnetworklearner.run_epochs(X, Y, epochs)
+
+    def predict(self, X):
+        return [self.network.predict(xi) for xi in X]
+
+    @property
+    def network(self):
+        return self._network
+
+    @network.setter
+    def network(self, network):
+        self._network = network
+
+    @property
+    def neuralnetworklearner(self):
+        return self._neuralnetworklearner
+
+    @neuralnetworklearner.setter
+    def neuralnetworklearner(self, neuralnetworklearner):
+        self._neuralnetworklearner = neuralnetworklearner
 
 
-class nnp(object):
 
-    def __init__(self, layers, trans='sigmoid', perf_fcn='mse',
-                 reg=0, netstruc='ff'):
-        self.Yscale, self.Yoffset = [0, 0]
+        """"#self.Yscale, self.Yoffset = [0, 0]
         self.best_perf = np.inf
-        self.layers = layers
+        #self.layers = layers
         self.reg = reg
-        self.Xstd, self.Xoffset = [], []
+        #self.Xstd, self.Xoffset = [], []
         self.depth = len(layers)
         self._settrans(trans)
         self._setperf(perf_fcn)
@@ -28,8 +60,8 @@ class nnp(object):
 
     def _setperf(self, perf_fcn):
         if perf_fcn == 'mse':
-            self.perf_fcn = helper.mse
-            self.perf_fcn_p = helper.mse_p
+            self.perf_fcn = utils.mse
+            self.perf_fcn_p = utils.mse_p
 
     def _initweights(self, std=.0001):
         self.weights = [[[0] for _ in range(len(self.Lmap))]
@@ -43,8 +75,8 @@ class nnp(object):
                     )
 
     def _set_one_trans(self, trans, idx):
-        if trans in helper.trans_fcns:
-            self.trans[idx], self.trans_p[idx] = helper.trans_fcns[trans]
+        if trans in utils.trans_fcns:
+            self.trans[idx], self.trans_p[idx] = utils.trans_fcns[trans]
         else:
             print("Error: " + str(trans) + " not known in tran_fcns")
             sys.exit(0)
@@ -82,7 +114,7 @@ class nnp(object):
 
     def _sum_layer(self, layer_idx):
         return np.sum(np.dot(
-            helper.cat([self.act_vals[prev], [1]]),
+            utils.cat([self.act_vals[prev], [1]]),
             self.weights[prev][layer_idx])
             for prev in range(len(self.Lmap))
             if self.Lmap[prev][layer_idx])
@@ -94,7 +126,7 @@ class nnp(object):
                     self.weights[row][col] += self.batch_deltas[row][col]
 
     def _run_batch(self, batch, X, Y):
-        self.batch_deltas = helper.zero_weights(self.weights)
+        self.batch_deltas = utils.zero_weights(self.weights)
         for i in batch:
             self._train_one_sample(X[i], Y[i])
         self._update_all_batch_deltas()
@@ -125,7 +157,7 @@ class nnp(object):
 
     def _add_error_to_one_delta_edge(self, row, col):
         self.batch_deltas[row][col] += self.LR * (
-            np.atleast_2d(helper.cat((self.act_vals[row], [1]))).T
+            np.atleast_2d(utils.cat((self.act_vals[row], [1]))).T
             .dot(np.atleast_2d(self.deltas[col])) -
             self.reg * self.weights[row][col] *
             (col < len(self.weights[0]) - 1)) / self.layers[row]
@@ -150,10 +182,10 @@ class nnp(object):
         if batch_perf < self.best_perf * (1+epsilon):
             self.LR *= 1.05
             self.best_perf = batch_perf
-            self.best_weights = helper.copy_weights(self.weights)
+            self.best_weights = utils.copy_weights(self.weights)
         else:
             self.LR *= .7
-            self.weights = helper.copy_weights(self.best_weights)
+            self.weights = utils.copy_weights(self.best_weights)
         if self.verb > 0:
             print(batch_perf, self.LR)
 
@@ -175,10 +207,10 @@ class nnp(object):
         return X
 
     def _assign_batches(self, batch_type):
-        if batch_type == helper.SOLO:
+        if batch_type == utils.SOLO:
             self.num_batches = self.samples
             self.batch_size = 1
-        if batch_type == helper.GROUP:
+        if batch_type == utils.GROUP:
             self.num_batches = 1
             self.batch_size = self.samples
         if batch_type > 0:
@@ -189,7 +221,7 @@ class nnp(object):
         self._run_epoch(X, Y)
         if self.best_perf < self.gb_perf:
             self.gb_perf = self.best_perf
-            self.gb_weights = helper.copy_weights(self.best_weights)
+            self.gb_weights = utils.copy_weights(self.best_weights)
             self.gb_LR = self.LR
 
     def _init_k_times(self, X, Y, re_init, re_init_d, LR):
@@ -206,9 +238,9 @@ class nnp(object):
         offset = np.amin(Y)
         Y = Y - offset
         # At this point, Y is [0,1]
-        if self.trans[-1] in [helper.sigmoid]:
+        if self.trans[-1] in [utils.sigmoid]:
             pass
-        if self.trans[-1] in [helper.tanh]:
+        if self.trans[-1] in [utils.tanh]:
             scale = scale / 2
             offset += 0.5
         return scale, offset
@@ -226,9 +258,9 @@ class nnp(object):
             print("X size %d, need %d" % (X.shape[0], self.layers[0]))
             return
         if self.Xstd == []:
-            X, self.Xstd, self.Xoffset = helper.normalize(X)
+            X, self.Xstd, self.Xoffset = utils.normalize(X)
         else:
-            X = helper.apply_norm(X, self.Xstd, self.Xoffset)
+            X = utils.apply_norm(X, self.Xstd, self.Xoffset)
         self.samples = X.shape[0]
         self.verb = verb
         self.objective = objective
@@ -241,8 +273,8 @@ class nnp(object):
             self.Yscale, self.Yoffset = self._calc_norm_Y(Y)
         Y = self._normalize_Y(Y)
         self._assign_batches(batch_type)
-        self.best_weights = helper.copy_weights(self.weights)
-        self.gb_weights = helper.copy_weights(self.best_weights)
+        self.best_weights = utils.copy_weights(self.weights)
+        self.gb_weights = utils.copy_weights(self.best_weights)
         self.gb_perf = np.copy(self.best_perf)
         self.gb_LR = self.LR
         return X, Y
@@ -266,7 +298,7 @@ class nnp(object):
         if perf < self.objective:
             print("reached optimization objective at \
                     {0} epochs".format(epoch))
-            return helper.STOP_TRAIN
+            return utils.STOP_TRAIN
         if perf < self.gb_perf - del_thresh:
             self.nudge = 0
             self.gb_perf = perf
@@ -278,27 +310,27 @@ class nnp(object):
                 else:
                     print ("no longer improvng after {0} epochs"
                            .format(self.best_epoch))
-                    return helper.STOP_TRAIN
+                    return utils.STOP_TRAIN
 
-    def train(self, X, Y, LR=10**-3, batch_type=helper.GROUP, verb=0,
+    def train(self, X, Y, LR=10**-3, batch_type=utils.GROUP, verb=0,
               re_init=3, re_init_d=10, epochs = 10,
               nudge = 0, objective = 0, del_thresh=0, max_fail = np.inf):
         X, Y = self._prepare_training(X, Y, LR, batch_type, verb,
                                       nudge, objective, del_thresh)
         self._init_k_times(X, Y, re_init, re_init_d, LR)
         self.best_perf = self.gb_perf
-        self.best_weights = helper.copy_weights(self.gb_weights)
-        self.weights = helper.copy_weights(self.best_weights)
+        self.best_weights = utils.copy_weights(self.gb_weights)
+        self.weights = utils.copy_weights(self.best_weights)
         self.LR = self.gb_LR
         for epoch in range(epochs):
             perf = self._run_epoch(X, Y)
             if self._eval_perf(perf, epoch, del_thresh, max_fail) == \
-                    helper.STOP_TRAIN:
+                    utils.STOP_TRAIN:
                 break
-        self.weights = helper.copy_weights(self.best_weights)
+        self.weights = utils.copy_weights(self.best_weights)
 
     def predict(self, x):
-        x = helper.apply_norm(x, self.Xstd, self.Xoffset)
+        x = utils.apply_norm(x, self.Xstd, self.Xoffset)
         self.samples = x.shape[0]
         output = np.empty([self.samples, self.act_vals[-1].shape[0]])
         # this can be made more efficient through matrix math.
@@ -308,3 +340,4 @@ class nnp(object):
             output[d_idx] = self.act_vals[-1]
         output = self._denormalize_Y(output)
         return output
+"""

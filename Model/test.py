@@ -1,12 +1,12 @@
-import nn_python as nn_p
-import nn_helper as helper
-import numpy as np
 import matplotlib.pyplot as plt
-import nn_validation as validation
+import numpy as np
+
+from Model import utils as helper, validation
+from Model.Network import NeuralNetworkUI as nn_uf
 
 
 def test_xor(verb=0, re_init=10, netstruc='ff'):
-    tNN = nn_p.nnp([2, 100, 1], reg=10 ** -10, netstruc=netstruc)
+    tNN = nn_uf.NeuralNetworkUI([2, 100, 1], reg=10 ** -10, netstruc=netstruc)
     X = np.array([[0, 0],
                   [0, 1],
                   [1, 0],
@@ -19,11 +19,11 @@ def test_xor(verb=0, re_init=10, netstruc='ff'):
         helper.print_y(y_predict, Y)
     return np.mean(np.square(y_predict - Y))
 np.random.seed(2)
-#test_xor()
+test_xor()
 
 
 def test_xor3(verb=0, **kwargs):
-    tNN = nn_p.nnp([3, 100, 100, 1], reg=10 ** -1)
+    tNN = nn_uf.NeuralNetworkUI([3, 100, 100, 1], reg=10 ** -1)
     X = np.array([[0, 0, 0],
                   [0, 1, 0],
                   [1, 0, 0],
@@ -49,7 +49,7 @@ if 0:
 
 # Does not yet work well. needs purelin transfer fcn
 def test_sine(verb=0, netstruc='ff', **kwargs):
-    tNN = nn_p.nnp([1, 2000, 1], reg=10 ** -1, trans='tanh')
+    tNN = nn_uf.NeuralNetworkUI([1, 2000, 1], reg=10 ** -1, trans='tanh')
     X = np.array([np.array([x]) for x in np.arange(0, 2 * np.pi, .1)])
     Y = np.array([np.sin(x) + np.random.randn(x.shape[0]) * .001
                  for x in X])
@@ -70,7 +70,7 @@ if 0:
 
 #need to visualize results
 def x1dotx2(verb=0, **kwargs):
-    tNN = nn_p.nnp([2, 10, 1], reg=0, trans = 'tanh')
+    tNN = nn_uf.NeuralNetworkUI([2, 10, 1], reg=0, trans ='tanh')
     X = np.array([np.array([x, c]) for x in np.linspace(-1, 1, 5)
                  for c in np.linspace(-1, 1, 5)])
     Y = np.array([np.array([x[0] * x[1]]) for x in X])
@@ -88,11 +88,11 @@ if 0:
     
     
 def x1plusx2squared(verb = 0, **kwargs):
-    tNN = nn_p.nnp([2, 10, 10, 1], reg=10 ** -10, trans = 'tanh')
+    tNN = nn_uf.NeuralNetworkUI([2, 10, 10, 1], reg=10 ** -10, trans ='tanh')
     X = np.array([np.array([x, c]) for x in np.linspace(-1, 1, 10)
                  for c in np.linspace(-1, 1, 10)])
     Y = np.array([np.array([x[0] + (x[1]**2)]) for x in X])
-    val_err = validation.kfoldvalidation(X, Y, tNN, k=4, graph=False,verb = verb, **kwargs)
+    val_err = validation.kfoldvalidation(X, Y, tNN, k=4, graph=False, verb = verb, **kwargs)
     tNN.train(X, Y, verb = verb, **kwargs)
     y_predict = tNN.predict(X)
     if verb > 0:
@@ -100,7 +100,7 @@ def x1plusx2squared(verb = 0, **kwargs):
     if verb > -1:
         helper.print_y(y_predict, Y)
     return np.mean(np.square(y_predict - Y)), val_err
-if 1:
+if 0:
     dot_err = x1plusx2squared(epochs=1000, re_init=3, re_init_d=20,
                              objective = 10**-5, del_thresh=10**-15, max_fail = 300, nudge = 300,
                              verb = 1)
