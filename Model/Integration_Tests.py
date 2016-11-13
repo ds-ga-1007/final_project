@@ -1,4 +1,3 @@
-import matplotlib.pyplot as plt
 import numpy as np
 
 from Model import utils
@@ -20,7 +19,7 @@ def test_xor(verb=0):
     y_predict = NN.predict(X)
     print(y_predict)
     return np.mean(np.square(y_predict - Y))
-if (0):
+if (1):
     np.random.seed(1)
     xor_err = test_xor()
     print('xor error = ', xor_err)

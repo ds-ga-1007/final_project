@@ -5,6 +5,18 @@ from Model.Network.Layer import Layer
 import sys
 
 class ConnectionActivationLayer(Layer):
+    '''
+    ConnectionActivation Layers are used to represent a Layer that consists
+    of a FullyConnectedLayer and then an ActivationLayer.
+    Each ConnectionActivationLayer is just an abstraction of these two layers
+    because, from a feed forward neural networks point of view,
+    the connection between any two layers is often a fully connected layer
+    that outputs a transfer function of the matrix multiplication of the
+    previous layer and it's edge weights.
+    Also, for other types of neural networks such as convolutional neural
+    networks, the network may have other layer types but ConnectionActivationLayers
+    are a core, commonly used layer type.
+    '''
 
     def __init__(self, fcn, fcn_p, num_in, num_out):
         Layer.__init__(self, num_in)
@@ -12,7 +24,7 @@ class ConnectionActivationLayer(Layer):
             num_in = num_in, num_out = num_out)
 
         self.ActivationLayer = ActivationLayer(
-            fcn = fcn, fcn_p = fcn_p, num_in= num_out)
+            fcn = fcn, derivative= fcn_p, num_in= num_out)
 
         self.act_vals = [0]*num_out
         self.num_out = num_out

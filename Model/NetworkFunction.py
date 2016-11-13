@@ -1,6 +1,10 @@
 
-
 class NetworkFunction(object):
+    '''
+    Network functions are used to represent transfer functions
+    and performance functions. Each NetworkFunction requires
+    a forward activation function and a derivative function.
+    '''
     def __init__(self, forward, derivative):
         self.forward_fcn = forward
         self.derivative_fcn = derivative

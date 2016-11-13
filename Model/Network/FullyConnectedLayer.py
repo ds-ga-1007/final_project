@@ -3,6 +3,10 @@ from Model.utils import vect_with_bias
 from Model.Network.Layer import Layer
 
 class FullyConnectedLayer(Layer):
+    '''
+    A FullyConnectedLayer is a Layer that represents a matrix multiplication
+    of its inputs by a matrix it maintains of edge weights into its output.
+    '''
 
     def __init__(self, num_in, num_out):
         Layer.__init__(self, num_in, has_bias=True)
