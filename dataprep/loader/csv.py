@@ -1,27 +1,35 @@
 
-from .tabular import *
+from .base import *
 
 import pandas as PD
-import numpy as NP
 
 
-class CSVLoader(TabularLoader):
+# Basically a prettier Java-ish wrapper for pandas.read_csv function.
+class CSVLoader(Loader):
     '''
-    Dataset loader for reading CSV files.
+    Concrete class for loading a CSV file.
     '''
-    def __init__(self, sep=','):
+
+    def __init__(self, delim=',', header=None, index_col=None):
         '''
         Parameters
         ----------
-        sep : string
-            Delimiter
+        delim : str
+            The field, or column, separator
+        header : int or None
+            Whether there is a header row in the dataset, and if so, on
+            which line.
         '''
-        self.header = None
-        self.seperator = sep
+        self._delim = delim
+        self._header = header
 
-    def load(self, filename):
-        self._dataset = PD.read_csv(
-                filename,
-                header=self.header,
-                sep=self.separator,
-                )
+    @property
+    def delim(self):
+        return self._delim
+
+    @delim.setter
+    def delim(self, delim):
+        self._delim = delim
+
+    def load_from_path(self, path):
+        return PD.read_csv(path, sep=self._delim, header=self._header)
