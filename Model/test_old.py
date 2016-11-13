@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-from Model import utils as helper, validation
+from Model import utils as helper, validation_old
 from Model.Network import NeuralNetworkUI as nn_uf
 
 
@@ -92,7 +92,7 @@ def x1plusx2squared(verb = 0, **kwargs):
     X = np.array([np.array([x, c]) for x in np.linspace(-1, 1, 10)
                  for c in np.linspace(-1, 1, 10)])
     Y = np.array([np.array([x[0] + (x[1]**2)]) for x in X])
-    val_err = validation.kfoldvalidation(X, Y, tNN, k=4, graph=False, verb = verb, **kwargs)
+    val_err = validation_old.kfoldvalidation(X, Y, tNN, k=4, graph=False, verb = verb, **kwargs)
     tNN.train(X, Y, verb = verb, **kwargs)
     y_predict = tNN.predict(X)
     if verb > 0:

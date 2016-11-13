@@ -3,14 +3,18 @@ from Model.Network.ConnectionActivationLayer import ConnectionActivationLayer
 from Model import utils
 
 class Network(object):
-    def __init__(self, layer_sizes, trans_fcns='sigmoid', loss_fcn='mse', reg_const = 1e-3,
-                 learn_alg = utils.MOMENTUM_BP, learning_rate = 0.01):
-        self.learning_rate = learning_rate
+    '''
+    A network object represents an Artifical Neural Network. It is able to
+    forward propogate inputs to calculate outputs, evaluate the error of those outputs,
+     and can backward propogate known errors to compute error derivatives
+    with respect to every layer.
+    '''
+
+    def __init__(self, layer_sizes, trans_fcns='sigmoid', loss_fcn='mse', reg_const = 1e-3):
         self.reg_const = reg_const
         trans_fcns = utils.get_trans(trans_fcns = trans_fcns, num_layers = len(layer_sizes) - 1)
         self.loss_fcn = utils.get_loss(loss_fcn)
         self._init_layers_and_deltas(trans_fcns, layer_sizes)
-        self.learn_alg = learn_alg
 
     def _init_layers_and_deltas(self, trans_fcns, layer_sizes):
         self.layers = []
@@ -164,20 +168,3 @@ class Network(object):
     @reg_const.setter
     def reg_const(self, reg_const):
         self._reg_const = reg_const
-
-    @property
-    def learn_alg(self):
-        return self._learn_alg
-
-    @learn_alg.setter
-    def learn_alg(self, learn_alg):
-        self._learn_alg = learn_alg
-
-
-    @property
-    def learning_rate(self):
-        return self._learning_rate
-
-    @learning_rate.setter
-    def learning_rate(self, learning_rate):
-        self._learning_rate = learning_rate

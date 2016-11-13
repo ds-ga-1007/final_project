@@ -2,6 +2,12 @@ import numpy as np
 from Model import utils
 
 class NeuralNetworkLearner(object):
+    '''
+    A neural network learner is the trainer for a neural network. It forward and backward
+    propagates errors within its Network, and updates the network layer weights according
+    to the error derivatives in accordance with the learners learning algorithm.
+
+    '''
     def __init__(self, network, learning_rate = 0.01, learn_alg = utils.MOMENTUM_BP, loss_fcn='mse'):
         self.network = network
         self.learning_rate = learning_rate

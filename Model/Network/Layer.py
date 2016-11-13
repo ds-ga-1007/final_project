@@ -1,8 +1,11 @@
 class Layer(object):
+    '''
+    A layer is a parent class for the different layer types
+    of a Neural Network
+    '''
     def __init__(self, num_in, has_bias = False):
         self.num_in = num_in
         self.has_bias = has_bias
-
 
 
     @property
