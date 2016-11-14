@@ -71,32 +71,30 @@ if (0):
     print('sine error = ', sine_error)
 
 def test_encoding(verb=0):
-    X1h = np.random.rand(20)
-    X2h = np.random.rand(20)
-    X = np.zeros([20, 5])
-    for idx in range(20):
+    num_x = 100
+    X1h = np.random.rand(num_x)
+    X2h = np.random.rand(num_x)
+    size_encoding = 6
+    X = np.zeros([num_x, size_encoding])
+    for idx in range(num_x):
         X1 = X1h[idx]
         X2 = X2h[idx]
-        X[idx,:] = [X1*X2, X1+X2, X1/(1+X2), X2/(1+X1), X1-X2]
-    X = X/2
-    X1h = np.atleast_2d(X1h)
-    X2h = np.atleast_2d(X2h)
+        X[idx,:] = [X1, X2,X1 + X2, X1 - X2, X2 - X1, X1*X2]
+    X = X/10 + np.random.rand(num_x, size_encoding)/100
     encoder = AutoEncoder(X)
     encoding_vals = encoder.get_encoding_vals(X)
     for _ in range(10):
-        encoder.train(X, 100)
-        encoding_vals = encoder.get_encoding_vals(X)
-        reconstruction = np.round(encoder.predict(X), 3)
-        #print("reconstruction error: ", np.mean(np.square(reconstruction - X)))
-        err1 = np.mean(np.square(np.concatenate([X1h, X2h]).T - encoding_vals))
-        err2 = np.mean(np.square(np.concatenate([X2h, X1h]).T - encoding_vals))
-        print(err1, err2)
-        #print("encoding error: ", np.min([err1, err2]))
-        #print("encoding_vals:   ", encoding_vals)
-        #print(np.mean(np.square(reconstruction - X)))
-    print(X)
+        encoder.train(X, 10)
+        if verb > 0:
+            encoding_vals = encoder.get_encoding_vals(X)
+            err1 = np.abs(np.corrcoef(x=X1h, y=encoding_vals[:,0])[0,1]) + \
+                   np.abs(np.corrcoef(x=X2h, y=encoding_vals[:,1])[0,1])
+            err2 = np.abs(np.corrcoef(x=X2h, y=encoding_vals[:,0])[0,1]) + \
+                   np.abs(np.corrcoef(x=X1h, y=encoding_vals[:,1])[0,1])
+            print(err1, err2)
+        reconstruction = encoder.predict(X)
     return np.mean(np.square(reconstruction - X))
 if (1):
     np.random.seed(1)
-    encoding_error = test_encoding()
+    encoding_error = test_encoding(1)
     print('autoencoding error = ', encoding_error)
