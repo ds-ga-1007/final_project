@@ -19,10 +19,9 @@ class AutoEncoder(object):
     def __init__(self, X):
         #MAKE THIS LOOK LIKE A PRIVATE VAREIABLE
         self.network = Network(layer_sizes = [X.shape[1], 100, 2, 100, X.shape[1]],
-                               trans_fcns="tanh", reg_const=1e-5)
+                               trans_fcns="tanh", reg_const=1e-1)
         self.neuralnetworklearner = \
-            NeuralNetworkLearner(network = self.network)
-        self.train(X, 1)
+            NeuralNetworkLearner(network = self.network, learning_rate=1e-5)
 
     def train(self, X, epochs = 10):
         self.neuralnetworklearner.run_epochs(X, X, epochs)

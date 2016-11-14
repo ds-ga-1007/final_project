@@ -49,8 +49,8 @@ if (0):
     print('add error = ', add_error)
 
 
-def test_sine(verb=1):
-    NN = NeuralNetworkUI([1, 2000, 1], trans_fcns="tanh", reg_const=1e-6)
+def test_sine(verb=0):
+    NN = NeuralNetworkUI([1, 200, 1], trans_fcns="tanh", reg_const=1e-5)
     X = np.linspace(0, 2*np.pi, num=5)
     Y = np.array([np.sin(x) for x in X])
     if np.ndim(X) == 1:
@@ -80,7 +80,7 @@ def test_encoding(verb=0):
         X1 = X1h[idx]
         X2 = X2h[idx]
         X[idx,:] = [X1, X2,X1 + X2, X1 - X2, X2 - X1, X1*X2]
-    X = X/10 + np.random.rand(num_x, size_encoding)/100
+    X = X/4 + np.random.rand(num_x, size_encoding)/100
     encoder = AutoEncoder(X)
     encoding_vals = encoder.get_encoding_vals(X)
     for _ in range(10):
