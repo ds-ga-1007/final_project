@@ -10,5 +10,5 @@ The data preparation is separated into mainly two parts:
         Data preprocessing falls into this category.
 '''
 
-import loader
-import transformer
+import .loader
+import .transformer
