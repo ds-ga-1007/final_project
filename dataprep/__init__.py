@@ -1,5 +1,5 @@
 '''
-dataprep : nn-uf data preparation module
+nn-uf data preparation module
 
 The data preparation is separated into mainly two parts:
     1. `Loader`
@@ -10,4 +10,5 @@ The data preparation is separated into mainly two parts:
         Data preprocessing falls into this category.
 '''
 
-from .loader import *
+import loader
+import transformer
