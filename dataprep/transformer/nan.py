@@ -68,7 +68,7 @@ class NullValueTransformer(Transformer):
 
     Parameters
     ----------
-    criterion : number, str, callable, or dict/iterable of these
+    criterion : number, str, callable, None, or dict/iterable of these
         If criterion is given a number (int, float, etc.), the transformer
         will replace all numeric values equal to the criterion with null
         values, leaving all other values untouched.
@@ -81,6 +81,8 @@ class NullValueTransformer(Transformer):
             * is either taking a single argument representing the cell value,
               or,
             * is a numpy.ufunc
+        If None is given, the transformer will do nothing.  Useful when
+        you want to skip some columns when supplying a list of criteria.
         If an iterable of these types are given, the transformer will
         compare or evaluate, and replace with null values in a per-column
         basis.  If the iterable is a dict, the transformer will match
@@ -113,7 +115,7 @@ class NullValueTransformer(Transformer):
     >>> NullValueTransformer([None, None, -1]).transform(df)
     [array([[1.0, 'a', nan],
            [2.0, 'a', 2.0],
-           [nan, 'b', 3.0]], dtype=object)]
+           [-3.0, 'b', 3.0]], dtype=object)]
     >>> NullValueTransformer({'A': 2}).transform(df)
     [array([[1.0, 'a', -1],
            [nan, 'a', 2],
