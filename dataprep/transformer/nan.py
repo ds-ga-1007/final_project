@@ -2,8 +2,8 @@
 from .base import Transformer
 import pandas as PD
 import numpy as NP
-from numbers import Number          # for type checking
-from collections import Iterable    # for type checking
+from numbers import Number, Integral    # for type checking
+from collections import Iterable        # for type checking
 
 
 def _none_criterion(criterion):
@@ -159,6 +159,7 @@ class NullValueTransformer(Transformer):
                         )
             else:
                 pairs = zip(dataset.columns, self._criterion)
+
             for c, crit in pairs:
                 if self._skip(dataset[c]):
                     continue
@@ -168,4 +169,78 @@ class NullValueTransformer(Transformer):
                 if self._skip(dataset[c]):
                     continue
                 dataset.loc[self._criterion(dataset[c]), c] = NP.nan
+        return dataset
+
+
+class NullIndicatorTransformer(Transformer):
+    '''
+    Search through columns and add a dummy variable for each column with
+    NaN values to indicate that the value there is missing.
+
+    Parameters
+    ----------
+    columns : Iterable of str or int, or None
+        When None is given, the transformer will do this for every column.
+    suffix : str (default = '_missing')
+        The new column name for these indicator variable is
+        original_column_name+suffix
+
+    Examples
+    --------
+    >>> import pandas as PD
+    >>> import numpy as NP
+    >>> df = PD.DataFrame(
+    ...         [[NP.nan, 2, 1], [1, NP.nan, 2]],
+    ...         columns=['A', 'B', 'C']
+    ...         )
+    >>> df
+         A    B
+    0  NaN  2.0
+    1  1.0  NaN
+    >>> from dataprep.transformer import *
+    >>> NullIndicatorTransformer().transform(df)
+    [array([[ nan,   2.,   1.,   1.,   0.],
+           [  1.,  nan,   2.,   0.,   1.]])]
+    >>> NullIndicatorTransformer(['A']).transform(df)
+    [array([[ nan,   2.,   1.,   1.],
+           [  1.,  nan,   2.,   0.]])]
+    >>> NullIndicatorTransformer([1, 2]).transform(df)
+    [array([[ nan,   2.,   1.,   0.],
+           [  1.,  nan,   2.,   1.]])]
+    '''
+
+    def __init__(self, columns=None, suffix='_missing'):
+        if not ((columns is None) or
+                (isinstance(columns, Iterable) and not
+                    isinstance(columns, str))):
+            raise TypeError('invalid columns type %r' % type(columns))
+        elif columns is not None:
+            # Check element types
+            if isinstance(columns[0], Integral):
+                indices = True
+            elif isinstance(columns[0], str):
+                indices = False
+            else:
+                raise TypeError('invalid element type %r' % type(columns[0]))
+
+            for c in columns:
+                if not ((isinstance(c, Integral) and indices) or
+                        (isinstance(c, str) and not indices)):
+                    raise TypeError('element types are not the same')
+
+        if not isinstance(suffix, str):
+            raise TypeError('suffix is not a string')
+
+        self._columns = columns
+        self._suffix = suffix
+
+    def _transform(self, dataset):
+        cols = self._columns if self._columns is not None else dataset.columns
+
+        for c in cols:
+            series = dataset.ix[:, c]
+            newc = str(c) + self._suffix
+            if series.isnull().any():
+                dataset[newc] = series.isnull().astype(int)
+
         return dataset
