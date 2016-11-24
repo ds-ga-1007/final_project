@@ -1,6 +1,8 @@
-import numpy as np
 import sys
-from Model.NetworkFunction import NetworkFunction
+
+import numpy as np
+
+from Model.FeedForwardNetwork.NetworkFunction import NetworkFunction
 
 GRADIENT_DESCENT = 0
 MOMENTUM_BP = 1

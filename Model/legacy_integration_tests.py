@@ -1,19 +1,16 @@
-import numpy as np
-
-from Model import utils
-from Model.Network.NeuralNetworkUI import NeuralNetworkUI
-from Model.Network.AutoEncoder import AutoEncoder
-import matplotlib
 import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D
-from matplotlib import colors
+import numpy as np
 import six
+from .FeedForwardNetApps import *
+from .FeedForwardNetwork import *#from .FeedForwardNetApps.FeedForwardNetworkUI import FeedForwardNetworkUI
+from matplotlib import colors
 
-
+from Model.FeedForwardNetApps.AutoEncoder import AutoEncoder
+from Model.FeedForwardNetwork import utils
 
 
 def test_xor(verb=0):
-    NN = NeuralNetworkUI([2, 100, 100, 1], reg_const=1e-4)
+    NN = FeedForwardNetworkUI([2, 100, 100, 1], reg_const=1e-4)
     X = np.array([[0, 0],
                   [0, 1],
                   [1, 0],
@@ -33,7 +30,8 @@ if (0):
     print('xor error = ', xor_err)
 
 def test_addition(verb=0):
-    NN = NeuralNetworkUI([2, 100, 1], trans_fcns=["sigmoid", "purelin"], learn_alg=utils.GRADIENT_DESCENT)
+    NN = FeedForwardNetworkUI([2, 100, 1], trans_fcns=["sigmoid", "purelin"],
+                              learn_alg=utils.GRADIENT_DESCENT)
     X = np.array([[0, 0],
                   [0, 1],
                   [1, 0],
@@ -57,7 +55,7 @@ if (0):
 
 
 def test_sine(verb=0):
-    NN = NeuralNetworkUI([1, 200, 1], trans_fcns="tanh", reg_const=1e-5)
+    NN = FeedForwardNetworkUI([1, 200, 1], trans_fcns="tanh", reg_const=1e-5)
     X = np.linspace(0, 2*np.pi, num=5)
     Y = np.array([np.sin(x) for x in X])
     if np.ndim(X) == 1:

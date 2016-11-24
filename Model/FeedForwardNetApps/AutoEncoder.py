@@ -1,15 +1,15 @@
-
 import numpy as np
-from Model import utils
-from Model.Network.Network import Network
-from Model.Network.NeuralNetworkLearner import NeuralNetworkLearner
+
+from Model.FeedForwardNetwork.Network import Network
+from Model.FeedForwardNetwork.NeuralNetworkLearner import NeuralNetworkLearner
+
 
 class AutoEncoder(object):
     '''
     This is the User Inferface for a user to create a neural network.
     A user can create the network, and then train the network for
     a specified number of epochs on a set of input output (X, Y) pairs.
-    During training, the NeuralNetworkLearner updates the Network
+    During training, the NeuralNetworkLearner updates the FeedForwardNetwork
     in accordance with its learning algorithm.
     A user can also predict the output of a list of inputs based on the current network
 

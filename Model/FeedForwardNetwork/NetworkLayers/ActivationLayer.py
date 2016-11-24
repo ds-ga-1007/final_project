@@ -1,5 +1,5 @@
 
-from Model.Network.Layer import Layer
+from Model.FeedForwardNetwork.NetworkLayers.Layer import Layer
 
 class ActivationLayer(Layer):
     '''

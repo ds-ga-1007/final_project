@@ -1,10 +1,12 @@
 import numpy as np
-from Model import utils
+
+from Model.FeedForwardNetwork import utils
+
 
 class NeuralNetworkLearner(object):
     '''
     A neural network learner is the trainer for a neural network. It forward and backward
-    propagates errors within its Network, and updates the network layer weights according
+    propagates errors within its FeedForwardNetwork, and updates the network layer weights according
     to the error derivatives in accordance with the learners learning algorithm.
 
     '''
