@@ -1,21 +1,12 @@
 
 import matplotlib.pyplot as plt
-import numpy as np
 import six
 from matplotlib import colors
-from mpl_toolkits.mplot3d import Axes3D
-
-from Model.FeedForwardNetApps.AutoEncoder import AutoEncoder
-from Model.FeedForwardNetwork import utils
-
 
 import unittest
 from Model.FeedForwardNetApps import *
 from Model.FeedForwardNetwork import *
 from Model.FeedForwardNetwork.NetworkLayers import *
-
-#The following are test cases to ensure correct functionality of intervals
-
 
 def test_encoding_regression(verb=0):
     num_x = 100
