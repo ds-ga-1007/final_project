@@ -74,24 +74,23 @@ def test_sine(verb=0):
 
 
 class TestLearnability(unittest.TestCase):
-    """unit tests for functions relating to the interval class
+    """
+    Tests for functions relating to the interval class
     These should be run by enterring the command "python -m unittest discover"
     from the root directory of this project
     """
 
-
-    def test_learnability(self):
-
+    def test_learn_xor(self):
+        np.random.seed(1)
         xor_err = test_xor()
-        print('xor error = ', xor_err)
         self.assertLess(xor_err, 1e-3)
 
+    def test_learn_add(self):
         np.random.seed(1)
         add_error = test_addition()
-        print('add error = ', add_error)
         self.assertLess(add_error, 1e-3)
 
+    def test_learn_sine(self):
         np.random.seed(1)
         sine_error = test_sine()
-        print('sine error = ', sine_error)
         self.assertLess(sine_error, 1e-3)
