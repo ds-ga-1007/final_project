@@ -3,6 +3,10 @@ import numpy as np
 from Model import utils
 from Model.Network.NeuralNetworkUI import NeuralNetworkUI
 from Model.Network.AutoEncoder import AutoEncoder
+import matplotlib
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+
 
 
 def test_xor(verb=0):
@@ -111,19 +115,61 @@ def test_encoding_categorical(verb=0):
         X[idx,:] = [X1, X2,X1 + X2, X1 - X2, X2 - X1, X1*X2]
     X = X/4 + np.random.rand(num_x, size_encoding)/100
     encoder = AutoEncoder(X)
-    encoding_vals = encoder.get_encoding_vals(X)
+    encoding_vals = encoder.get_encoding_vals()
     for _ in range(10):
-        encoder.train(X, 10)
+        encoder.train(10)
         if verb > 0:
-            encoding_vals = encoder.get_encoding_vals(X)
+            encoding_vals = encoder.get_encoding_vals()
             err1 = np.abs(np.corrcoef(x=X1h, y=encoding_vals[:,0])[0,1]) + \
                    np.abs(np.corrcoef(x=X2h, y=encoding_vals[:,1])[0,1])
             err2 = np.abs(np.corrcoef(x=X2h, y=encoding_vals[:,0])[0,1]) + \
                    np.abs(np.corrcoef(x=X1h, y=encoding_vals[:,1])[0,1])
             print("correlation between true hidden and encoders: ", np.max([err1, err2])/2)
-        reconstruction = encoder.predict(X)
+    reconstruction = encoder.predict()
+    encoding_vals = encoder.get_encoding_vals()
+    plt.scatter(encoding_vals[:,0], encoding_vals[:,1])
+    plt.show()
     return np.mean(np.square(reconstruction - X))
-if (1):
+if (0):
     np.random.seed(1)
     encoding_categorical_error = test_encoding_categorical(1)
     print('autoencoding regression error = ', encoding_categorical_error)
+
+def test_encoding_categorical_3d(verb=0):
+    num_x = 100
+    X1h = np.random.randint(0,2,num_x)
+    X2h = np.random.randint(0,2,num_x)
+    X3h = np.random.randint(0,2,num_x)
+    size_encoding = 13
+    X = np.zeros([num_x, size_encoding])
+    rgb = np.zeros([num_x, 3])
+    for idx in range(num_x):
+        X1 = X1h[idx]
+        X2 = X2h[idx]
+        X3 = X3h[idx]
+        X[idx,:] = [X1, X2,X1 + X2, X1 - X2, X2 - X1, X1*X2,
+                    X3, X2-X1, X3-X1, X3+ X2, X3 + X1, X3*X2, X3*X1]
+        rgb[idx,:] = [X1, X2, X3]
+    X = X/4 + np.random.rand(num_x, size_encoding)/4
+    encoder = AutoEncoder(X, hidden_dim = 3)
+    encoding_vals = encoder.get_encoding_vals()
+    for _ in range(10):
+        encoder.train(20)
+        if verb > 0:
+            encoding_vals = encoder.get_encoding_vals()
+            #err1 = np.abs(np.corrcoef(x=X1h, y=encoding_vals[:,0])[0,1]) + \
+            #       np.abs(np.corrcoef(x=X2h, y=encoding_vals[:,1])[0,1])
+            #err2 = np.abs(np.corrcoef(x=X2h, y=encoding_vals[:,0])[0,1]) + \
+            #       np.abs(np.corrcoef(x=X1h, y=encoding_vals[:,1])[0,1])
+            #print("correlation between true hidden and encoders: ", np.max([err1, err2])/2)
+    reconstruction = encoder.predict()
+    encoding_vals = encoder.get_encoding_vals()
+    fig = plt.figure()
+    ax = fig.add_subplot(111, projection='3d')
+    ax.scatter(xs = encoding_vals[:,0], ys = encoding_vals[:,1], zs = encoding_vals[:,2], c = rgb)
+    plt.show()
+    return np.mean(np.square(reconstruction - X))
+if (1):
+    np.random.seed(1)
+    encoding_categorical_error_3d = test_encoding_categorical_3d(1)
+    print('autoencoding regression error = ', encoding_categorical_error_3d)

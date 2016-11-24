@@ -16,25 +16,27 @@ class AutoEncoder(object):
     Visualization description?
     '''
 
-    def __init__(self, X):
+    def __init__(self, X, hidden_dim = 2):
         #MAKE THIS LOOK LIKE A PRIVATE VAREIABLE
-        self.network = Network(layer_sizes = [X.shape[1], 100, 2, 100, X.shape[1]],
+        self.hidden_dim = hidden_dim
+        self.X = X
+        self.network = Network(layer_sizes = [X.shape[1], 100, hidden_dim, 100, X.shape[1]],
                                trans_fcns="tanh", reg_const=1e-1)
         self.neuralnetworklearner = \
             NeuralNetworkLearner(network = self.network, learning_rate=1e-5)
 
-    def train(self, X, epochs = 10):
-        self.neuralnetworklearner.run_epochs(X, X, epochs)
+    def train(self, epochs = 10):
+        self.neuralnetworklearner.run_epochs(self.X, self.X, epochs)
 
-    def get_encoding_vals(self, X):
-        hidden_repr = np.zeros([X.shape[0], 2])
-        for x_idx, xi in enumerate(X):
+    def get_encoding_vals(self):
+        hidden_repr = np.zeros([self.X.shape[0], self._hidden_dim])
+        for x_idx, xi in enumerate(self.X):
             self.network.feed_forward(xi)
             hidden_repr[x_idx] = self.network.layers[1].act_vals
         return hidden_repr
 
-    def predict(self, X):
-        return np.array([self.network.predict(xi) for xi in X])
+    def predict(self):
+        return np.array([self.network.predict(xi) for xi in self.X])
 
     @property
     def network(self):
@@ -51,3 +53,11 @@ class AutoEncoder(object):
     @neuralnetworklearner.setter
     def neuralnetworklearner(self, neuralnetworklearner):
         self._neuralnetworklearner = neuralnetworklearner
+
+    @property
+    def hidden_dim(self):
+        return self._hidden_dim
+
+    @hidden_dim.setter
+    def hidden_dim(self, hidden_dim):
+        self._hidden_dim = hidden_dim
