@@ -30,6 +30,7 @@ class Transformer(object, metaclass=ABCMeta):
         '''
         if len(datasets) == 0:
             raise ValueError('empty list of dataset')
+        single_dataset = len(datasets) == 1
 
         # Concatenate all datasets together, and record the number of
         # records in each dataset so that we can restore the concatenation
@@ -51,7 +52,10 @@ class Transformer(object, metaclass=ABCMeta):
             restored.append(NP.array(newdf.iloc[i:i+_]))
             i += _
 
-        return restored
+        if single_dataset:
+            return restored[0]      # strip off the list
+        else:
+            return restored
 
     @abstractmethod
     def _transform(self, dataset):

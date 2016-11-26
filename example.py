@@ -28,16 +28,18 @@ ts = TabularSchemaTransformer(
 # Note that the '?''s in numeric fields are already replaced by NaNs
 # in TabularSchemaTransformer
 nv = NullValueTransformer('?')
-# Impute the NaN's in numeric fields by mean value, adding a "missing
-# value" indicator variable in the process
-mi = MeanImputingTransformer(missing_indicator=True)
+# Add a 'missing indicator' for each column with missing values
+ni = NullIndicatorTransformer()
+# Impute the NaN's in numeric fields by mean value
+mi = NumericImputationTransformer('mean')
 # One-hot categorical encoder.  PD.get_dummies() does all the magic
 ohe = OneHotEncoderTransformer()
 
 # A pipeline which does transformation one-by-one
-pipeline = PipelineTransformer(ts, nv, mi, ohe)
+pipeline = PipelineTransformer(ts, nv, ni, mi, ohe)
 
 # Transform one dataset
 train = pipeline.transform(dataset)
 # Transform two datasets at once so that the encodings are preserved
 # train, test = pipeline.transform(dataset, testset)
+NP.save('dataset/arrhythmia.npy', train)

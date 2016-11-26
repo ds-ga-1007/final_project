@@ -120,11 +120,20 @@ class NullValueTransformer(Transformer):
     def __init__(self, criterion, only=None):
         # Throws TypeError
         self._criterion = _make_op(criterion, _make_single_criterion)
-        self._only = only
+        if only is not None:
+            self._only = only
+        else:
+            # Guess which kind of column we should ignore
+            if isinstance(criterion, str):
+                self._only = 'categorical'
+            elif isinstance(criterion, Number):
+                self._only = 'numeric'
 
     def _skip(self, series):
-        return (((self._only == 'numeric') and (series.dtype == NP.object)) or
-                ((self._only == 'categorical') and (series.dtype != NP.object))
+        numeric = self._only == 'numeric'
+        categorical = self._only == 'categorical'
+        return ((numeric and (series.dtype == NP.object)) or
+                (categorical and (series.dtype != NP.object))
                 )
 
     def _transform_column(self, dataset, column, crit):
