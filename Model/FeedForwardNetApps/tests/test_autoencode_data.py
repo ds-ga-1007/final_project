@@ -14,9 +14,8 @@ from dataprep.transformer import *
 
 def process_arrhythmia():
 
-    csvloader = CSVLoader()
-
-    dataset = csvloader.load_from_path('dataset/arrhythmia.data')
+    csvloader = CSVLoader(target=[-1])
+    datasetX, datasetY = csvloader.load_from_path('dataset/arrhythmia.data')
 
     nv = NullValueTransformer('?')
 
@@ -28,36 +27,30 @@ def process_arrhythmia():
 
     pipeline = PipelineTransformer(nv, ni, mi, ohe)
 
-    processed_data = pipeline.transform(dataset)
+    processedX = pipeline.transform(datasetX)
+    processedY = pipeline.transform(datasetY)
 
-    return processed_data
+    return processedX, processedY
 
 
 
-def test_encode_n_vars_d_dims(visualize=1):
+def test_arrhythmia(d = 3, visualize=1):
 
-    X = process_arrhythmia()
+    X, Y = process_arrhythmia()
 
     num_x = X.shape[0]
-
-    rgb = ['0'] * num_x
+    print(X.shape)
     color_list = list(six.iteritems(colors.cnames))
-    for idx in range(num_x):
-        X[idx, :] = np.array([[xi + xj, xi - xj, xj - xi, xi * xj]
-                              for xi in Xhidden[idx,:]
-                              for xj in Xhidden[idx,:]]).flatten()
-        rgb[idx] = color_list[np.sum([Xhidden[idx, i] * (2 ** i)
-                                      for i in range(num_hidden_dim)])][0]
-    X = X + np.random.rand(num_x, size_encoding)
-    X = X - np.mean(X)
-    X = X / np.abs(np.max(X)) / 3
-    encoder = AutoEncoder(X, hidden_dim=d)
+    print(Y[:,0])
+    rgb = [color_list[y[0]*5][0] for y in Y]
+    encoder = AutoEncoder(X, hidden_dim=3)
+    print(X)
     for _ in range(10):
-        encoder.train(10)
+        encoder.train(1)
+        reconstruction = encoder.predict()
+        print(reconstruction)
     reconstruction = encoder.predict()
     if visualize > 0:
-        if d > 3 or d < 2:
-            raise(ValueError('d must be 2 or 3 for visualization'))
         encoding_vals = encoder.get_encoding_vals()
         encoding_vals = encoding_vals / np.abs(np.mean(encoding_vals, axis=0))
         if d == 2:
@@ -67,8 +60,8 @@ def test_encode_n_vars_d_dims(visualize=1):
             ax = fig.add_subplot(111, projection='3d')
             ax.scatter(xs=encoding_vals[:, 0], ys=encoding_vals[:, 1],
                        zs=encoding_vals[:, 2], c=rgb)
-        plt.title(str(2 ** num_hidden_dim * 4) + ' Visible Variables \n With ' +
-                  str(num_hidden_dim) + ' Hidden Dimensions. Graphed in ' + str(d) + 'D')
+        plt.title(str(2 ** 0 * 4) + ' Visible Variables \n With ' +
+                  str(0) + ' Hidden Dimensions. Graphed in ' + str(d) + 'D')
         plt.show()
     return np.mean(np.square(reconstruction - X))
 
@@ -82,5 +75,5 @@ class TestAutoEncoding(unittest.TestCase):
 
     def test_autoencode_3d(self):
         np.random.seed(1)
-        encoding_error = test_arrhythmia_3d()
+        encoding_error = test_arrhythmia(d = 3)
         self.assertLess(encoding_error, .1)
