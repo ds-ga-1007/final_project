@@ -1,6 +1,7 @@
 import numpy as np
-from Model.utils import vect_with_bias
-from Model.Network.Layer import Layer
+
+from Model.FeedForwardNetwork.NetworkLayers.Layer import Layer
+
 
 class FullyConnectedLayer(Layer):
     '''

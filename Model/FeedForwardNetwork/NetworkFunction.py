@@ -1,7 +1,7 @@
 
 class NetworkFunction(object):
     '''
-    Network functions are used to represent transfer functions
+    FeedForwardNetwork functions are used to represent transfer functions
     and performance functions. Each NetworkFunction requires
     a forward activation function and a derivative function.
     '''

@@ -1,10 +1,12 @@
 import numpy as np
-from Model.Network.ConnectionActivationLayer import ConnectionActivationLayer
-from Model import utils
+
+from Model.FeedForwardNetwork import utils
+from Model.FeedForwardNetwork.NetworkLayers.ConnectionActivationLayer import ConnectionActivationLayer
+
 
 class Network(object):
     '''
-    A network object represents an Artifical Neural Network. It is able to
+    A network object represents an Artifical Neural FeedForwardNetwork. It is able to
     forward propogate inputs to calculate outputs, evaluate the error of those outputs,
      and can backward propogate known errors to compute error derivatives
     with respect to every layer.
@@ -12,7 +14,7 @@ class Network(object):
 
     def __init__(self, layer_sizes, trans_fcns='sigmoid', loss_fcn='mse', reg_const = 1e-3):
         self.reg_const = reg_const
-        trans_fcns = utils.get_trans(trans_fcns = trans_fcns, num_layers = len(layer_sizes) - 1)
+        trans_fcns = utils.get_trans(trans_fcns = trans_fcns, num_layers =len(layer_sizes) - 1)
         self.loss_fcn = utils.get_loss(loss_fcn)
         self._init_layers_and_deltas(trans_fcns, layer_sizes)
 
