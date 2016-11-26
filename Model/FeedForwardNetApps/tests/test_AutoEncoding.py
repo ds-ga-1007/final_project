@@ -5,7 +5,6 @@ from matplotlib import colors
 
 import unittest
 from Model.FeedForwardNetApps import *
-from Model.FeedForwardNetwork import *
 from Model.FeedForwardNetwork.NetworkLayers import *
 
 def test_encoding_regression(verb=0):
@@ -73,7 +72,7 @@ def test_encode_n_vars_d_dims(num_hidden_dim, d, visualize=0):
     return np.mean(np.square(reconstruction - X))
 
 
-class TestAutoEncoding(unittest.TestCase):
+class TestAutoEncoding():
     """
     unit tests for functions relating to the interval class
     These should be run by enterring the command "python -m unittest discover"

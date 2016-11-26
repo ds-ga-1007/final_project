@@ -53,33 +53,27 @@ class NeuralNetworkLearner(object):
         #if error > self.best_network['error']:
         #    pass
 
-    def train_one_epoch(self, X, Y):
-        for xi, yi in zip(X, Y):
-            self.network.feed_forward(xi)
-            yhat = self.network.layers[-1].act_vals
-            error_derivative = self.loss_fcn.derivative_fcn(yhat, yi)
-            self.network.backpropagate(error_derivative)
-            self._update_weights(xi)
-
-
 
 
 
     def get_weight_deltas_for_active_algorithm(self, old_weights, backprop_error):
         if self.learn_alg == utils.GRADIENT_DESCENT:
             return backprop_error
+
         if self.learn_alg == utils.MOMENTUM_BP:
             return old_weights * utils.MOMENTUM_DECAY + backprop_error
 
     def _update_deltas_active_algorithm(self, layer_index, old_weights, backprop_error):
 
         if self.learn_alg == utils.GRADIENT_DESCENT:
+
             updated_weight_deltas = self.get_weight_deltas_for_active_algorithm(
                                         old_weights = old_weights,
                                         backprop_error = backprop_error)
             self.weight_deltas[layer_index] = updated_weight_deltas
 
         if self.learn_alg == utils.MOMENTUM_BP:
+
             past_velocity = self.weight_velocity[layer_index]
             force_on_weights = backprop_error
             new_velocity = past_velocity * utils.MOMENTUM_DECAY + force_on_weights
@@ -87,6 +81,7 @@ class NeuralNetworkLearner(object):
             self.weight_deltas[layer_index] = self.weight_velocity[layer_index]
 
     def _get_weight_error_with_reg(self, layer_index, layer_activation_with_bias):
+
             output_gradient = self.layer_deltas[layer_index]
             current_edge_weight_values = self.layers[layer_index].FullyConnectedLayer.weights
             weight_error = utils.get_weight_error(
@@ -95,6 +90,7 @@ class NeuralNetworkLearner(object):
             return weight_error + self.reg_const * current_edge_weight_values.T
 
     def _calc_edge_deltas(self, X):
+
         layer_activation_with_bias = utils.vect_with_bias(X)
         for layer_index in range(self.num_layers - 1):
 
