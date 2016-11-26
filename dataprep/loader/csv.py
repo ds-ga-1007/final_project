@@ -10,7 +10,7 @@ class CSVLoader(Loader):
     Concrete class for loading a CSV file.
     '''
 
-    def __init__(self, delim=',', header=None, index_col=None):
+    def __init__(self, target=None, delim=',', header=None):
         '''
         Parameters
         ----------
@@ -20,6 +20,7 @@ class CSVLoader(Loader):
             Whether there is a header row in the dataset, and if so, on
             which line.
         '''
+        Loader.__init__(self, target=target)
         self._delim = delim
         self._header = header
 
@@ -31,5 +32,5 @@ class CSVLoader(Loader):
     def delim(self, delim):
         self._delim = delim
 
-    def load_from_path(self, path):
+    def _load_from_path(self, path):
         return PD.read_csv(path, sep=self._delim, header=self._header)
