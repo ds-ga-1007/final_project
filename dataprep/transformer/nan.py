@@ -1,5 +1,6 @@
 
 from .base import Transformer
+from ._util import _make_op, _apply_op
 import pandas as PD
 import numpy as NP
 from numbers import Number, Integral    # for type checking
@@ -36,29 +37,6 @@ def _make_single_criterion(criterion):
         return _predicate_criterion(criterion)
     else:
         raise TypeError('invalid criterion type %r' % type(criterion))
-
-
-def _make_criterion_dict(criterion):
-    newcrit = {}
-    for k, v in criterion.items():
-        newcrit[k] = _make_single_criterion(v)
-    return newcrit
-
-
-def _make_criterion_list(criterion):
-    newcrit = []
-    for crit in criterion:
-        newcrit.append(_make_single_criterion(crit))
-    return newcrit
-
-
-def _make_criterion(criterion):
-    if isinstance(criterion, dict):
-        return _make_criterion_dict(criterion)
-    elif isinstance(criterion, Iterable) and not isinstance(criterion, str):
-        return _make_criterion_list(criterion)
-    else:
-        return _make_single_criterion(criterion)
 
 
 class NullValueTransformer(Transformer):
@@ -141,7 +119,7 @@ class NullValueTransformer(Transformer):
 
     def __init__(self, criterion, only=None):
         # Throws TypeError
-        self._criterion = _make_criterion(criterion)
+        self._criterion = _make_op(criterion, _make_single_criterion)
         self._only = only
 
     def _skip(self, series):
@@ -149,27 +127,17 @@ class NullValueTransformer(Transformer):
                 ((self._only == 'categorical') and (series.dtype != NP.object))
                 )
 
-    def _transform(self, dataset):
-        if isinstance(self._criterion, Iterable):
-            if isinstance(self._criterion, dict):
-                pairs = self._criterion.items()
-            elif len(dataset.columns) != len(self._criterion):
-                raise ValueError(
-                        "number of columns does not match that of criteria"
-                        )
-            else:
-                pairs = zip(dataset.columns, self._criterion)
+    def _transform_column(self, dataset, column, crit):
+        if not self._skip(dataset[column]):
+            dataset.loc[crit(dataset[column]), column] = NP.nan
 
-            for c, crit in pairs:
-                if self._skip(dataset[c]):
-                    continue
-                dataset.loc[crit(dataset[c]), c] = NP.nan
-        else:
-            for c in dataset.columns:
-                if self._skip(dataset[c]):
-                    continue
-                dataset.loc[self._criterion(dataset[c]), c] = NP.nan
-        return dataset
+    def _transform(self, dataset):
+        return _apply_op(
+                self._criterion,
+                dataset,
+                'criteria',
+                self._transform_column
+                )
 
 
 class NullIndicatorTransformer(Transformer):
@@ -194,9 +162,9 @@ class NullIndicatorTransformer(Transformer):
     ...         columns=['A', 'B', 'C']
     ...         )
     >>> df
-         A    B
-    0  NaN  2.0
-    1  1.0  NaN
+         A    B    C
+    0  NaN  2.0  1.0
+    1  1.0  NaN  2.0
     >>> from dataprep.transformer import *
     >>> NullIndicatorTransformer().transform(df)
     [array([[ nan,   2.,   1.,   1.,   0.],
