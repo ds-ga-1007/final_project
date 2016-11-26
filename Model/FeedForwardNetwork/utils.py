@@ -39,11 +39,8 @@ def purelin(x):
     return x
 
 
-#this might be wrong
 def purelin_p(x):
     return -1
-
-
 
 
 def mse(Y, a):
