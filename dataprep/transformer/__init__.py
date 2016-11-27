@@ -8,3 +8,4 @@ from .nan import *
 from .impute import *
 from .dummy import *
 from .pipeline import *
+from .normalizer import *

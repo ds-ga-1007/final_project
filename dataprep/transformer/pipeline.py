@@ -1,5 +1,5 @@
 
-from .base import Transformer
+from .base import Transformer, LearnableTransformer
 
 
 class PipelineTransformer(Transformer):
@@ -42,5 +42,7 @@ class PipelineTransformer(Transformer):
 
     def _transform(self, dataset):
         for t in self._transformers:
+            if isinstance(t, LearnableTransformer):
+                t.fit(dataset)
             dataset = t._transform(dataset)
         return dataset

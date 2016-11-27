@@ -38,7 +38,7 @@ def _make_op(ops, callback):
 def _apply_op(ops, dataset, name, callback):
     # Apply an operation to the entire dataset or a list of operations
     # per-column.
-    if isinstance(ops, Iterable):
+    if isinstance(ops, Iterable) and not isinstance(ops, str):
         if isinstance(ops, dict):
             pairs = ops.items()
         elif len(dataset.columns) != len(ops):
