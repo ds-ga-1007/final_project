@@ -43,6 +43,6 @@ class PipelineTransformer(Transformer):
     def _transform(self, dataset):
         for t in self._transformers:
             if isinstance(t, LearnableTransformer):
-                t.fit(dataset)
+                t._fit(dataset)
             dataset = t._transform(dataset)
         return dataset
