@@ -92,7 +92,7 @@ def test_arrhythmia(d = 3, visualize=1):
     return np.mean(np.square(reconstruction - X))
 
 
-class TestAutoEncoding(unittest.TestCase):
+class TestAutoEncodingData():
     """
     unit tests for functions relating to the interval class
     These should be run by enterring the command "python -m unittest discover"
