@@ -35,7 +35,7 @@ def process_arrhythmia():
     tsY = TabularSchemaTransformer(["categorical"])
 
     # Normalize all numeric columns into [-1, 1] first.
-    norm = Normalizer('negpos')
+    norm = ColumnNormalizer('negpos')
     # Replace all string values equal to '?' to NaN
     # Note that the '?''s in numeric fields are already replaced by NaNs
     # in TabularSchemaTransformer

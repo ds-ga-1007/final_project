@@ -5,7 +5,7 @@ import pandas as PD
 import numpy as NP
 
 
-class Normalizer(InvertibleTransformer, LearnableTransformer):
+class ColumnNormalizer(InvertibleTransformer, LearnableTransformer):
     '''
     Normalize numeric features
 
@@ -39,10 +39,10 @@ class Normalizer(InvertibleTransformer, LearnableTransformer):
     0  1  a -1
     1  2  a  2
     2 -3  b  3
-    >>> from dataprep.transformer import Normalizer
-    >>> norm = Normalizer('zeropos')
+    >>> from dataprep.transformer import ColumnNormalizer
+    >>> norm = ColumnNormalizer('zeropos')
     >>> norm.fit(df)
-    <dataprep.transformer.normalizer.Normalizer at 0x...>
+    <dataprep.transformer.normalizer.ColumnNormalizer at 0x...>
     >>> arr = norm.transform(df)
     >>> arr
     array([[0.8, 'a', 0.0],
@@ -58,9 +58,9 @@ class Normalizer(InvertibleTransformer, LearnableTransformer):
     array([[1.0, 'a', -1.0],
            [2.0, 'a', 2.0],
            [-3.0, 'b', 3.0]], dtype=object)
-    >>> norm2 = Normalizer({'A': 'zeropos'})
+    >>> norm2 = ColumnNormalizer({'A': 'zeropos'})
     >>> norm2.fit(df)
-    <dataprep.transformer.normalizer.Normalizer at 0x...>
+    <dataprep.transformer.normalizer.ColumnNormalizer at 0x...>
     >>> norm2.transform(df)
     array([[0.8, 'a', -1],
            [1.0, 'a', 2],
@@ -160,3 +160,30 @@ class Normalizer(InvertibleTransformer, LearnableTransformer):
         elif which == 'normal':
             # When std == 0, all elements are equal to mean.
             dataset[column] = dataset[column] * std + mean
+
+
+class GlobalLinearNormalizer(InvertibleTransformer):
+    '''
+    Normalize every cell according to the following rule:
+
+    new = (old - vmin) / (vmax - vmin) * (nmax - nmin) + nmin
+
+    where vmin, vmax, nmin and nmax are all given by user.
+
+    Parameters
+    ----------
+    vmin, vmax, nmin, nmax : float
+    '''
+    def __init__(self, vmin, vmax, nmin=0, nmax=1):
+        self._vmin = float(vmin)
+        self._vmax = float(vmax)
+        self._nmin = float(nmin)
+        self._nmax = float(nmax)
+
+    def _transform(self, dataset):
+        return ((dataset - self._vmin) / (self._vmax - self._vmin) *
+                (self._nmax - self._nmin) + self._nmin)
+
+    def _inverse_transform(self, dataset):
+        return ((dataset - self._nmin) / (self._nmax - self._nmin) *
+                (self._vmax - self._vmin) + self._vmin)
