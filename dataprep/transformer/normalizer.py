@@ -89,14 +89,23 @@ class Normalizer(InvertibleTransformer, LearnableTransformer):
         if which is None:
             return
         elif which == 'negpos':
-            dataset[column] = (dataset[column] - min_) / (max_ - min_)
-            dataset[column] = dataset[column] * 2 - 1
+            if max_ == min_:
+                dataset[column] = 0
+            else:
+                dataset[column] = (dataset[column] - min_) / (max_ - min_)
+                dataset[column] = dataset[column] * 2 - 1
         elif which == 'zeropos':
-            dataset[column] = (dataset[column] - min_) / (max_ - min_)
+            if max_ == min_:
+                dataset[column] = 0
+            else:
+                dataset[column] = (dataset[column] - min_) / (max_ - min_)
         elif which == 'zeromean':
             dataset[column] -= mean
         elif which == 'normal':
-            dataset[column] = (dataset[column] - mean) / std
+            if std == 0:
+                dataset[column] -= mean
+            else:
+                dataset[column] = (dataset[column] - mean) / std
 
     def _transform(self, dataset):
         return _apply_op(
@@ -138,11 +147,16 @@ class Normalizer(InvertibleTransformer, LearnableTransformer):
         if which is None:
             return
         elif which == 'negpos':
+            # When min == max, all elements are equal to min, so the
+            # following still works
             dataset[column] = (dataset[column] + 1) / 2
             dataset[column] = dataset[column] * (max_ - min_) + min_
         elif which == 'zeropos':
+            # When min == max, all elements are equal to min, so the
+            # following still works
             dataset[column] = dataset[column] * (max_ - min_) + min_
         elif which == 'zeromean':
             dataset[column] += mean
         elif which == 'normal':
+            # When std == 0, all elements are equal to mean.
             dataset[column] = dataset[column] * std + mean
