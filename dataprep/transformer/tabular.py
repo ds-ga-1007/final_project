@@ -89,6 +89,21 @@ class TabularSchemaGuesser(TabularSchemaTransformer):
 
     Examples
     --------
+    >>> import pandas as PD
+    >>> df = PD.DataFrame(
+    ...         [[1, 'a', '?'], [2, 'a', 2], ['?', 'b', 3]],
+    ...         columns=['A', 'B', 'C']
+    ...         )
+    >>> df
+       A  B  C
+    0  1  a  ?
+    1  2  a  2
+    2  ?  b  3
+    >>> from dataprep.transformer import TabularSchemaGuesser
+    >>> TabularSchemaGuesser().transform(df)
+    array([[1.0, 'a', nan],
+           [2.0, 'a', 2.0],
+           [nan, 'b', 3.0]], dtype=object)
     '''
 
     def __init__(self, threshold=0.5):
