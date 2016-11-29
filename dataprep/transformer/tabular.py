@@ -70,3 +70,54 @@ class TabularSchemaTransformer(Transformer):
             op = _column_types[t]
             dataset[c] = op(dataset[c])
         return dataset
+
+
+class TabularSchemaGuesser(TabularSchemaTransformer):
+    '''
+    Guess the schema of a tabular dataset by counting the number of elements
+    looking like numeric values.  If the number of numeric-like values takes
+    a large portion of a column, then the column is treated as a numeric
+    column.  Otherwise it is treated as a categorical column.
+
+    Use this at your own risk.
+
+    Parameters
+    ----------
+    threshold : float, between 0 and 1.  Default 0.5
+        The lower bound of numeric-like value proportion for a column to be
+        treated as numeric.
+
+    Examples
+    --------
+    >>> import pandas as PD
+    >>> df = PD.DataFrame(
+    ...         [[1, 'a', '?'], [2, 'a', 2], ['?', 'b', 3]],
+    ...         columns=['A', 'B', 'C']
+    ...         )
+    >>> df
+       A  B  C
+    0  1  a  ?
+    1  2  a  2
+    2  ?  b  3
+    >>> from dataprep.transformer import TabularSchemaGuesser
+    >>> TabularSchemaGuesser().transform(df)
+    array([[1.0, 'a', nan],
+           [2.0, 'a', 2.0],
+           [nan, 'b', 3.0]], dtype=object)
+    '''
+
+    def __init__(self, threshold=0.5):
+        if not (0 <= threshold <= 1):
+            raise ValueError('invalid threshold value')
+        self._threshold = threshold
+        self._schema = None
+
+    def _transform(self, dataset):
+        new = dataset.apply(lambda c: PD.to_numeric(c, errors='coerce'))
+        counts = new.count()
+        self._schema = {
+                c: ('numeric' if counts[c] / dataset.shape[0] > self._threshold
+                    else 'categorical')
+                for c in dataset.columns
+                }
+        return TabularSchemaTransformer._transform(self, dataset)
