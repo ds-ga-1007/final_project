@@ -172,11 +172,10 @@ class NeuralNetworkLearner(object):
     def reg_const(self):
         return self.network.reg_const
 
+    @reg_const.setter
+    def reg_const(self, reg_const):
+        self.network.reg_const = reg_const
+
     @property
     def layer_deltas(self):
         return self.network.layer_deltas
-
-    #Should I code it this way? I would rather use evaluate error, but that has hidden
-    #effects, or whatever the professor called it.
-
-

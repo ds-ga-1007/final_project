@@ -20,7 +20,7 @@ class AutoEncoder(object):
         #MAKE THIS LOOK LIKE A PRIVATE VAREIABLE
         self.hidden_dim = hidden_dim
         self.X = X
-        network = Network(layer_sizes = [X.shape[1], 100, hidden_dim, 100, X.shape[1]],
+        network = Network(layer_sizes = [X.shape[1], 10, hidden_dim, 10, X.shape[1]],
                                trans_fcns="tanh", reg_const=1e-1)
         self.neuralnetworklearner = \
             NeuralNetworkLearner(network = network, learning_rate=1e-5)
