@@ -131,13 +131,6 @@ class NeuralNetworkLearner(object):
             self.network.backpropagate(error_derivative)
             self._update_weights(xi)
 
-
-
-
-
-
-
-
     @property
     def network(self):
         return self._network
