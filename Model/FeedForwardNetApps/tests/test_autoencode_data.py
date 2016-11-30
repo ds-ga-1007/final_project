@@ -134,7 +134,7 @@ def process_abalone():
     return processedX, processedY
 
 
-def autoencode_abalone(d = 3, visualize=1):
+def autoencode_abalone(visualize=1):
 
     X, Y = process_abalone()
     X = X / 2
@@ -144,28 +144,33 @@ def autoencode_abalone(d = 3, visualize=1):
     print(Y.shape)
     color_list = list(six.iteritems(colors.cnames))
     rgb = [color_list[y*2 + 1][0] for y in Y]
-    encoder = AutoEncoder(X, hidden_dim=d)
-    encoder.neuralnetworklearner.reg_const = 1e-2
-    for ep in range(3):
-        encoder.train(3)
-        print(ep)
-        #reconstruction = encoder.predict()
-    reconstruction = encoder.predict()
-    if visualize > 0:
-        encoding_vals = encoder.get_encoding_vals()
-        print(encoding_vals)
-        #encoding_vals = encoding_vals / np.mean(np.abs(encoding_vals), axis=0)
-        if d == 2:
-            plt.scatter(encoding_vals[:, 0], encoding_vals[:, 1], color=rgb)
-        if d == 3:
-            fig = plt.figure()
-            ax = fig.add_subplot(111, projection='3d')
-            ax.scatter(xs=encoding_vals[:, 0], ys=encoding_vals[:, 1],
-                       zs=encoding_vals[:, 2], c=rgb)
-        plt.title(str(2 ** 0 * 4) + ' Visible Variables \n With ' +
-                  str(0) + ' Hidden Dimensions. Graphed in ' + str(d) + 'D')
-        plt.show()
-    return np.mean(np.square(reconstruction - X))
+    err = np.empty(2)
+    fig = plt.figure()
+    for d in [2, 3]:
+        encoder = AutoEncoder(X, hidden_dim=d)
+        encoder.neuralnetworklearner.reg_const = 1e-2
+        for ep in range(3):
+            encoder.train(1)
+            print(ep)
+            #reconstruction = encoder.predict()
+        reconstruction = encoder.predict()
+        if visualize > 0:
+            encoding_vals = encoder.get_encoding_vals()
+            print(encoding_vals)
+            #encoding_vals = encoding_vals / np.mean(np.abs(encoding_vals), axis=0)
+            if d == 2:
+                ax = fig.add_subplot(120 + d - 1)
+                plt.scatter(encoding_vals[:, 0], encoding_vals[:, 1], color=rgb)
+            if d == 3:
+                ax = fig.add_subplot(120 + d - 1, projection='3d')
+                ax.scatter(xs=encoding_vals[:, 0], ys=encoding_vals[:, 1],
+                           zs=encoding_vals[:, 2], c=rgb)
+            plt.title(str(2 ** 0 * 4) + ' Visible Variables \n With ' +
+                      str(0) + ' Hidden Dimensions. Graphed in ' + str(d) + 'D')
+        err[d-2] = np.mean(np.square(reconstruction - X))
+
+    plt.show()
+    return err[0]. err[1]
 
 
 def train_test_arrhythmia(d = 30, visualize=1):
@@ -197,8 +202,10 @@ class TestAutoEncodingData(unittest.TestCase):
     from the root directory of this project
     """
 
-    def test_autoencode_3d(self):
+    def test_autoencode_abalone(self):
         np.random.seed(1)
-        arr_err = autoencode_abalone(d = 2)
-        print(arr_err)
-        self.assertLess(arr_err, .1)
+        err_2d, err_3d = autoencode_abalone()
+        print(err_2d)
+        print(err_3d)
+        self.assertLess(err_2d, .1)
+        self.assertLess(err_3d, .1)
