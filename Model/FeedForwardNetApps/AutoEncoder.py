@@ -12,7 +12,6 @@ class AutoEncoder(object):
     During training, the NeuralNetworkLearner updates the FeedForwardNetwork
     in accordance with its learning algorithm.
     A user can also predict the output of a list of inputs based on the current network
-
     Visualization description?
     '''
 
@@ -20,7 +19,9 @@ class AutoEncoder(object):
         #MAKE THIS LOOK LIKE A PRIVATE VAREIABLE
         self.hidden_dim = hidden_dim
         self.X = X
-        network = Network(layer_sizes = [X.shape[1], 10, hidden_dim, 10, X.shape[1]],
+        network = Network(layer_sizes = [X.shape[1], (X.shape[1] + hidden_dim) // 2,
+                                         hidden_dim,
+                                         (X.shape[1] + hidden_dim) // 2, X.shape[1]],
                                trans_fcns="tanh", reg_const=1e-1)
         self.neuralnetworklearner = \
             NeuralNetworkLearner(network = network, learning_rate=1e-5)

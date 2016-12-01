@@ -2,7 +2,6 @@
 import matplotlib.pyplot as plt
 import six
 from matplotlib import colors
-from sklearn.cluster import KMeans
 import unittest
 from Model.FeedForwardNetApps import *
 from Model.FeedForwardNetwork.NetworkLayers import *
@@ -72,41 +71,12 @@ def test_encode_n_vars_d_dims(num_hidden_dim, d, visualize=0):
     return np.mean(np.square(reconstruction - X)), encoding_vals, Xhidden
 
 
-class TestAutoEncoding():
+class TestAutoEncoding(unittest.TestCase):
     """
     unit tests for functions relating to the interval class
     These should be run by enterring the command "python -m unittest discover"
     from the root directory of this project
     """
-
-    def test_autoencode_cluster_3d(self):
-
-        for num_hidden_dim in range(3, 7):
-            np.random.seed(1)
-            _, encoding_vals, Xhidden = \
-                test_encode_n_vars_d_dims(
-                    num_hidden_dim = num_hidden_dim, d = 3)
-            num_hidden = 2**num_hidden_dim
-            kmeans_classes = KMeans(
-                n_clusters=num_hidden).fit_predict(
-                    encoding_vals
-            )
-            true_classes = [np.sum([xi*(2**idx) for idx, xi in enumerate(x)])
-                            for x in Xhidden]
-            min_total_divergence = 0
-            for kmean_class in range(np.max(kmeans_classes)+1):
-                a = np.array([c == kmean_class for c in kmeans_classes])
-                min_divergence = np.inf
-                for true_class in range(np.max(true_classes)+1):
-                    b = np.array([c == true_class
-                                  for c in true_classes])
-                    difference = np.logical_xor(a, b)
-                    divergence = np.sum(difference)
-                    min_divergence = np.min((min_divergence, divergence))
-                min_total_divergence += min_divergence
-            min_total_divergence /= len(true_classes)
-            print(min_total_divergence)
-            self.assertLess(min_total_divergence, .1)
 
     def test_autoencode_regression(self):
 
@@ -118,12 +88,16 @@ class TestAutoEncoding():
 
         for num_hidden_dim in range(3, 6):
             np.random.seed(1)
-            encoding_error = test_encode_n_vars_d_dims(num_hidden_dim = num_hidden_dim, d = 3)
+            encoding_error, _, _ = test_encode_n_vars_d_dims(num_hidden_dim = num_hidden_dim, d = 3)
+            print(encoding_error.shape)
+            print("encoding error: ", encoding_error)
             self.assertLess(encoding_error, .1)
 
     def test_autoencode_2d(self):
 
         for num_hidden_dim in range(2, 6):
             np.random.seed(1)
-            encoding_error = test_encode_n_vars_d_dims(num_hidden_dim = num_hidden_dim, d = 2)
+            encoding_error, _, _ = test_encode_n_vars_d_dims(num_hidden_dim = num_hidden_dim, d = 2)
+            print(encoding_error.shape)
+            print("encoding error: ", encoding_error)
             self.assertLess(encoding_error, .1)

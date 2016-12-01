@@ -95,7 +95,7 @@ NN_frozen = copy.deepcopy(NN)
 
 
 
-class TestLearnability():
+class TestLearnability(unittest.TestCase):
     """
     Tests for functions relating to the interval class
     These should be run by enterring the command
