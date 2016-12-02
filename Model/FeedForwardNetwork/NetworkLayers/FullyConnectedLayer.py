@@ -32,19 +32,13 @@ class FullyConnectedLayer(Layer):
         self._weights = weights
 
     @property
-    def num_in(self):
-        return self._num_in
-
-    @num_in.setter
-    def num_in(self, num_in):
-        self._num_in = num_in
-
-    @property
     def num_out(self):
         return self._num_out
 
     @num_out.setter
     def num_out(self, num_out):
+        if num_out < 1:
+            raise ValueError("Layers need positive number of outputs")
         self._num_out = num_out
 
     @property

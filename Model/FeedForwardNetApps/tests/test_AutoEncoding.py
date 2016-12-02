@@ -1,4 +1,4 @@
-
+from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
 import six
 from matplotlib import colors
@@ -18,16 +18,8 @@ def test_encoding_regression(verb=0):
         X[idx, :] = [X1, X2, X1 + X2, X1 - X2, X2 - X1, X1 * X2]
     X = X / 4 + np.random.rand(num_x, size_encoding) / 100
     encoder = AutoEncoder(X)
-    for _ in range(10):
-        encoder.train(10)
-        if verb > 0:
-            encoding_vals = encoder.get_encoding_vals()
-            err1 = np.abs(np.corrcoef(x=X1h, y=encoding_vals[:, 0])[0, 1]) + \
-                   np.abs(np.corrcoef(x=X2h, y=encoding_vals[:, 1])[0, 1])
-            err2 = np.abs(np.corrcoef(x=X2h, y=encoding_vals[:, 0])[0, 1]) + \
-                   np.abs(np.corrcoef(x=X1h, y=encoding_vals[:, 1])[0, 1])
-            print(err1, err2)
-        reconstruction = encoder.predict()
+    encoder.train(100)
+    reconstruction = encoder.predict()
     return np.mean(np.square(reconstruction - X))
 
 
@@ -50,8 +42,7 @@ def test_encode_n_vars_d_dims(num_hidden_dim, d, visualize=0):
     X = X - np.mean(X)
     X = X / np.abs(np.max(X)) / 3
     encoder = AutoEncoder(X, hidden_dim=d)
-    for _ in range(10):
-        encoder.train(10)
+    encoder.train(100)
     reconstruction = encoder.predict()
     encoding_vals = encoder.get_encoding_vals()
     encoding_vals = encoding_vals / np.abs(np.mean(encoding_vals, axis=0))
@@ -89,8 +80,6 @@ class TestAutoEncoding(unittest.TestCase):
         for num_hidden_dim in range(3, 6):
             np.random.seed(1)
             encoding_error, _, _ = test_encode_n_vars_d_dims(num_hidden_dim = num_hidden_dim, d = 3)
-            print(encoding_error.shape)
-            print("encoding error: ", encoding_error)
             self.assertLess(encoding_error, .1)
 
     def test_autoencode_2d(self):
@@ -98,6 +87,4 @@ class TestAutoEncoding(unittest.TestCase):
         for num_hidden_dim in range(2, 6):
             np.random.seed(1)
             encoding_error, _, _ = test_encode_n_vars_d_dims(num_hidden_dim = num_hidden_dim, d = 2)
-            print(encoding_error.shape)
-            print("encoding error: ", encoding_error)
             self.assertLess(encoding_error, .1)

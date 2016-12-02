@@ -16,7 +16,6 @@ def process_arrhythmia_supervised():
 
     csvloader = CSVLoader(target=[-1])
     datasetX, datasetY = csvloader.load_from_path('dataset/arrhythmia.data')
-    print(datasetX.shape)
     tsX = TabularSchemaTransformer(
             [
                 "numeric",          # Age
@@ -127,7 +126,8 @@ def autoencode_2d_3d(X, Y, visualize = 0):
     else:
         visualize = 0
     err = np.empty(2)
-    fig = plt.figure()
+    if visualize > 0:
+        fig = plt.figure()
     for d in [2, 3]:
         encoder = AutoEncoder(X, hidden_dim=d)
         for ep in range(10):
@@ -145,7 +145,8 @@ def autoencode_2d_3d(X, Y, visualize = 0):
             plt.title('real data visualized with graphed in ' + str(d) + 'D')
         err[d-2] = np.mean(np.square(reconstruction - X))
 
-    plt.show()
+    if visualize > 0:
+        plt.show()
     return err[0], err[1]
 
 
@@ -170,15 +171,11 @@ class TestAutoEncodingData(unittest.TestCase):
     def test_autoencode_iris(self):
         np.random.seed(1)
         err_2d, err_3d = autoencode_iris()
-        print(err_2d)
-        print(err_3d)
         self.assertLess(err_2d, .1)
         self.assertLess(err_3d, .1)
 
     def test_autoencode_abalone(self):
         np.random.seed(1)
         err_2d, err_3d = autoencode_abalone()
-        print(err_2d)
-        print(err_3d)
         self.assertLess(err_2d, .1)
         self.assertLess(err_3d, .1)

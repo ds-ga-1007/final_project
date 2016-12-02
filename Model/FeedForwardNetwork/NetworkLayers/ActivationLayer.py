@@ -1,5 +1,5 @@
-
 from Model.FeedForwardNetwork.NetworkLayers.Layer import Layer
+import numpy as np
 
 class ActivationLayer(Layer):
     '''
@@ -15,9 +15,13 @@ class ActivationLayer(Layer):
         self.num_in = num_in
 
     def apply_trans_fcn(self, vect):
+        if len(vect) != self.num_in or not isinstance(vect[0], np.float):
+            raise ValueError("Activation Layer is not a num_in vector")
         return self.trans_fcn(vect)
 
     def apply_derivative_fcn(self, vect):
+        if len(vect) != self.num_in or not isinstance(vect[0], np.float):
+            raise ValueError("Activation Layer is not a num_in vector")
         return self.derivative_fcn(vect)
 
     @property
@@ -35,12 +39,3 @@ class ActivationLayer(Layer):
     @derivative_fcn.setter
     def derivative_fcn(self, derivative_fcn):
         self._derivative_fcn = derivative_fcn
-
-    @property
-    def num_in(self):
-        return self._num_in
-
-    @num_in.setter
-    def num_in(self, num_in):
-        self._num_in = num_in
-
