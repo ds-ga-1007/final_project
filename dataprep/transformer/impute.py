@@ -79,23 +79,23 @@ class NumericImputationTransformer(Transformer):
     2  NaN  b  3.0
     >>> from dataprep.transformer import NumericImputationTransformer
     >>> NumericImputationTransformer('mean').transform(df)
-    [array([[1.0, 'a', 2.5],
-            [2.0, 'a', 2.0],
-            [1.5, 'b', 3.0]], dtype=object)]
+    array([[1.0, 'a', 2.5],
+           [2.0, 'a', 2.0],
+           [1.5, 'b', 3.0]], dtype=object)
     >>> NumericImputationTransformer(lambda s: NP.sum(s)).transform(df)
-    [array([[1.0, 'a', 5.0],
-            [2.0, 'a', 2.0],
-            [3.0, 'b', 3.0]], dtype=object)]
+    array([[1.0, 'a', 5.0],
+           [2.0, 'a', 2.0],
+           [3.0, 'b', 3.0]], dtype=object)
     >>> NumericImputationTransformer(
     ...        ['mean', None, lambda s: NP.sum(s)]
     ...        ).transform(df)
-    [array([[1.0, 'a', 5.0],
-            [2.0, 'a', 2.0],
-            [1.5, 'b', 3.0]], dtype=object)]
+    array([[1.0, 'a', 5.0],
+           [2.0, 'a', 2.0],
+           [1.5, 'b', 3.0]], dtype=object)
     >>> NumericImputationTransformer({'A': 'mean'}).transform(df)
-    [array([[1.0, 'a', nan],
-            [2.0, 'a', 2.0],
-            [1.5, 'b', 3.0]], dtype=object)]
+    array([[1.0, 'a', nan],
+           [2.0, 'a', 2.0],
+           [1.5, 'b', 3.0]], dtype=object)
     '''
     def __init__(self, by):
         self._by = _make_op(by, _make_single_by)

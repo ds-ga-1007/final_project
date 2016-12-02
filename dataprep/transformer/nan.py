@@ -83,21 +83,21 @@ class NullValueTransformer(Transformer):
     2 -3  b  3
     >>> from dataprep.transformer import NullValueTransformer
     >>> NullValueTransformer(2).transform(df)
-    [array([[1.0, 'a', -1.0],
-           [nan, 'a', nan],
-           [-3.0, 'b', 3.0]], dtype=object)]
+    array([[1.0, 'a', -1.0],
+          [nan, 'a', nan],
+          [-3.0, 'b', 3.0]], dtype=object)
     >>> NullValueTransformer('a').transform(df)
-    [array([[1.0, nan, -1.0],
-           [2.0, nan, 2.0],
-           [-3.0, 'b', 3.0]], dtype=object)]
+    array([[1.0, nan, -1.0],
+          [2.0, nan, 2.0],
+          [-3.0, 'b', 3.0]], dtype=object)
     >>> NullValueTransformer([None, None, -1]).transform(df)
-    [array([[1.0, 'a', nan],
-           [2.0, 'a', 2.0],
-           [-3.0, 'b', 3.0]], dtype=object)]
+    array([[1.0, 'a', nan],
+          [2.0, 'a', 2.0],
+          [-3.0, 'b', 3.0]], dtype=object)
     >>> NullValueTransformer({'A': 2}).transform(df)
-    [array([[1.0, 'a', -1],
-           [nan, 'a', 2],
-           [-3.0, 'b', 3]], dtype=object)]
+    array([[1.0, 'a', -1],
+          [nan, 'a', 2],
+          [-3.0, 'b', 3]], dtype=object)
 
     When specifying function as criterion, it applies to all elements so
     it may throw errors.  To better control it's behavior, use the 'only'
@@ -108,18 +108,20 @@ class NullValueTransformer(Transformer):
         ...
     TypeError: unorderable types: str() < int()
     >>> NullValueTransformer(lambda x: x < 0, only='numeric').transform(df)
-    [array([[1.0, 'a', nan],
-           [2.0, 'a', 2.0],
-           [nan, 'b', 3.0]], dtype=object)]
+    array([[1.0, 'a', nan],
+          [2.0, 'a', 2.0],
+          [nan, 'b', 3.0]], dtype=object)
     >>> NullValueTransformer({'A': lambda x: x < 0}).transform(df)
-    [array([[1.0, 'a', -1],
-           [2.0, 'a', 2],
-           [nan, 'b', 3]], dtype=object)]
+    array([[1.0, 'a', -1],
+          [2.0, 'a', 2],
+          [nan, 'b', 3]], dtype=object)
     '''
 
     def __init__(self, criterion, only=None):
         # Throws TypeError
         self._criterion = _make_op(criterion, _make_single_criterion)
+        self._only = None
+
         if only is not None:
             self._only = only
         else:
@@ -176,14 +178,14 @@ class NullIndicatorTransformer(Transformer):
     1  1.0  NaN  2.0
     >>> from dataprep.transformer import *
     >>> NullIndicatorTransformer().transform(df)
-    [array([[ nan,   2.,   1.,   1.,   0.],
-           [  1.,  nan,   2.,   0.,   1.]])]
+    array([[ nan,   2.,   1.,   1.,   0.],
+          [  1.,  nan,   2.,   0.,   1.]])
     >>> NullIndicatorTransformer(['A']).transform(df)
-    [array([[ nan,   2.,   1.,   1.],
-           [  1.,  nan,   2.,   0.]])]
+    array([[ nan,   2.,   1.,   1.],
+          [  1.,  nan,   2.,   0.]])
     >>> NullIndicatorTransformer([1, 2]).transform(df)
-    [array([[ nan,   2.,   1.,   0.],
-           [  1.,  nan,   2.,   1.]])]
+    array([[ nan,   2.,   1.,   0.],
+          [  1.,  nan,   2.,   1.]])
     '''
 
     def __init__(self, columns=None, suffix='_missing'):

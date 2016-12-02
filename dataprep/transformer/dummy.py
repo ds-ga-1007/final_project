@@ -42,17 +42,17 @@ class DummyTransformer(Transformer):
     2  A  c
     >>> from dataprep.transformer import DummyTransformer
     >>> DummyTransformer().transform(df)
-    [array([[ 1.,  0.,  1.,  0.],
-            [ 0.,  1.,  0.,  0.],
-            [ 0.,  0.,  0.,  1.]])]
+    array([[ 1.,  0.,  1.,  0.],
+           [ 0.,  1.,  0.,  0.],
+           [ 0.,  0.,  0.,  1.]])
     >>> DummyTransformer(dummy_unknown=True).transform(df)
-    [array([[ 1.,  0.,  0.,  1.,  0.,  0.],
-            [ 0.,  1.,  0.,  0.,  0.,  1.],
-            [ 0.,  0.,  1.,  0.,  1.,  0.]])]
+    array([[ 1.,  0.,  0.,  1.,  0.,  0.],
+           [ 0.,  1.,  0.,  0.,  0.,  1.],
+           [ 0.,  0.,  1.,  0.,  1.,  0.]])
     >>> DummyTransformer(drop_first=True).transform(df2)
-    [array([[ 0.,  0.,  0.],
-            [ 1.,  1.,  0.],
-            [ 0.,  0.,  1.]])]
+    array([[ 0.,  0.,  0.],
+           [ 1.,  1.,  0.],
+           [ 0.,  0.,  1.]])
     '''
     def __init__(self, columns=None, dummy_unknown=False, drop_first=False):
         self._dummy_unknown = dummy_unknown

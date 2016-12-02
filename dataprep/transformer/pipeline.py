@@ -33,9 +33,9 @@ class PipelineTransformer(Transformer):
     >>> imputer = NumericImputationTransformer('mean')
     >>> dummy = DummyTransformer()
     >>> PipelineTransformer(imputer, dummy).transform(df)
-    [array([[ 1. ,  2.5,  1. ,  0. ],
-            [ 2. ,  2. ,  1. ,  0. ],
-            [ 1.5,  3. ,  0. ,  1. ]])]
+    array([[ 1. ,  2.5,  1. ,  0. ],
+           [ 2. ,  2. ,  1. ,  0. ],
+           [ 1.5,  3. ,  0. ,  1. ]])
     '''
     def __init__(self, *transformers):
         self._transformers = transformers
