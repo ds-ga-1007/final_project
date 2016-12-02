@@ -1,13 +1,3 @@
-
-import matplotlib.pyplot as plt
-import numpy as np
-import six
-from matplotlib import colors
-from mpl_toolkits.mplot3d import Axes3D
-
-from Model.FeedForwardNetApps.AutoEncoder import AutoEncoder
-from Model.FeedForwardNetwork import utils
-
 import copy
 import unittest
 from Model.FeedForwardNetApps import *
@@ -69,130 +59,11 @@ def test_sine(verb=0):
     y_predict = NN.predict(X)
     return np.mean(np.square(y_predict - Y))
 
-
-
-
-
-    '''
-    if verb > 0:
-        y_predict = NN.predict(X)
-        print(y_predict)
-    y_predict = NN.predict(X)
-    print(y_predict)
-    return np.mean(np.square(y_predict - Y))
-    '''
-delta = 1e-3
-NN = FeedForwardNetworkUI([2, 3, 1], learn_alg=utils.GRADIENT_DESCENT,
-                          trans_fcns=["tanh", "purelin"])
-X = np.array([[0, 0],
-              [0, 1],
-              [1, 0],
-              [1, 1]])
-Y = np.array([np.array([x[0] + x[1]]) for x in X])
-NN.train(X, Y, epochs=100)
-NN_frozen = copy.deepcopy(NN)
-
-
-
-
 class TestLearnability(unittest.TestCase):
     """
     Tests for functions relating to the interval class
-    These should be run by enterring the command
-    "python -m unittest discover"
-    from the root directory of this project
     """
 
-    def test_gradient_simple(self):
-        np.random.seed(1)
-        delta = 1e-7
-        NN = FeedForwardNetworkUI([2, 1], learn_alg=utils.GRADIENT_DESCENT, reg_const = 0,
-                                  trans_fcns=["purelin"])
-        X = np.array([[0, 0],
-                      [0, 1],
-                      [1, 0],
-                      [1, 1]])
-        Y = np.array([np.array([x[0] + x[1]]) for x in X])
-        NN.train(X, Y, epochs=1000)
-        NN_frozen = copy.deepcopy(NN)
-
-        X0 = X[-1]
-        Y0 = Y[-1]
-
-        NN.train(np.array([X0]), np.array(Y0), epochs=1)
-        df_dx = NN.neuralnetworklearner.weight_deltas
-        NN = copy.deepcopy(NN_frozen)
-        for l_idx, layer in enumerate(NN.network.layers):
-            fullyconnectedlayer = layer.FullyConnectedLayer
-            weights = fullyconnectedlayer.weights
-            for r_idx, row in enumerate(weights):
-                for c_idx, weight in enumerate(row):
-                    NN_plus = copy.deepcopy(NN_frozen)
-                    NN_minus = copy.deepcopy(NN_frozen)
-
-                    fullyconnectedplus = NN_plus.network.layers[l_idx].FullyConnectedLayer
-                    fullyconnectedminus = NN_minus.network.layers[l_idx].FullyConnectedLayer
-
-                    weights_plus = fullyconnectedplus.weights
-                    weights_minus = fullyconnectedminus.weights
-
-                    weights_plus[r_idx, c_idx] = weight + delta
-                    weights_minus[r_idx, c_idx] = weight - delta
-
-                    y_plus = NN_plus.network.predict(X0)
-                    y_minus = NN_minus.network.predict(X0)
-
-                    f_plus = (y_plus - Y0) ** 2
-                    f_minus = (y_minus - Y0) ** 2
-
-                    derivitive = (f_plus - f_minus) / (2 * delta)
-                    self.assertLess(np.abs(derivitive - df_dx[l_idx][r_idx][c_idx]), 1e-2)
-
-    def test_gradient(self):
-        np.random.seed(1)
-        delta = 1e-7
-        NN = FeedForwardNetworkUI([2, 5, 1], learn_alg=utils.GRADIENT_DESCENT, reg_const = 0,
-                                  trans_fcns=["tanh", "purelin"])
-        X = np.array([[0, 0],
-                      [0, 1],
-                      [1, 0],
-                      [1, 1]])
-        Y = np.array([np.array([x[0] + x[1]]) for x in X])
-        NN.train(X, Y, epochs=1000)
-        NN_frozen = copy.deepcopy(NN)
-
-        X0 = X[-1]
-        Y0 = Y[-1]
-
-        NN.train(np.array([X0]), np.array(Y0), epochs=1)
-        df_dx = NN.neuralnetworklearner.weight_deltas
-        NN = copy.deepcopy(NN_frozen)
-        for l_idx, layer in enumerate(NN.network.layers):
-            fullyconnectedlayer = layer.FullyConnectedLayer
-            weights = fullyconnectedlayer.weights
-            for r_idx, row in enumerate(weights):
-                for c_idx, weight in enumerate(row):
-                    NN_plus = copy.deepcopy(NN_frozen)
-                    NN_minus = copy.deepcopy(NN_frozen)
-
-                    fullyconnectedplus = NN_plus.network.layers[l_idx].FullyConnectedLayer
-                    fullyconnectedminus = NN_minus.network.layers[l_idx].FullyConnectedLayer
-
-                    weights_plus = fullyconnectedplus.weights
-                    weights_minus = fullyconnectedminus.weights
-
-                    weights_plus[r_idx, c_idx] = weight + delta
-                    weights_minus[r_idx, c_idx] = weight - delta
-
-                    y_plus = NN_plus.network.predict(X0)
-                    y_minus = NN_minus.network.predict(X0)
-
-                    f_plus = (y_plus - Y0) ** 2
-                    f_minus = (y_minus - Y0) ** 2
-
-                    derivitive = (f_plus - f_minus) / (2 * delta)
-
-                    self.assertLess(np.abs(derivitive - df_dx[l_idx][r_idx][c_idx]), 1e-3)
 
     def test_learn_xor(self):
         '''

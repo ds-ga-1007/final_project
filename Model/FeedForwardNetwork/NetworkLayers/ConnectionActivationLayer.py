@@ -1,5 +1,4 @@
-import sys
-
+import numpy as np
 from Model.FeedForwardNetwork.NetworkLayers.FullyConnectedLayer import FullyConnectedLayer
 from Model.FeedForwardNetwork.NetworkLayers.Layer import Layer
 
@@ -32,19 +31,8 @@ class ConnectionActivationLayer(Layer):
         self.num_out = num_out
 
     def propogate_forward(self, X):
-        if X.shape[0] != self.num_in:
-            print("error. Input X shape 1 is not self.num_in. Replace this error message")
-            sys.exit(0)
         edge_output = self.FullyConnectedLayer.propogate_forward(X)
         self.act_vals = self.ActivationLayer.apply_trans_fcn(edge_output)
-
-    @property
-    def num_in(self):
-        return self._num_in
-
-    @num_in.setter
-    def num_in(self, num_in):
-        self._num_in = num_in
 
     @property
     def num_out(self):

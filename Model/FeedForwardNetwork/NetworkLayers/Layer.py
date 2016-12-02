@@ -15,10 +15,13 @@ class Layer(object):
     @has_bias.setter
     def has_bias(self, has_bias):
         self._has_bias = has_bias
+
     @property
     def num_in(self):
         return self._num_in
 
     @num_in.setter
     def num_in(self, num_in):
+        if num_in < 1:
+            raise ValueError("Layers need positive number of inputs")
         self._num_in = num_in

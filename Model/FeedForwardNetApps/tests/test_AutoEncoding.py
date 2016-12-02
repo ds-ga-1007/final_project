@@ -1,8 +1,7 @@
-
+from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
 import six
 from matplotlib import colors
-from sklearn.cluster import KMeans
 import unittest
 from Model.FeedForwardNetApps import *
 from Model.FeedForwardNetwork.NetworkLayers import *
@@ -19,16 +18,8 @@ def test_encoding_regression(verb=0):
         X[idx, :] = [X1, X2, X1 + X2, X1 - X2, X2 - X1, X1 * X2]
     X = X / 4 + np.random.rand(num_x, size_encoding) / 100
     encoder = AutoEncoder(X)
-    for _ in range(10):
-        encoder.train(10)
-        if verb > 0:
-            encoding_vals = encoder.get_encoding_vals()
-            err1 = np.abs(np.corrcoef(x=X1h, y=encoding_vals[:, 0])[0, 1]) + \
-                   np.abs(np.corrcoef(x=X2h, y=encoding_vals[:, 1])[0, 1])
-            err2 = np.abs(np.corrcoef(x=X2h, y=encoding_vals[:, 0])[0, 1]) + \
-                   np.abs(np.corrcoef(x=X1h, y=encoding_vals[:, 1])[0, 1])
-            print(err1, err2)
-        reconstruction = encoder.predict()
+    encoder.train(100)
+    reconstruction = encoder.predict()
     return np.mean(np.square(reconstruction - X))
 
 
@@ -51,8 +42,7 @@ def test_encode_n_vars_d_dims(num_hidden_dim, d, visualize=0):
     X = X - np.mean(X)
     X = X / np.abs(np.max(X)) / 3
     encoder = AutoEncoder(X, hidden_dim=d)
-    for _ in range(10):
-        encoder.train(10)
+    encoder.train(100)
     reconstruction = encoder.predict()
     encoding_vals = encoder.get_encoding_vals()
     encoding_vals = encoding_vals / np.abs(np.mean(encoding_vals, axis=0))
@@ -79,35 +69,6 @@ class TestAutoEncoding(unittest.TestCase):
     from the root directory of this project
     """
 
-    def test_autoencode_cluster_3d(self):
-
-        for num_hidden_dim in range(3, 7):
-            np.random.seed(1)
-            _, encoding_vals, Xhidden = \
-                test_encode_n_vars_d_dims(
-                    num_hidden_dim = num_hidden_dim, d = 3)
-            num_hidden = 2**num_hidden_dim
-            kmeans_classes = KMeans(
-                n_clusters=num_hidden).fit_predict(
-                    encoding_vals
-            )
-            true_classes = [np.sum([xi*(2**idx) for idx, xi in enumerate(x)])
-                            for x in Xhidden]
-            min_total_divergence = 0
-            for kmean_class in range(np.max(kmeans_classes)+1):
-                a = np.array([c == kmean_class for c in kmeans_classes])
-                min_divergence = np.inf
-                for true_class in range(np.max(true_classes)+1):
-                    b = np.array([c == true_class
-                                  for c in true_classes])
-                    difference = np.logical_xor(a, b)
-                    divergence = np.sum(difference)
-                    min_divergence = np.min((min_divergence, divergence))
-                min_total_divergence += min_divergence
-            min_total_divergence /= len(true_classes)
-            print(min_total_divergence)
-            self.assertLess(min_total_divergence, .1)
-"""
     def test_autoencode_regression(self):
 
         np.random.seed(1)
@@ -118,13 +79,12 @@ class TestAutoEncoding(unittest.TestCase):
 
         for num_hidden_dim in range(3, 6):
             np.random.seed(1)
-            encoding_error = test_encode_n_vars_d_dims(num_hidden_dim = num_hidden_dim, d = 3)
+            encoding_error, _, _ = test_encode_n_vars_d_dims(num_hidden_dim = num_hidden_dim, d = 3)
             self.assertLess(encoding_error, .1)
 
     def test_autoencode_2d(self):
 
         for num_hidden_dim in range(2, 6):
             np.random.seed(1)
-            encoding_error = test_encode_n_vars_d_dims(num_hidden_dim = num_hidden_dim, d = 2)
+            encoding_error, _, _ = test_encode_n_vars_d_dims(num_hidden_dim = num_hidden_dim, d = 2)
             self.assertLess(encoding_error, .1)
-"""
