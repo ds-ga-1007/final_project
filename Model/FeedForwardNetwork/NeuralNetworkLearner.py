@@ -8,8 +8,8 @@ class NeuralNetworkLearner(object):
     A neural network learner is the trainer for a neural network. It forward and backward
     propagates errors within its FeedForwardNetwork, and updates the network layer weights according
     to the error derivatives in accordance with the learners learning algorithm.
-
     '''
+
     def __init__(self, network, learning_rate = 0.01, learn_alg = utils.MOMENTUM_BP, loss_fcn='mse'):
         self.network = network
         self.learning_rate = learning_rate
@@ -49,12 +49,6 @@ class NeuralNetworkLearner(object):
 
     def _run_one_epoch(self, X, Y):
         self.train_one_epoch(X, Y)
-        #error = self.network.evaluate_error(X, Y)
-        #if error > self.best_network['error']:
-        #    pass
-
-
-
 
     def get_weight_deltas_for_active_algorithm(self, old_weights, backprop_error):
         if self.learn_alg == utils.GRADIENT_DESCENT:
@@ -163,19 +157,22 @@ class NeuralNetworkLearner(object):
     def weight_velocity(self, weight_velocity):
         self._weight_velocity = weight_velocity
 
-
     @property
     def layers(self):
+        ''' access the learner's networks layers'''
         return self.network.layers
 
     @property
+    def layer_deltas(self):
+        ''' access the learner's networks layer_deltas'''
+        return self.network.layer_deltas
+
+    @property
     def reg_const(self):
+        ''' access the learner's networks reg_const'''
         return self.network.reg_const
 
     @reg_const.setter
     def reg_const(self, reg_const):
+        '''set the learner's networks reg_const'''
         self.network.reg_const = reg_const
-
-    @property
-    def layer_deltas(self):
-        return self.network.layer_deltas
