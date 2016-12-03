@@ -1,6 +1,7 @@
 import numpy as np
+import numbers
 
-from Model.FeedForwardNetwork import utils
+from Model.FeedForwardNetwork import utils, NetworkFunction
 from Model.FeedForwardNetwork.NetworkLayers.ConnectionActivationLayer import ConnectionActivationLayer
 
 
@@ -36,6 +37,8 @@ class Network(object):
         #The connection input size is the previous layer size plus one for the bias term
         num_in = self.layer_sizes[layer_idx] + 1
         num_out = self.layer_sizes[layer_idx+1]
+        if num_in < 1 or num_out < 1:
+            raise ValueError("layers must have strictly positive nodes at each layer")
         fcn = self._get_one_trans_fcn(layer_idx)
         self.add_one_layer_and_associated_delta(fcn, num_in, num_out)
 
@@ -113,6 +116,8 @@ class Network(object):
 
     @num_layers.setter
     def num_layers(self, num_layers):
+        if num_layers < 1:
+            raise ValueError("Neural Networks must have at least one layer")
         self._num_layers = num_layers
 
     @property
@@ -161,6 +166,8 @@ class Network(object):
 
     @loss_fcn.setter
     def loss_fcn(self, loss_fcn):
+        #if not isinstance(loss_fcn, NetworkFunction):
+        #    raise ValueError("loss function must be a NetworkFunction")
         self._loss_fcn = loss_fcn
 
     @property
@@ -169,4 +176,8 @@ class Network(object):
 
     @reg_const.setter
     def reg_const(self, reg_const):
+        if not isinstance(reg_const, numbers.Number):
+            raise ValueError("regularization constant must be a number")
+        if reg_const < 0:
+            raise ValueError("regularization constant must be non-negative")
         self._reg_const = reg_const

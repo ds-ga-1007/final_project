@@ -61,7 +61,7 @@ class TestLayers(unittest.TestCase):
         self.assertEqual(conn_act_output[0], act_output[0])
         self.assertEqual(conn_act_output[1], act_output[1])
 
-    def test_layer_constructor_errors(self):
+    def test_negative_node_errors(self):
         with self.assertRaises(ValueError):
             FullyConnectedLayer(num_in=2, num_out=-3)
         with self.assertRaises(ValueError):
@@ -105,13 +105,4 @@ class TestLayers(unittest.TestCase):
             conn_act_layer.propogate_forward(np.ones((2, 3)))
         with self.assertRaises(ValueError):
             conn_act_layer.propogate_forward([])
-
-
-
-
-
-
-
-
-
 

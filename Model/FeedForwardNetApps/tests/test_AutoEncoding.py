@@ -62,7 +62,7 @@ def test_encode_n_vars_d_dims(num_hidden_dim, d, visualize=0):
     return np.mean(np.square(reconstruction - X)), encoding_vals, Xhidden
 
 
-class TestAutoEncoding(unittest.TestCase):
+class TestAutoEncoding():
     """
     unit tests for functions relating to the interval class
     These should be run by enterring the command "python -m unittest discover"

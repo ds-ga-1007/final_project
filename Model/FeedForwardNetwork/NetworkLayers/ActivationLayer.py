@@ -1,4 +1,5 @@
 from Model.FeedForwardNetwork.NetworkLayers.Layer import Layer
+from Model.FeedForwardNetwork import NetworkFunction
 import numpy as np
 
 class ActivationLayer(Layer):
