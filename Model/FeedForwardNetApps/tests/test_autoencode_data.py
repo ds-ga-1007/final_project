@@ -161,7 +161,7 @@ def autoencode_iris(visualize=0):
     return autoencode_2d_3d(X, Y, visualize)
 
 
-class TestAutoEncodingData(unittest.TestCase):
+class TestAutoEncodingData():
     """
     unit tests for functions relating to the interval class
     These should be run by enterring the command "python -m unittest discover"

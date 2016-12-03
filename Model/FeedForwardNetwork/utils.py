@@ -70,8 +70,8 @@ def get_one_trans(trans):
     if trans in trans_fcns:
         return trans_fcns[trans]
     else:
-        print("Error: " + str(trans) + " not known in tran_fcns")
-        sys.exit(0)
+        raise ValueError("Error: " + str(trans) + " not known in tran_fcns")
+
 
 def get_trans_list(trans):
     return [get_one_trans(fcn) for fcn in trans]
@@ -81,8 +81,7 @@ def get_trans(trans_fcns, num_layers):
         return [get_one_trans(trans_fcns)] * num_layers
     elif isinstance(trans_fcns, list):
         if num_layers != len(trans_fcns):
-            print("wrong number of trans fcns")
-            sys.exit(0)
+            raise ValueError("wrong number of trans fcns")
         return get_trans_list(trans_fcns)
     else:
         print ('what is transfer fcn?')

@@ -61,7 +61,7 @@ class TestLayers(unittest.TestCase):
         self.assertEqual(conn_act_output[0], act_output[0])
         self.assertEqual(conn_act_output[1], act_output[1])
 
-    def test_layer_constructor_errors(self):
+    def test_negative_node_errors(self):
         with self.assertRaises(ValueError):
             FullyConnectedLayer(num_in=2, num_out=-3)
         with self.assertRaises(ValueError):
@@ -72,6 +72,20 @@ class TestLayers(unittest.TestCase):
             ConnectionActivationLayer(tanh, tanh_p, 2, -2)
         with self.assertRaises(ValueError):
             ConnectionActivationLayer(tanh, tanh_p, -2, 2)
+
+    def test_non_NetworkFunction_errors(self):
+        with self.assertRaises(TypeError):
+            ActivationLayer(sigmoid, 10, 2)
+        with self.assertRaises(TypeError):
+            ActivationLayer([], sigmoid_p, 2)
+        with self.assertRaises(TypeError):
+            ActivationLayer('sigmoid', sigmoid_p, 2)
+        with self.assertRaises(TypeError):
+            ConnectionActivationLayer(sigmoid, 10, 2)
+        with self.assertRaises(TypeError):
+            ConnectionActivationLayer([], sigmoid_p, 2)
+        with self.assertRaises(TypeError):
+            ConnectionActivationLayer('tanh', sigmoid_p, 2)
 
     def test_FC_layer_error(self):
         fullyconnectedlayer = FullyConnectedLayer(num_in= 2, num_out = 3)
@@ -105,13 +119,4 @@ class TestLayers(unittest.TestCase):
             conn_act_layer.propogate_forward(np.ones((2, 3)))
         with self.assertRaises(ValueError):
             conn_act_layer.propogate_forward([])
-
-
-
-
-
-
-
-
-
 
