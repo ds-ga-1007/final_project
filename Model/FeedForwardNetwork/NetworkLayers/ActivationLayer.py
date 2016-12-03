@@ -1,3 +1,4 @@
+import types
 from Model.FeedForwardNetwork.NetworkLayers.Layer import Layer
 from Model.FeedForwardNetwork import NetworkFunction
 import numpy as np
@@ -31,6 +32,8 @@ class ActivationLayer(Layer):
 
     @trans_fcn.setter
     def trans_fcn(self, fcn):
+        if not isinstance(fcn, types.FunctionType):
+            raise TypeError("transfer functions of activation layers must be a function")
         self._trans_fcn = fcn
 
     @property
@@ -39,4 +42,7 @@ class ActivationLayer(Layer):
 
     @derivative_fcn.setter
     def derivative_fcn(self, derivative_fcn):
+        if not isinstance(derivative_fcn, types.FunctionType):
+            raise TypeError("deritive functions of activation layers must be a function")
+
         self._derivative_fcn = derivative_fcn

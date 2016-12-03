@@ -1,7 +1,8 @@
 import numpy as np
 import numbers
 
-from Model.FeedForwardNetwork import utils, NetworkFunction
+from Model.FeedForwardNetwork import utils
+from Model.FeedForwardNetwork.NetworkFunction import NetworkFunction
 from Model.FeedForwardNetwork.NetworkLayers.ConnectionActivationLayer import ConnectionActivationLayer
 
 
@@ -166,8 +167,8 @@ class Network(object):
 
     @loss_fcn.setter
     def loss_fcn(self, loss_fcn):
-        #if not isinstance(loss_fcn, NetworkFunction):
-        #    raise ValueError("loss function must be a NetworkFunction")
+        if not isinstance(loss_fcn, NetworkFunction):
+            raise ValueError("loss function must be a NetworkFunction")
         self._loss_fcn = loss_fcn
 
     @property

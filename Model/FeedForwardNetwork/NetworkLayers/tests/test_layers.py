@@ -73,6 +73,20 @@ class TestLayers(unittest.TestCase):
         with self.assertRaises(ValueError):
             ConnectionActivationLayer(tanh, tanh_p, -2, 2)
 
+    def test_non_NetworkFunction_errors(self):
+        with self.assertRaises(TypeError):
+            ActivationLayer(sigmoid, 10, 2)
+        with self.assertRaises(TypeError):
+            ActivationLayer([], sigmoid_p, 2)
+        with self.assertRaises(TypeError):
+            ActivationLayer('sigmoid', sigmoid_p, 2)
+        with self.assertRaises(TypeError):
+            ConnectionActivationLayer(sigmoid, 10, 2)
+        with self.assertRaises(TypeError):
+            ConnectionActivationLayer([], sigmoid_p, 2)
+        with self.assertRaises(TypeError):
+            ConnectionActivationLayer('tanh', sigmoid_p, 2)
+
     def test_FC_layer_error(self):
         fullyconnectedlayer = FullyConnectedLayer(num_in= 2, num_out = 3)
         with self.assertRaises(ValueError):
