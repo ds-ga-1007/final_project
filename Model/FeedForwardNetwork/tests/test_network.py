@@ -62,6 +62,8 @@ class TestNetwork(unittest.TestCase):
             Network([2, 3, 1], trans_fcns='sigmoid', loss_fcn='mse', reg_const=-1)
         with self.assertRaises(ValueError):
             Network([2, 3, 1], trans_fcns='sigmoid', loss_fcn='mse', reg_const=[1, 2])
+        with self.assertRaises(TypeError):
+            Network()
 
     def test_network_learner_constructor(self):
         pass

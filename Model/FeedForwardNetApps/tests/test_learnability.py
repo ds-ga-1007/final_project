@@ -4,7 +4,6 @@ from Model.FeedForwardNetApps import *
 from Model.FeedForwardNetwork import *
 from Model.FeedForwardNetwork.NetworkLayers import *
 
-#The following are test cases to ensure correct functionality of intervals
 
 def test_xor(verb=0):
     NN = FeedForwardNetworkUI([2, 100, 100, 1],
