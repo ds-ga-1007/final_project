@@ -5,26 +5,6 @@ from Model.FeedForwardNetwork.NetworkLayers import *
 
 class TestNetwork(unittest.TestCase):
 
-    def test_network_function(self):
-
-        sigfcn = trans_fcns['sigmoid']
-        self.assertTrue(sigfcn.forward_fcn is sigmoid)
-        self.assertTrue(sigfcn.derivative_fcn is sigmoid_p)
-        self.assertEqual(sigfcn.forward_fcn(0), 0.5)
-        self.assertEqual(sigfcn.derivative_fcn(0), 0.25)
-
-        tanhfcn = trans_fcns['tanh']
-        self.assertTrue(tanhfcn.forward_fcn is tanh)
-        self.assertTrue(tanhfcn.derivative_fcn is tanh_p)
-        self.assertEqual(tanhfcn.forward_fcn(0), 0)
-        self.assertEqual(tanhfcn.derivative_fcn(0), 1)
-
-        purelinfcn = trans_fcns['purelin']
-        self.assertTrue(purelinfcn.forward_fcn is purelin)
-        self.assertTrue(purelinfcn.derivative_fcn is purelin_p)
-        self.assertEqual(purelinfcn.forward_fcn(2), 2)
-        self.assertEqual(purelinfcn.derivative_fcn(2), -1)
-
     def test_network_constructor(self):
 
         network = Network([2, 3, 1], trans_fcns='sigmoid', loss_fcn='mse', reg_const=1e-3)
@@ -46,17 +26,6 @@ class TestNetwork(unittest.TestCase):
         Network([2, 3, 1], trans_fcns='sigmoid', loss_fcn='mse', reg_const=1.1)
         Network([2, 3, 1], trans_fcns='sigmoid', loss_fcn='mse', reg_const=0)
 
-    def test_network_function_errors(self):
-        purelinfcn = trans_fcns['purelin']
-        sigfcn = trans_fcns['sigmoid']
-        with self.assertRaises(TypeError):
-            NetworkFunction(purelinfcn, sigfcn)
-        with self.assertRaises(TypeError):
-            NetworkFunction(2, sigfcn.derivative_fcn)
-        with self.assertRaises(TypeError):
-            NetworkFunction(purelinfcn.forward_fcn, sigfcn)
-        with self.assertRaises(TypeError):
-            NetworkFunction(purelinfcn.forward_fcn, [])
 
     def test_network_errors(self):
         with self.assertRaises(KeyError):
@@ -75,26 +44,3 @@ class TestNetwork(unittest.TestCase):
             Network([2, 3, 1], trans_fcns='sigmoid', loss_fcn='mse', reg_const=[1, 2])
         with self.assertRaises(TypeError):
             Network()
-
-    def test_network_learner_constructor(self):
-
-        network = Network([1, 2, 1])
-        self.neuralnetworklearner = \
-            NeuralNetworkLearner(network = network, learning_rate = 1, learn_alg = utils.GRADIENT_DESCENT)
-        self.neuralnetworklearner = \
-            NeuralNetworkLearner(network = network, learning_rate = 1, learn_alg = utils.MOMENTUM_BP)
-        self.neuralnetworklearner = \
-            NeuralNetworkLearner(network = network)
-
-    def test_network_learner_errors(self):
-
-        with self.assertRaises(TypeError):
-            network = Network([2, 3, 1], trans_fcns='sigmoid', loss_fcn='mse', reg_const=1e-3)
-            learner = NeuralNetworkLearner(network)
-            learner.loss_fcn = 2
-        with self.assertRaises(TypeError):
-            network = Network([2, 3, 1], trans_fcns='sigmoid', loss_fcn='mse', reg_const=1e-3)
-            learner = NeuralNetworkLearner(network)
-            learner.loss_fcn = []
-        with self.assertRaises(TypeError):
-            NeuralNetworkLearner()

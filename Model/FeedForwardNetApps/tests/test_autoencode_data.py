@@ -16,7 +16,8 @@ def process_arrhythmia_supervised():
 
     csvloader = CSVLoader(target=[-1])
     datasetX, datasetY = csvloader.load_from_path('dataset/arrhythmia.data')
-    tsX = TabularSchemaTransformer(
+    tsX = TabularSchemaTransformer\
+            (
             [
                 "numeric",          # Age
                 "categorical",      # Sex
@@ -149,17 +150,16 @@ def autoencode_2d_3d(X, Y, visualize = 0):
         plt.show()
     return err[0], err[1]
 
-
 def autoencode_abalone(visualize=0):
 
     X, Y = process_abalone()
     return autoencode_2d_3d(X, Y, visualize)
 
+
 def autoencode_iris(visualize=0):
 
     X, Y = process_iris()
     return autoencode_2d_3d(X, Y, visualize)
-
 
 class TestAutoEncodingData():
     """

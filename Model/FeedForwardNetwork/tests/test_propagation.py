@@ -53,14 +53,14 @@ class TestPropagation(unittest.TestCase):
     def test_backprop_gradient(self):
         """"""
         np.random.seed(1)
-        NN = FeedForwardNetworkUI([2, 10, 1], learn_alg=utils.GRADIENT_DESCENT, reg_const=0,
+        NN = FeedForwardNetworkUI([2, 100, 1], learn_alg=utils.GRADIENT_DESCENT, reg_const=0,
                                   trans_fcns=["tanh", "purelin"])
         X = np.array([[0, 0],
                       [0, 1],
                       [1, 0],
                       [1, 1]])
         Y = np.array([np.array([x[0] + x[1]]) for x in X])
-        NN.train(X, Y, epochs=10000)
+        NN.train(X, Y, epochs=1000)
         NN_frozen = copy.deepcopy(NN)
 
         X0 = X[-1]

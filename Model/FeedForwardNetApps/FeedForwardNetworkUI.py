@@ -14,6 +14,15 @@ class FeedForwardNetworkUI(object):
 
     def __init__(self, layers, trans_fcns='sigmoid', loss_fcn='mse', reg_const=1e-3,
                  learn_alg=utils.MOMENTUM_BP, learning_rate=1e-3):
+        '''
+        User interface for Feed Forward Networks
+        :param layers: list of integers representing the layer sizes of the network
+        :param trans_fcns: string name of a transfer function or a list of transfer function named strings.
+        :param loss_fcn: string name of a loss function
+        :param reg_const: numeric regularization constant
+        :param learn_alg: numeric representation of a learning algorithm
+        :param learning_rate: numeric representation of learning rate.
+        '''
 
         network = Network(layers, trans_fcns, loss_fcn, reg_const)
         self.neuralnetworklearner = \
