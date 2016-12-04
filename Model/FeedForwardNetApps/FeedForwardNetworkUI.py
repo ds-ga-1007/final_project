@@ -10,13 +10,11 @@ class FeedForwardNetworkUI(object):
     During training, the NeuralNetworkLearner updates the FeedForwardNetwork
     in accordance with its learning algorithm.
     A user can also predict the output of a list of inputs based on the current network
-
-    Visualization description?
     '''
 
     def __init__(self, layers, trans_fcns='sigmoid', loss_fcn='mse', reg_const = 1e-3,
                  learn_alg = utils.MOMENTUM_BP, learning_rate = 1e-3):
-        #MAKE THIS LOOK LIKE A PRIVATE VAREIABLE
+
         self.network = Network(layers, trans_fcns, loss_fcn, reg_const)
         self.neuralnetworklearner = \
             NeuralNetworkLearner(network = self.network, learning_rate = learning_rate)
