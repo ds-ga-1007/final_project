@@ -30,9 +30,21 @@ class FeedForwardNetworkUI(object):
                                  learning_rate=learning_rate, learn_alg=learn_alg)
 
     def train(self, X, Y, epochs=10):
+        '''
+        Train the network using the neuralnetworklearner
+        :param X: 2D numpy.ndarray of predictor variables
+        :param Y: 2D numpy.ndarray of output variables
+        :param epochs: integer-like number of epochs to run
+        :return: None
+        '''
         self.neuralnetworklearner.run_epochs(X, Y, epochs)
 
     def predict(self, X):
+        '''
+        Predict output Y variable for each column of input values in X
+        :param X: 2D numpy.ndarray of predictor variables
+        :return: 2D array of output variables
+        '''
         return [self.network.predict(xi) for xi in X]
 
     @property

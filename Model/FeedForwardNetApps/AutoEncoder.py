@@ -20,6 +20,12 @@ class AutoEncoder(object):
     '''
 
     def __init__(self, X, hidden_dim=2):
+        '''
+        Create an autoencoder for a high dimensional dataset
+        represented as a 2d matrix
+        :param X: 2D numpy.ndarray of the data to be autoencoded
+        :param hidden_dim: int of the most narrow hidden layer within the autoencoder
+        '''
         self.hidden_dim = hidden_dim
         self.X = X
         width = X.shape[1]

@@ -117,8 +117,10 @@ def process_iris():
     return processedX, processedY
 
 def autoencode_2d_3d(X, Y, visualize = 0):
+
     X = X / 2
     color_list = list(six.iteritems(colors.cnames))
+
     if Y.ndim == 1:
         rgb = [color_list[y*2 + 1][0] for y in Y]
     elif Y.ndim == 2:
@@ -126,16 +128,21 @@ def autoencode_2d_3d(X, Y, visualize = 0):
             [yi * (2 ** idx) for idx, yi in enumerate(y)])][0] for y in Y]
     else:
         visualize = 0
+
     err = np.empty(2)
     if visualize > 0:
         fig = plt.figure()
+
     for d in [2, 3]:
+
         encoder = AutoEncoder(X, hidden_dim=d)
-        for ep in range(10):
-            encoder.train(3)
+        encoder.train(10)
         reconstruction = encoder.predict()
+
         if visualize > 0:
+
             encoding_vals = encoder.get_encoding_vals()
+
             if d == 2:
                 fig.add_subplot(120 + d - 1)
                 plt.scatter(encoding_vals[:, 0], encoding_vals[:, 1], color=rgb)
@@ -143,11 +150,14 @@ def autoencode_2d_3d(X, Y, visualize = 0):
                 ax = fig.add_subplot(120 + d - 1, projection='3d')
                 ax.scatter(xs=encoding_vals[:, 0], ys=encoding_vals[:, 1],
                            zs=encoding_vals[:, 2], c=rgb)
+
             plt.title('real data visualized with graphed in ' + str(d) + 'D')
+
         err[d-2] = np.mean(np.square(reconstruction - X))
 
     if visualize > 0:
         plt.show()
+
     return err[0], err[1]
 
 def autoencode_abalone(visualize=0):
@@ -161,7 +171,7 @@ def autoencode_iris(visualize=0):
     X, Y = process_iris()
     return autoencode_2d_3d(X, Y, visualize)
 
-class TestAutoEncodingData():
+class TestAutoEncodingData(unittest.TestCase):
     """
     unit tests for functions relating to the interval class
     These should be run by enterring the command "python -m unittest discover"
