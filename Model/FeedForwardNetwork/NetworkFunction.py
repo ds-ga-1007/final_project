@@ -15,6 +15,8 @@ class NetworkFunction(object):
 
     @forward_fcn.setter
     def forward_fcn(self, fcn):
+        if not callable(fcn):
+            raise TypeError("Network Function forward functions must be callable")
         self._forward_fcn = fcn
 
     @property
@@ -23,4 +25,6 @@ class NetworkFunction(object):
 
     @derivative_fcn.setter
     def derivative_fcn(self, derivative_fcn):
+        if not callable(derivative_fcn):
+            raise TypeError("Network Function derivative functions must be callable")
         self._derivative_fcn = derivative_fcn

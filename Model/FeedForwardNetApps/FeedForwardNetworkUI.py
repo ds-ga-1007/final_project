@@ -12,14 +12,15 @@ class FeedForwardNetworkUI(object):
     A user can also predict the output of a list of inputs based on the current network
     '''
 
-    def __init__(self, layers, trans_fcns='sigmoid', loss_fcn='mse', reg_const = 1e-3,
-                 learn_alg = utils.MOMENTUM_BP, learning_rate = 1e-3):
+    def __init__(self, layers, trans_fcns='sigmoid', loss_fcn='mse', reg_const=1e-3,
+                 learn_alg=utils.MOMENTUM_BP, learning_rate=1e-3):
 
-        self.network = Network(layers, trans_fcns, loss_fcn, reg_const)
+        network = Network(layers, trans_fcns, loss_fcn, reg_const)
         self.neuralnetworklearner = \
-            NeuralNetworkLearner(network = self.network, learning_rate = learning_rate)
+            NeuralNetworkLearner(network=network,
+                                 learning_rate=learning_rate, learn_alg=learn_alg)
 
-    def train(self, X, Y, epochs = 10):
+    def train(self, X, Y, epochs=10):
         self.neuralnetworklearner.run_epochs(X, Y, epochs)
 
     def predict(self, X):
@@ -27,11 +28,11 @@ class FeedForwardNetworkUI(object):
 
     @property
     def network(self):
-        return self._network
+        return self.neuralnetworklearner.network
 
     @network.setter
     def network(self, network):
-        self._network = network
+        self.neuralnetworklearner.network = network
 
     @property
     def neuralnetworklearner(self):

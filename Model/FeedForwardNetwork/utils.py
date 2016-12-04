@@ -7,6 +7,8 @@ from Model.FeedForwardNetwork.NetworkFunction import NetworkFunction
 GRADIENT_DESCENT = 0
 MOMENTUM_BP = 1
 
+TRAINING_ALGORITHMS = {GRADIENT_DESCENT,
+                       MOMENTUM_BP}
 
 MOMENTUM_DECAY = 0.99
 

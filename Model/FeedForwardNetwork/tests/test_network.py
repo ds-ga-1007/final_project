@@ -1,4 +1,3 @@
-import copy
 import unittest
 from Model.FeedForwardNetApps import *
 from Model.FeedForwardNetwork import *
@@ -47,6 +46,18 @@ class TestNetwork(unittest.TestCase):
         Network([2, 3, 1], trans_fcns='sigmoid', loss_fcn='mse', reg_const=1.1)
         Network([2, 3, 1], trans_fcns='sigmoid', loss_fcn='mse', reg_const=0)
 
+    def test_network_function_errors(self):
+        purelinfcn = trans_fcns['purelin']
+        sigfcn = trans_fcns['sigmoid']
+        with self.assertRaises(TypeError):
+            NetworkFunction(purelinfcn, sigfcn)
+        with self.assertRaises(TypeError):
+            NetworkFunction(2, sigfcn.derivative_fcn)
+        with self.assertRaises(TypeError):
+            NetworkFunction(purelinfcn.forward_fcn, sigfcn)
+        with self.assertRaises(TypeError):
+            NetworkFunction(purelinfcn.forward_fcn, [])
+
     def test_network_errors(self):
         with self.assertRaises(KeyError):
             Network([2, 3, 1], trans_fcns='sigmoid', loss_fcn=12, reg_const=1e-4)
@@ -66,4 +77,24 @@ class TestNetwork(unittest.TestCase):
             Network()
 
     def test_network_learner_constructor(self):
-        pass
+
+        network = Network([1, 2, 1])
+        self.neuralnetworklearner = \
+            NeuralNetworkLearner(network = network, learning_rate = 1, learn_alg = utils.GRADIENT_DESCENT)
+        self.neuralnetworklearner = \
+            NeuralNetworkLearner(network = network, learning_rate = 1, learn_alg = utils.MOMENTUM_BP)
+        self.neuralnetworklearner = \
+            NeuralNetworkLearner(network = network)
+
+    def test_network_learner_errors(self):
+
+        with self.assertRaises(TypeError):
+            network = Network([2, 3, 1], trans_fcns='sigmoid', loss_fcn='mse', reg_const=1e-3)
+            learner = NeuralNetworkLearner(network)
+            learner.loss_fcn = 2
+        with self.assertRaises(TypeError):
+            network = Network([2, 3, 1], trans_fcns='sigmoid', loss_fcn='mse', reg_const=1e-3)
+            learner = NeuralNetworkLearner(network)
+            learner.loss_fcn = []
+        with self.assertRaises(TypeError):
+            NeuralNetworkLearner()

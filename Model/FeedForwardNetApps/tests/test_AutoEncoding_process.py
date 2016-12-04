@@ -42,7 +42,7 @@ def test_encode_n_vars_d_dims(num_hidden_dim, d, visualize=0):
     X = X - np.mean(X)
     X = X / np.abs(np.max(X)) / 3
     encoder = AutoEncoder(X, hidden_dim=d)
-    encoder.train(100)
+    encoder.train(10)
     reconstruction = encoder.predict()
     encoding_vals = encoder.get_encoding_vals()
     encoding_vals = encoding_vals / np.abs(np.mean(encoding_vals, axis=0))
@@ -73,14 +73,14 @@ class TestAutoEncodingProcess(unittest.TestCase):
 
     def test_autoencode_3d(self):
 
-        for num_hidden_dim in range(3, 3):
+        for num_hidden_dim in range(3, 4):
             np.random.seed(1)
             encoding_error, _, _ = test_encode_n_vars_d_dims(num_hidden_dim = num_hidden_dim, d = 3)
             self.assertLess(encoding_error, .1)
 
     def test_autoencode_2d(self):
 
-        for num_hidden_dim in range(2, 2):
+        for num_hidden_dim in range(2, 4):
             np.random.seed(1)
             encoding_error, _, _ = test_encode_n_vars_d_dims(num_hidden_dim = num_hidden_dim, d = 2)
             self.assertLess(encoding_error, .1)

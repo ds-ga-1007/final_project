@@ -66,4 +66,6 @@ class TestUI(unittest.TestCase):
             FeedForwardNetworkUI([2, 3, 1], trans_fcns='sigmoid', loss_fcn='mse', reg_const=[1, 2])
         with self.assertRaises(TypeError):
             FeedForwardNetworkUI()
+        with self.assertRaises(ValueError):
+            FeedForwardNetworkUI([1, 3, 1], learn_alg = 4)
 
