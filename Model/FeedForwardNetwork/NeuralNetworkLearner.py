@@ -1,5 +1,5 @@
 import numpy as np
-
+import numbers
 from Model.FeedForwardNetwork import utils
 from Model.FeedForwardNetwork import NetworkFunction
 
@@ -134,6 +134,10 @@ class NeuralNetworkLearner(object):
 
     @learning_rate.setter
     def learning_rate(self, learning_rate):
+        if not isinstance(learning_rate, numbers.Number):
+            raise TypeError("learning rate be a number")
+        if learning_rate <= 0:
+            raise ValueError("learning rate must be non-negative")
         self._learning_rate = learning_rate
 
     @property

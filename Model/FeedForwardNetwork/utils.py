@@ -56,7 +56,7 @@ trans_fcns = {
               'sigmoid': NetworkFunction(sigmoid, sigmoid_p),
               'tanh': NetworkFunction(tanh, tanh_p),
               'purelin': NetworkFunction(purelin, purelin_p)
-              }
+             }
 
 loss_fcns = {
               'mse': NetworkFunction(mse, mse_p),
@@ -86,7 +86,7 @@ def get_trans(trans_fcns, num_layers):
             raise ValueError("wrong number of trans fcns")
         return get_trans_list(trans_fcns)
     else:
-        print ('what is transfer fcn?')
+        print('what is transfer fcn?')
         sys.exit(0)
 
 def get_loss(loss_fcn):

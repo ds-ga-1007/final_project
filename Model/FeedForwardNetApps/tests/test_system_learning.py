@@ -13,11 +13,13 @@ def test_xor(verb=0):
                   [1, 0],
                   [1, 1]])
     Y = np.array([np.array([x[0] ^ x[1]]) for x in X])
+
     for _ in range(10):
         NN.train(X, Y, epochs=500)
         if verb > 0:
             y_predict = NN.predict(X)
             print(y_predict)
+
     y_predict = NN.predict(X)
     return np.mean(np.square(y_predict - Y))
 
@@ -31,13 +33,16 @@ def test_addition(verb=0):
                   [1, 0],
                   [1, 1]])
     Y = np.array([np.array([x[0] + x[1]]) for x in X])
+
     if verb > -1:
         pass
+
     for _ in range(10):
         NN.train(X, Y, epochs=100)
         if verb > 0:
             y_predict = NN.predict(X)
             print(y_predict)
+
     y_predict = NN.predict(X)
     return np.mean(np.square(y_predict - Y))
 
@@ -47,18 +52,21 @@ def test_sine(verb=0):
                               trans_fcns="tanh", reg_const=1e-5)
     X = np.linspace(0, 2 * np.pi, num=5)
     Y = np.array([np.sin(x) for x in X])
+
     if np.ndim(X) == 1:
         X = np.atleast_2d(X).T
         Y = np.atleast_2d(Y).T
+
     for _ in range(10):
         NN.train(X, Y, epochs=100)
         if verb > 0:
             y_predict = NN.predict(X)
             print(y_predict)
+
     y_predict = NN.predict(X)
     return np.mean(np.square(y_predict - Y))
 
-class TestLearnability(unittest.TestCase):
+class TestSystemLearning(unittest.TestCase):
     """
     Tests for functions relating to the interval class
     """

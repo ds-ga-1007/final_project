@@ -14,7 +14,6 @@ class ActivationLayer(Layer):
         Layer.__init__(self, num_in, has_bias=True)
         self.trans_fcn = fcn
         self.derivative_fcn = derivative
-        self.num_in = num_in
 
     def apply_trans_fcn(self, vect):
         if len(vect) != self.num_in or not isinstance(vect[0], np.float):
