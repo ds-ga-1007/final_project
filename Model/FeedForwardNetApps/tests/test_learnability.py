@@ -4,7 +4,6 @@ from Model.FeedForwardNetApps import *
 from Model.FeedForwardNetwork import *
 from Model.FeedForwardNetwork.NetworkLayers import *
 
-#The following are test cases to ensure correct functionality of intervals
 
 def test_xor(verb=0):
     NN = FeedForwardNetworkUI([2, 100, 100, 1],
@@ -72,7 +71,7 @@ class TestLearnability(unittest.TestCase):
         '''
         np.random.seed(1)
         xor_err = test_xor()
-        self.assertLess(xor_err, 1e-3)
+        self.assertLess(xor_err, 1e-2)
 
     def test_learn_add(self):
         '''
@@ -83,7 +82,7 @@ class TestLearnability(unittest.TestCase):
         '''
         np.random.seed(1)
         add_error = test_addition()
-        self.assertLess(add_error, 1e-3)
+        self.assertLess(add_error, 1e-2)
 
     def test_learn_sine(self):
         '''
@@ -92,6 +91,6 @@ class TestLearnability(unittest.TestCase):
         '''
         np.random.seed(1)
         sine_error = test_sine()
-        self.assertLess(sine_error, 1e-3)
+        self.assertLess(sine_error, 1e-2)
 
 

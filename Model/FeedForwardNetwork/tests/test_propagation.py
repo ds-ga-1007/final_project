@@ -53,14 +53,14 @@ class TestPropagation(unittest.TestCase):
     def test_backprop_gradient(self):
         """"""
         np.random.seed(1)
-        NN = FeedForwardNetworkUI([2, 5, 1], learn_alg=utils.GRADIENT_DESCENT, reg_const=0,
+        NN = FeedForwardNetworkUI([2, 10, 1], learn_alg=utils.GRADIENT_DESCENT, reg_const=0,
                                   trans_fcns=["tanh", "purelin"])
         X = np.array([[0, 0],
                       [0, 1],
                       [1, 0],
                       [1, 1]])
         Y = np.array([np.array([x[0] + x[1]]) for x in X])
-        NN.train(X, Y, epochs=1000)
+        NN.train(X, Y, epochs=10000)
         NN_frozen = copy.deepcopy(NN)
 
         X0 = X[-1]
@@ -78,7 +78,7 @@ class TestPropagation(unittest.TestCase):
                     derivitive = computationally_approximate_gradient(
                         NN_frozen, l_idx, r_idx, c_idx, weight, X0, Y0)
 
-                    self.assertLess(np.abs(derivitive - df_dx[l_idx][r_idx][c_idx]), 1e-3)
+                    self.assertLess(np.abs(derivitive - df_dx[l_idx][r_idx][c_idx]), 1e-2)
 
     def test_feed_forward(self):
         """test accurate forward propogation of the network containing
@@ -89,6 +89,6 @@ class TestPropagation(unittest.TestCase):
         for X in [np.ones(2),np.array([0, -.5])]:
             for NN in [NN1, NN2]:
                 correct_output = calculate_correct_output(NN, X)
-                NN.neuralnetworklearner.network.feed_forward(X)
+                NN.neuralnetworklearner.network._feed_forward(X)
                 network_output = NN.neuralnetworklearner.layers[-1].act_vals
                 self.assertLess(np.abs(correct_output-network_output), 1e-2)

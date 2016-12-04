@@ -1,8 +1,13 @@
 class Layer(object):
     '''
-    A layer is a parent class for the different layer types
-    of a Neural FeedForwardNetwork
+    Parent class for all Layers.
+
+    Parameters
+    ----------
+    num_in : integer representing the number of nodes into a layer instance
+    has_bias : boolean representing if the layer contains a bias term
     '''
+
     def __init__(self, num_in, has_bias = False):
         self.num_in = num_in
         self.has_bias = has_bias

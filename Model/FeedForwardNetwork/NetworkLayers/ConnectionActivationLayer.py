@@ -65,4 +65,3 @@ class ConnectionActivationLayer(Layer):
     @ActivationLayer.setter
     def ActivationLayer(self, ActivationLayer):
         self._ActivationLayer = ActivationLayer
-

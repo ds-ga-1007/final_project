@@ -14,7 +14,7 @@ class Network(object):
     with respect to every layer.
     '''
 
-    def __init__(self, layer_sizes, trans_fcns='sigmoid', loss_fcn='mse', reg_const = 1e-3):
+    def __init__(self, layer_sizes, trans_fcns='sigmoid', loss_fcn='mse', reg_const=1e-3):
         self.reg_const = reg_const
         trans_fcns = utils.get_trans(trans_fcns = trans_fcns, num_layers =len(layer_sizes) - 1)
         self.loss_fcn = utils.get_loss(loss_fcn)
@@ -54,7 +54,7 @@ class Network(object):
         self._weight_deltas.append(weight_delta_placeholder)
         self.weight_velocity.append(weight_velocity_placeholder)
 
-    def feed_forward(self, X):
+    def _feed_forward(self, X):
         act_vals = X
         for layer in self.layers:
             layer.propogate_forward(utils.vect_with_bias(act_vals))
@@ -73,25 +73,25 @@ class Network(object):
         error_matrix_for_layer_nodes = weight_vals.T * derivative_of_previous_activations
         return np.sum(error_matrix_for_layer_nodes, 0)
 
-    def prop_back_one_layer(self, delta_idx):
+    def _prop_back_one_layer(self, delta_idx):
         fullyconnectedlayer = self.layers[delta_idx].FullyConnectedLayer
         edge_weights = fullyconnectedlayer.get_weights_except_bias()
         forward_error = self.layer_deltas[delta_idx]
         edge_error = edge_weights * forward_error
         self.layer_deltas[delta_idx - 1] = np.sum(edge_error, 1)
 
-    def backpropagate(self, error):
+    def _backpropagate(self, error):
         self.layer_deltas[-1] = error
         for delta_idx in range(len(self.layer_deltas) - 1, 0, -1):
-            self.prop_back_one_layer(delta_idx)
+            self._prop_back_one_layer(delta_idx)
 
 
     def predict(self, X):
-        self.feed_forward(X)
+        self._feed_forward(X)
         return self.layers[-1].act_vals
 
     def evaluate_error(self, X, Y):
-        self.feed_forward(X)
+        self._feed_forward(X)
         yhat = self.layers[-1].act_vals
         error = self.loss_fcn.forward_fcn(yhat, Y)
         return error
