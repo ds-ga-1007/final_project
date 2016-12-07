@@ -15,12 +15,26 @@ class Network(object):
     '''
 
     def __init__(self, layer_sizes, trans_fcns='sigmoid', loss_fcn='mse', reg_const=1e-3):
+        """
+        Feed Forward Neural Network constructor
+        :param layer_sizes: list of integers. Represents the layer sizes of the network structure
+        :param trans_fcns: String or list of strings. If a list, must be same legnth as layer_sizes
+        :param loss_fcn: String representation of a loss function
+        :param reg_const: Numeric value used to regularize the network during training.
+            Must be non-negative. 0 corresponds to no regularization.
+        """
         self.reg_const = reg_const
         trans_fcns = utils.get_trans(trans_fcns = trans_fcns, num_layers =len(layer_sizes) - 1)
         self.loss_fcn = utils.get_loss(loss_fcn)
         self._init_layers_and_deltas(trans_fcns, layer_sizes)
 
     def _init_layers_and_deltas(self, trans_fcns, layer_sizes):
+        """
+        Initialize layers and corresponding deltas for a network
+        :param trans_fcns: list of NetworkFunctions for forward and backward propoagation
+        :param layer_sizes: width of layers of the network
+        :return: None
+        """
         self.layers = []
         self.layer_sizes = layer_sizes
         self.trans_fcns = trans_fcns
@@ -35,6 +49,16 @@ class Network(object):
             self._add_one_layer(layer_idx)
 
     def _add_one_layer(self, layer_idx):
+        """
+        For initialization, initializes the layer_idx layer within the network
+        :param layer_idx: int-like, represents the layer
+        :return: None
+        """
+        try:
+            layer_idx = int(layer_idx)
+        except ValueError:
+            raise ValueError('network._add_one_layer(layer_idx) only accepts integer layer indexes')
+
         #The connection input size is the previous layer size plus one for the bias term
         num_in = self.layer_sizes[layer_idx] + 1
         num_out = self.layer_sizes[layer_idx+1]
@@ -44,6 +68,7 @@ class Network(object):
         self.add_one_layer_and_associated_delta(fcn, num_in, num_out)
 
     def add_one_layer_and_associated_delta(self, fcn, num_in, num_out):
+
         layer = ConnectionActivationLayer(fcn = fcn.forward_fcn, fcn_p = fcn.derivative_fcn,
                                           num_in = num_in, num_out = num_out)
         self._layers.append(layer)
@@ -55,12 +80,19 @@ class Network(object):
         self.weight_velocity.append(weight_velocity_placeholder)
 
     def _feed_forward(self, X):
+
         act_vals = X
         for layer in self.layers:
             layer.propogate_forward(utils.vect_with_bias(act_vals))
             act_vals = layer.act_vals
 
     def _layer_derivative(self, idx):
+        """
+        Calculate the derivitive of the idx layer of the network, from the
+        activation values of the previous layer and the weight values.
+        :param idx:
+        :return: numpy.ndarray of the np.float values, length of the idx layer of the network,
+        """
 
         fullyconnectedlayer = self.layers[idx].FullyConnectedLayer
         weight_vals = fullyconnectedlayer.get_weights_except_bias()
@@ -74,6 +106,12 @@ class Network(object):
         return np.sum(error_matrix_for_layer_nodes, 0)
 
     def _prop_back_one_layer(self, delta_idx):
+        """
+        Backpropogate the error one layer, from the delta_idx layer to the previous layer.
+        :param delta_idx: int-like. Represents the index in the network
+            of which layer to backpropogate error from
+        :return: None
+        """
         fullyconnectedlayer = self.layers[delta_idx].FullyConnectedLayer
         edge_weights = fullyconnectedlayer.get_weights_except_bias()
         forward_error = self.layer_deltas[delta_idx]
@@ -81,19 +119,23 @@ class Network(object):
         self.layer_deltas[delta_idx - 1] = np.sum(edge_error, 1)
 
     def _backpropagate(self, error):
+
         self.layer_deltas[-1] = error
         for delta_idx in range(len(self.layer_deltas) - 1, 0, -1):
             self._prop_back_one_layer(delta_idx)
 
 
     def predict(self, X):
+
         self._feed_forward(X)
         return self.layers[-1].act_vals
 
     def evaluate_error(self, X, Y):
+
         self._feed_forward(X)
         yhat = self.layers[-1].act_vals
         error = self.loss_fcn.forward_fcn(yhat, Y)
+
         return error
 
 
@@ -117,8 +159,10 @@ class Network(object):
 
     @num_layers.setter
     def num_layers(self, num_layers):
+
         if num_layers < 1:
             raise ValueError("Neural Networks must have at least one layer")
+
         self._num_layers = num_layers
 
     @property
@@ -167,8 +211,10 @@ class Network(object):
 
     @loss_fcn.setter
     def loss_fcn(self, loss_fcn):
+
         if not isinstance(loss_fcn, NetworkFunction):
             raise ValueError("loss function must be a NetworkFunction")
+
         self._loss_fcn = loss_fcn
 
     @property
@@ -177,8 +223,10 @@ class Network(object):
 
     @reg_const.setter
     def reg_const(self, reg_const):
+
         if not isinstance(reg_const, numbers.Number):
             raise ValueError("regularization constant must be a number")
         if reg_const < 0:
             raise ValueError("regularization constant must be non-negative")
+
         self._reg_const = reg_const
