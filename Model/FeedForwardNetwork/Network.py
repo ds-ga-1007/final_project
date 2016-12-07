@@ -79,9 +79,9 @@ class Network(object):
         self._weight_deltas.append(weight_delta_placeholder)
         self.weight_velocity.append(weight_velocity_placeholder)
 
-    def _feed_forward(self, X):
+    def _feed_forward(self, xi):
 
-        act_vals = X
+        act_vals = xi
         for layer in self.layers:
             layer.propogate_forward(utils.vect_with_bias(act_vals))
             act_vals = layer.act_vals
@@ -125,12 +125,27 @@ class Network(object):
             self._prop_back_one_layer(delta_idx)
 
 
-    def predict(self, X):
+    def predict(self, xi):
+        """
+        Predict output based on input xi
+        :param X: numpy.ndarray of input activations
+        :return: np.ndarray of activations of the last layer
+            corresponding to input xi
+        """
 
-        self._feed_forward(X)
+        self._feed_forward(xi)
         return self.layers[-1].act_vals
 
     def evaluate_error(self, X, Y):
+        """
+        self evaluate the error of the current network
+        by evaluate the learner's loss function of the predicted yhat
+        and the true Y values
+        :param X: numpy.ndarray of input activations
+        :param Y: np.ndarray of true output values
+        :return: numeric loss function evaluated between the predicted
+            and correct output activation valuess
+        """
 
         self._feed_forward(X)
         yhat = self.layers[-1].act_vals
