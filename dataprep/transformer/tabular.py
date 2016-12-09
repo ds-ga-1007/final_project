@@ -171,8 +171,6 @@ class DropColumnTransformer(Transformer):
         for c in columns:
             if int_columns and not isinstance(c, Integral):
                 raise TypeError('the elements in columns are not all ints')
-            if int_columns and (c < 0):
-                raise ValueError('negative indices')
             if not int_columns and not isinstance(c, str):
                 raise TypeError('the elements in columns are not all strs')
 
