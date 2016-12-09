@@ -179,3 +179,21 @@ class TestTransformer(TestCase):
                 )
         res = TabularSchemaGuesser().transform(df)
         self.assertTrue(generic_array_equal(res, ans))
+
+    def test_tabular(self):
+        df = PD.DataFrame(
+                [[1, 'a', '?'], [2, 'a', 2], ['?', 'b', 3]],
+                columns=['A', 'B', 'C']
+                )
+        ans = NP.array([['a', '?'], ['a', 2], ['b', 3]], dtype=NP.object)
+        res = DropColumnTransformer(['A']).transform(df)
+        self.assertTrue(generic_array_equal(res, ans))
+        res = DropColumnTransformer([0]).transform(df)
+        self.assertTrue(generic_array_equal(res, ans))
+
+        with self.assertRaises(TypeError):
+            DropColumnTransformer([2.3])
+        with self.assertRaises(IndexError):
+            res = DropColumnTransformer([4]).transform(df)
+        with self.assertRaises(ValueError):
+            res = DropColumnTransformer(['D']).transform(df)
