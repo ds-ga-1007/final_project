@@ -5,7 +5,7 @@ from Model.FeedForwardNetwork import *
 
 
 class TestUI(unittest.TestCase):
-
+    """tests for FeedForwardNetworkUI and AutoEncoder at a UI level"""
     def test_autoencoder_constructor(self):
 
         def get_shape(x):

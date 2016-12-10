@@ -4,8 +4,11 @@ from Model.FeedForwardNetApps import *
 from Model.FeedForwardNetwork import *
 from Model.FeedForwardNetwork.NetworkLayers import *
 
-
+"""
+Tests to ensure that that FeedForwardNetworkUI is capable of learning
+"""
 def test_xor(verb=0):
+
     NN = FeedForwardNetworkUI([2, 100, 100, 1],
                               reg_const=1e-4)
     X = np.array([[0, 0],
@@ -25,6 +28,7 @@ def test_xor(verb=0):
 
 
 def test_addition(verb=0):
+
     NN = FeedForwardNetworkUI([2, 100, 1],
                               trans_fcns=["sigmoid", "purelin"],
                               learn_alg=utils.GRADIENT_DESCENT)
@@ -48,6 +52,7 @@ def test_addition(verb=0):
 
 
 def test_sine(verb=0):
+
     NN = FeedForwardNetworkUI([1, 200, 1],
                               trans_fcns="tanh", reg_const=1e-5)
     X = np.linspace(0, 2 * np.pi, num=5)
@@ -68,9 +73,8 @@ def test_sine(verb=0):
 
 class TestSystemLearning(unittest.TestCase):
     """
-    Tests for functions relating to the interval class
+    Tests to ensure that that FeedForwardNetworkUI is capable of learning
     """
-
 
     def test_learn_xor(self):
         '''

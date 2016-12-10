@@ -4,6 +4,12 @@ from Model.FeedForwardNetApps import *
 from Model.FeedForwardNetwork import *
 from Model.FeedForwardNetwork.NetworkLayers import *
 
+"""
+Tests for correct forward and backward propogation of the Network class
+These tests ensure the mathematical calculations used on a low level for all
+learning and predicting within this model.
+"""
+
 DELTA = 1e-7
 
 def computationally_approximate_gradient(NN_frozen, l_idx, r_idx, c_idx,
@@ -49,6 +55,9 @@ def calculate_correct_output(NN, X):
 
 
 class TestPropagation(unittest.TestCase):
+    """
+    Tests for correct forward and backward propogation of the Network class
+    """
 
     def test_backprop_gradient(self):
         """The following test approximates the derivitive of error with respect to each
