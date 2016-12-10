@@ -26,11 +26,7 @@ def test_encoding_regression(verb=0):
 
     return np.mean(np.square(reconstruction - X))
 
-
-def test_encode_n_vars_d_dims(num_hidden_dim, d, visualize=0):
-
-    if not isinstance(d, int):
-        raise(ValueError("hidden dimensions must be an integer"))
+def prepare_data_autoencoding(num_hidden_dim):
 
     num_x = (num_hidden_dim ** 2) * 20
     size_encoding = (num_hidden_dim ** 2) * 4
@@ -41,34 +37,59 @@ def test_encode_n_vars_d_dims(num_hidden_dim, d, visualize=0):
 
     for idx in range(num_x):
         X[idx, :] = np.array([[xi + xj, xi - xj, xj - xi, xi * xj]
-                              for xi in Xhidden[idx,:]
-                              for xj in Xhidden[idx,:]]).flatten()
+                              for xi in Xhidden[idx, :]
+                              for xj in Xhidden[idx, :]]).flatten()
         rgb[idx] = color_list[np.sum([Xhidden[idx, i] * (2 ** i)
                                       for i in range(num_hidden_dim)])][0]
 
-    X = X + np.random.rand(num_x, size_encoding) / 3
-    X = X - np.mean(X)
-    X = X / np.abs(np.max(X)) / 3
+    X += (np.random.rand(num_x, size_encoding) / 5)
+    X -= - np.mean(X)
+    X /= (np.abs(np.max(X)) * 3)
+    return X, rgb, Xhidden, num_x
+
+def get_trained_autoencoder(X, d):
 
     encoder = AutoEncoder(X, hidden_dim=d)
     encoder.train(10)
+
+    return encoder
+
+def visualize_autoencoding(encoding_vals, d, rgb, num_hidden_dim):
+
+    if d > 3 or d < 2:
+        raise (ValueError('d must be 2 or 3 for visualization'))
+
+    if d == 2:
+        plt.scatter(encoding_vals[:, 0], encoding_vals[:, 1], color=rgb)
+
+    if d == 3:
+
+        fig = plt.figure()
+        ax = fig.add_subplot(111, projection='3d')
+        ax.scatter(xs=encoding_vals[:, 0], ys=encoding_vals[:, 1],
+                   zs=encoding_vals[:, 2], c=rgb)
+
+    plt.title(str(2 ** num_hidden_dim * 4) + ' Visible Variables \n With ' +
+              str(num_hidden_dim) + ' Hidden Dimensions. Graphed in ' + str(d) + 'D')
+
+    plt.show()
+
+def test_encode_n_vars_d_dims(num_hidden_dim, d, visualize=0):
+
+    if not isinstance(d, int):
+        raise(ValueError("hidden dimensions must be an integer"))
+
+    X, rgb, Xhidden, num_x = prepare_data_autoencoding(num_hidden_dim)
+
+    encoder = get_trained_autoencoder(X, d)
+
     reconstruction = encoder.predict()
+
     encoding_vals = encoder.get_encoding_vals()
     encoding_vals = encoding_vals / np.abs(np.mean(encoding_vals, axis=0))
 
     if visualize > 0:
-        if d > 3 or d < 2:
-            raise(ValueError('d must be 2 or 3 for visualization'))
-        if d == 2:
-            plt.scatter(encoding_vals[:, 0], encoding_vals[:, 1], color=rgb)
-        if d == 3:
-            fig = plt.figure()
-            ax = fig.add_subplot(111, projection='3d')
-            ax.scatter(xs=encoding_vals[:, 0], ys=encoding_vals[:, 1],
-                       zs=encoding_vals[:, 2], c=rgb)
-        plt.title(str(2 ** num_hidden_dim * 4) + ' Visible Variables \n With ' +
-                  str(num_hidden_dim) + ' Hidden Dimensions. Graphed in ' + str(d) + 'D')
-        plt.show()
+        visualize_autoencoding(encoding_vals, d, rgb)
 
     return np.mean(np.square(reconstruction - X)), encoding_vals, Xhidden
 
