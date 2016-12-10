@@ -74,6 +74,7 @@ def read_csv():
     else:
         header = None
 
+    # Loads the file or throws error if it fails.
     loader = CSVLoader(target=target_list, delim=sep, header=header)
     try:
         dfs = loader.load_from_path(dataset_filename)
@@ -196,6 +197,10 @@ def edit_schema(df, pipeline, pipeline_names):
     else:
         actions[option](df, pipeline, pipeline_names)
 
+
+#########################
+# Putting them together #
+#########################
 
 def preprocess_dataset(df):
     menu_items = {
