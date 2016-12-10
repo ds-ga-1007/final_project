@@ -4,7 +4,9 @@ from Model.FeedForwardNetwork import *
 from Model.FeedForwardNetwork.NetworkLayers import *
 
 class TestLearner(unittest.TestCase):
-
+    """
+    Tests for functionality of the NeuralNetworkLearner class
+    """
     def test_network_learner_constructor(self):
 
         network = Network([1, 2, 1])

@@ -95,7 +95,13 @@ def test_encode_n_vars_d_dims(num_hidden_dim, d, visualize=0):
 
 
 class TestSystemAutoEncoding(unittest.TestCase):
-
+    """
+    Tests that the autoencoder can reconstruct the initial X vector
+    even though the data is passed through a narrow layer.
+    For user inspection, visualize can be set to true to understand how this
+    narrow layer encodes such high dimensional information in 2D and 3D, but that is not enabled
+    as a default for unit testing.
+    """
 
     def test_autoencode_regression(self):
 

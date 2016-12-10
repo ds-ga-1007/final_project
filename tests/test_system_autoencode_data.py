@@ -188,9 +188,11 @@ def autoencode_iris(visualize=0):
 
 class TestAutoEncodingData(unittest.TestCase):
     """
-    unit tests for functions relating to the interval class
-    These should be run by enterring the command "python -m unittest discover"
-    from the root directory of this project
+    Tests that the autoencoder can process and reconstruct the initial X vector
+    even though the data is passed through a narrow layer.
+    For user inspection, visualize can be set to true to understand how this
+    narrow layer encodes such high dimensional information in 2D and 3D, but that is not enabled
+    as a default for unit testing.
     """
 
     def test_autoencode_iris(self):

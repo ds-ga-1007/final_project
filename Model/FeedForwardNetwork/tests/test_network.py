@@ -4,6 +4,9 @@ from Model.FeedForwardNetwork import *
 from Model.FeedForwardNetwork.NetworkLayers import *
 
 class TestNetwork(unittest.TestCase):
+    """
+    Tests for functionality of the Network class
+    """
 
     def test_network_constructor(self):
 
