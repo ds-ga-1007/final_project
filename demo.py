@@ -36,6 +36,7 @@ def read_csv():
     sep = input_with_default(',')
 
     print('Would you like to specify target variables in terms of [N]ames or [I]ndices?')
+    print('If there is no target variable, enter "N" and enter a blank line in the next step.')
     s = input_expect(['n', 'N', 'i', 'I'])
 
     target_list = []
@@ -261,7 +262,7 @@ def main():
     dflist = read_csv()
     if len(dflist) == 1:
         # one dataset
-        preprocess(dflist[0])
+        preprocess_dataset(dflist[0])
     elif len(dflist) == 2:
         # a feature set and a label set
         print('Preprocessing feature set')
