@@ -51,7 +51,7 @@ class Loader(object, metaclass=ABCMeta):
         df = self._load_from_path(path)
 
         if self._target is None:
-            return df
+            return [df]
         else:
             if self._str_columns:
                 dfX = df.drop(self._target, axis=1)
@@ -62,7 +62,7 @@ class Loader(object, metaclass=ABCMeta):
                 dfX = df.drop(df.columns[self._target], axis=1)
             dfY = df.loc[:, self._target]
 
-            return dfX, dfY
+            return [dfX, dfY]
 
     @abstractmethod
     def _load_from_path(self, path):

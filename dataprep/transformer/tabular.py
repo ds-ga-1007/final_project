@@ -139,6 +139,7 @@ class DropColumnTransformer(Transformer):
         When given a list of strs, each element is the name of the column.
         Non-existent indices and/or names will throw a ValueError for list of
         strs, or IndexError for list of ints, *upon transformation*.
+
     Examples
     --------
     >>> import pandas as PD
@@ -185,4 +186,51 @@ class DropColumnTransformer(Transformer):
                          inplace=True)
         else:
             dataset.drop(self._columns, axis=1, inplace=True)
+        return dataset
+
+
+class ColumnRenamer(Transformer):
+    '''
+    Changes the names of the column while keeping the cells intact.
+
+    This is a wrapper of pandas.DataFrame.rename method.
+
+    Parameters
+    ----------
+    columns : list of new column names, or dict of old and new column names.
+        Non-existent old column names in the dict are ignored.
+        If the number of elements in list are more than n, the number of
+        columns in the DataFrame, then the elements beyond n are ignored.
+
+    Examples
+    --------
+    >>> import pandas as PD
+    >>> df = PD.DataFrame(
+    ...         [[1, 'a', '?'], [2, 'a', 2], ['?', 'b', 3]],
+    ...         columns=['A', 'B', 'C']
+    ...         )
+    >>> df
+       A  B  C
+    0  1  a  ?
+    1  2  a  2
+    2  ?  b  3
+    >>> from dataprep.transformer import ColumnRenamer
+    >>> cr = ColumnRenamer(['a', 'b', 'c'])
+    >>> cr.transform(df, to_dataframe=True)
+       a  b  c
+    0  1  a  ?
+    1  2  a  2
+    2  ?  b  3
+    '''
+    def __init__(self, columns):
+        if not isinstance(columns, Iterable):
+            raise TypeError('columns is not iterable')
+        self._columns = columns
+
+    def _transform(self, dataset):
+        if isinstance(self._columns, dict):
+            dataset.rename(columns=self._columns, inplace=True)
+        else:
+            dataset.rename(columns=dict(zip(dataset.columns, self._columns)),
+                           inplace=True)
         return dataset

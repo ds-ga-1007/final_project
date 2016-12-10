@@ -33,4 +33,6 @@ class CSVLoader(Loader):
         self._delim = delim
 
     def _load_from_path(self, path):
+        # I think the exception raised by pandas is pretty self-explanatory
+        # so I don't handle it here.
         return PD.read_csv(path, sep=self._delim, header=self._header)
