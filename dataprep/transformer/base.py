@@ -25,30 +25,41 @@ class Transformer(object, metaclass=ABCMeta):
             df = df.append(_)
         return df, records, single_dataset
 
-    def _restore_dataframes(self, df, records, single_dataset):
+    def _restore_dataframes(self, df, records, single_dataset,
+                            to_dataframe=False):
+        cols = df.columns
         restored = []
         i = 0
+
         for _ in records:
             # TODO:
             # Shall we check if the transformed elements are all numeric?
-            restored.append(NP.array(df.iloc[i:i+_]))
+            if not to_dataframe:
+                result = NP.array(df.iloc[i:i+_])
+            else:
+                result = PD.DataFrame(df.iloc[i:i+_], columns=cols)
+                result = result.reset_index(drop=True)
+            restored.append(result)
             i += _
         if single_dataset:
             return restored[0]      # strip off the list
         else:
             return restored
 
-    def transform(self, *datasets):
+    def transform(self, *datasets, to_dataframe=False):
         '''
         Transform a set of datasets at once.
 
         Parameters
         ----------
         datasets : list or any iterable of pandas.DataFrame
+        to_dataframe : bool
+            If True, returns pandas.DataFrame instances instead of
+            numpy.ndarray instances.
 
         Returns
         -------
-        transformed : list of np.ndarray
+        transformed : list of np.ndarray or pandas.DataFrame
             The number of elements in @transformed is the same as that
             of @datasets.
             The number of records in each element of @transformed matches
@@ -57,7 +68,8 @@ class Transformer(object, metaclass=ABCMeta):
         df, records, single_dataset = self._concatenate_dataframes(*datasets)
         # Relay the concatenation to concrete implementations
         newdf = self._transform(df)
-        restored = self._restore_dataframes(newdf, records, single_dataset)
+        restored = self._restore_dataframes(newdf, records, single_dataset,
+                                            to_dataframe)
         return restored
 
     @abstractmethod
@@ -138,17 +150,20 @@ class InvertibleTransformer(Transformer):
 
     it.inverse_transform(it.transform(df)) == numpy.array(df)
     '''
-    def inverse_transform(self, *datasets):
+    def inverse_transform(self, *datasets, to_dataframe=False):
         '''
         Inverse-transform a set of a datasets at once.
 
         Parameters
         ----------
         datasets : list or any iterable of pandas.DataFrame
+        to_dataframe : bool
+            If True, returns pandas.DataFrame instances instead of
+            numpy.ndarray instances.
 
         Returns
         -------
-        transformed : list of np.ndarray
+        transformed : list of np.ndarray or pandas.DataFrame
             The number of elements in @transformed is the same as that
             of @datasets.
             The number of records in each element of @transformed matches
