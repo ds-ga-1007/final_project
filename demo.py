@@ -14,7 +14,7 @@ def input_expect(expect, default=None):
     # Returns user input if it falls in specified list of expected inputs,
     # or either returns default value if specified, or keep asking until
     # the user follows the rule or gives up.
-    s = input()
+    s = input().lower()
     if default is not None:
         return s if s in expect else default
     else:
@@ -37,11 +37,11 @@ def read_csv():
 
     print('Would you like to specify target variables in terms of [N]ames or [I]ndices?')
     print('If there is no target variable, enter "N" and enter a blank line in the next step.')
-    s = input_expect(['n', 'N', 'i', 'I'])
+    s = input_expect(['n', 'i'])
 
     target_list = []
 
-    if s in ['n', 'N']:
+    if s == 'n':
         print('Please specify the names for target column in one line at a time.')
         print('Enter a blank line to proceed to next step.')
         s = input()
@@ -69,8 +69,8 @@ def read_csv():
         target_list = None
 
     print('Is there a header in the first line? [Y/N]')
-    s = input_expect(['y', 'Y', 'n', 'N'])
-    if s in ['y', 'Y']:
+    s = input_expect(['y', 'n'])
+    if s == 'y':
         header = 0
     else:
         header = None
@@ -117,7 +117,7 @@ def preview(df, pipeline, pipeline_names):
             print('An error has occurred during the transformation in', name)
             print('Error type:', sys.exc_info()[0].__name__)
             print('Error message:', sys.exc_info()[1])
-            return
+            return None
 
     fp = tempfile.NamedTemporaryFile(mode='w+')
     df.to_csv(fp)
@@ -125,6 +125,11 @@ def preview(df, pipeline, pipeline_names):
     TV.view(fp.name)
 
     fp.close()
+    print('Schema:')
+    for c in df.columns:
+        print('%s: %s' % (c, 'categorical' if df[c].dtype == NP.object else 'numeric'))
+
+    return df
 
 
 def view_pipeline(df, pipeline, pipeline_names):
@@ -187,9 +192,11 @@ def edit_schema(df, pipeline, pipeline_names):
     menu_items = {
             'c': 'rename columns',
             'q': 'do nothing',
+            'g': 'guess schema',
             }
     actions = {
             'c': rename_columns,
+            'g': guess_schema,
             }
 
     option = menu(menu_items)
