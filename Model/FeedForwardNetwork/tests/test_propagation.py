@@ -51,7 +51,12 @@ def calculate_correct_output(NN, X):
 class TestPropagation(unittest.TestCase):
 
     def test_backprop_gradient(self):
-        """"""
+        """The following test approximates the derivitive of error with respect to each
+        weight by increasing and decreasing the weight by a small amount and calculating
+        the difference in output divided by the adjustement delta.
+        This value is then compared with the error derivitive as calculated by the network.
+        The test passes if each of these values are very close for all edges within
+        the network"""
         np.random.seed(1)
         NN = FeedForwardNetworkUI([2, 100, 1], learn_alg=utils.GRADIENT_DESCENT, reg_const=0,
                                   trans_fcns=["tanh", "purelin"])
@@ -82,7 +87,10 @@ class TestPropagation(unittest.TestCase):
 
     def test_feed_forward(self):
         """test accurate forward propogation of the network containing
-        sigmoid, tanh, and purelin transfer functions"""
+        sigmoid, tanh, and purelin transfer functions.
+        The network passes this test of each of the output value of forward propogation is
+        very close to the manually calculated output values, for each of two networks
+        and two input values per network structure."""
         np.random.seed(1)
         NN1 = FeedForwardNetworkUI([2, 5, 1])
         NN2 = FeedForwardNetworkUI([2, 4, 3, 1], trans_fcns=["sigmoid", "tanh", "purelin"])

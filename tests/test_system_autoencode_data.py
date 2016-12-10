@@ -92,7 +92,6 @@ def process_iris():
     csvloader = CSVLoader(target=[-1])
     datasetX, datasetY = csvloader.load_from_path('dataset/iris.data')
 
-
     # Normalize all numeric columns into [-1, 1] first.
     norm = ColumnNormalizer('negpos')
     # Replace all string values equal to '?' to NaN
@@ -116,21 +115,40 @@ def process_iris():
     processedY = pipelineY.transform(datasetY)
     return processedX, processedY
 
-def autoencode_2d_3d(X, Y, visualize = 0):
+def prepare_autoencoding_data(X, Y, visualize):
 
-    X = X / 2
+    X /= 2
     color_list = list(six.iteritems(colors.cnames))
 
     if Y.ndim == 1:
-        rgb = [color_list[y*2 + 1][0] for y in Y]
+        rgb = [color_list[y * 2 + 1][0] for y in Y]
     elif Y.ndim == 2:
         rgb = [color_list[4 * np.sum(
             [yi * (2 ** idx) for idx, yi in enumerate(y)])][0] for y in Y]
     else:
         visualize = 0
 
+    return X, visualize, rgb
+
+def visualize_autoencoding_data(encoder, d, rgb, fig):
+
+    encoding_vals = encoder.get_encoding_vals()
+
+    if d == 2:
+        fig.add_subplot(120 + d - 1)
+        plt.scatter(encoding_vals[:, 0], encoding_vals[:, 1], color=rgb)
+    if d == 3:
+        ax = fig.add_subplot(120 + d - 1, projection='3d')
+        ax.scatter(xs=encoding_vals[:, 0], ys=encoding_vals[:, 1],
+                   zs=encoding_vals[:, 2], c=rgb)
+
+    plt.title('real data visualized with graphed in ' + str(d) + 'D')
+
+def process_autoencoding(X, visualize, rgb):
+
     err = np.empty(2)
-    if visualize > 0:
+
+    if visualize:
         fig = plt.figure()
 
     for d in [2, 3]:
@@ -139,24 +157,21 @@ def autoencode_2d_3d(X, Y, visualize = 0):
         encoder.train(10)
         reconstruction = encoder.predict()
 
-        if visualize > 0:
-
-            encoding_vals = encoder.get_encoding_vals()
-
-            if d == 2:
-                fig.add_subplot(120 + d - 1)
-                plt.scatter(encoding_vals[:, 0], encoding_vals[:, 1], color=rgb)
-            if d == 3:
-                ax = fig.add_subplot(120 + d - 1, projection='3d')
-                ax.scatter(xs=encoding_vals[:, 0], ys=encoding_vals[:, 1],
-                           zs=encoding_vals[:, 2], c=rgb)
-
-            plt.title('real data visualized with graphed in ' + str(d) + 'D')
+        if visualize:
+            visualize_autoencoding_data(encoder, d, rgb, fig)
 
         err[d-2] = np.mean(np.square(reconstruction - X))
 
-    if visualize > 0:
+    if visualize:
         plt.show()
+
+    return err
+
+def autoencode_2d_3d(X, Y, visualize = 0):
+
+    X, visualize, rgb = prepare_autoencoding_data(X, Y, visualize)
+
+    err = process_autoencoding(X, visualize, rgb)
 
     return err[0], err[1]
 
