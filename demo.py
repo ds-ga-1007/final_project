@@ -107,7 +107,15 @@ def menu(menu_items, title=None):
 # General Operations #
 ######################
 
-def preview(df, pipeline, pipeline_names):
+
+def preview_dataframe(df):
+    fp = tempfile.NamedTemporaryFile(mode='w+')
+    df.to_csv(fp)
+    TV.view(fp.name)
+    fp.close()
+
+
+def preview(df, pipeline, pipeline_names, show=True):
     # Tries to apply the transformations into a new DataFrame
     for tr, name in zip(pipeline, pipeline_names):
         print('Applying %s...' % name)
@@ -119,15 +127,8 @@ def preview(df, pipeline, pipeline_names):
             print('Error message:', sys.exc_info()[1])
             return None
 
-    fp = tempfile.NamedTemporaryFile(mode='w+')
-    df.to_csv(fp)
-
-    TV.view(fp.name)
-
-    fp.close()
-    print('Schema:')
-    for c in df.columns:
-        print('%s: %s' % (c, 'categorical' if df[c].dtype == NP.object else 'numeric'))
+    if show:
+        preview_dataframe(df)
 
     return df
 
@@ -151,6 +152,13 @@ def undo_last(df, pipeline, pipeline_names):
 ##################
 # Schema Editing #
 ##################
+
+
+def display_schema(df):
+    print('Displaying schema:')
+    for c in df.columns:
+        print('%s: %s' % (c, 'categorical' if df[c].dtype == NP.object else 'numeric'))
+
 
 def rename_columns(df, pipeline, pipeline_names):
     menu_items = {
@@ -193,10 +201,12 @@ def edit_schema(df, pipeline, pipeline_names):
             'c': 'rename columns',
             'q': 'do nothing',
             'g': 'guess schema',
+            's': 'display schema',
             }
     actions = {
             'c': rename_columns,
             'g': guess_schema,
+            's': lambda df, pipeline, pipeline_names: display_schema(df),
             }
 
     option = menu(menu_items)
@@ -204,6 +214,32 @@ def edit_schema(df, pipeline, pipeline_names):
         return
     else:
         actions[option](df, pipeline, pipeline_names)
+
+
+def guess_schema(df, pipeline, pipeline_names):
+    # Preview it first
+    df = preview(df, pipeline, pipeline_names, show=False)
+
+    guesser = TabularSchemaGuesser()
+    newdf = guesser.transform(df, to_dataframe=True)
+    display_schema(newdf)
+
+    menu_items = {
+            'y': 'proceed with this schema',
+            'p': 'preview the result',
+            'n': 'reject this schema and do nothing',
+            }
+
+    while True:
+        option = menu(menu_items)
+        if option == 'y':
+            pipeline.append(guesser)
+            pipeline_names.append('Automatic schema inference')
+            return
+        elif option == 'n':
+            return
+        elif option == 'p':
+            preview_dataframe(newdf)
 
 
 #########################
