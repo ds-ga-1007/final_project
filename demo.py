@@ -394,7 +394,9 @@ def normalize(df, pipeline, pipeline_names):
             '1': 'zeropos',
             '-': 'negpos',
             }
-    method = normalize_method[menu(norm_menu_items)]
+    option = menu(norm_menu_items)
+    method = normalize_method[option]
+    method_name = norm_menu_items[option]
 
     col_menu_items = {
             'a': 'all numeric columns',
@@ -403,12 +405,44 @@ def normalize(df, pipeline, pipeline_names):
     option = menu(col_menu_items)
     if option == 'a':
         pipeline.append(ColumnNormalizer(method))
-        pipeline_names.append('Normalize by %s for all columns' % method)
+        pipeline_names.append('Normalize by %s for all columns' % method_name)
     else:
         print('Enter the name of the columns you wish to normalize.')
         cols = input_until_blank()
         pipeline.append(ColumnNormalizer({col: method for col in cols}))
         pipeline_names.append('Normalize by %s for %r' % (method, cols))
+
+
+##############
+# Imputation #
+##############
+
+
+def numeric_impute(df, pipeline, pipeline_names):
+    print('Choose whether you want to impute the missing values with:')
+    print('(categorical columns are untouched)')
+    impute_menu_items = {
+            '0': 'zero',
+            'm': 'median',
+            'a': 'mean',
+            }
+    # Yes, the menu item description and the parameter for
+    # NumericImputationTransformer happens to be the same.
+    method = impute_menu_items[menu(impute_menu_items)]
+
+    col_menu_items = {
+            'a': 'all numeric columns',
+            's': 'only some of the columns',
+            }
+    option = menu(col_menu_items)
+    if option == 'a':
+        pipeline.append(NumericImputationTransformer(method))
+        pipeline_names.append('Impute by %s for all columns' % method)
+    else:
+        print('Enter the name of the columns you wish to impute.')
+        cols = input_until_blank()
+        pipeline.append(NumericImputationTransformer({col: method for col in cols}))
+        pipeline_names.append('Impute by %s for %r' % (method, cols))
 
 
 #########################
@@ -425,6 +459,7 @@ def preprocess_dataset(df):
             'd': 'delete values',
             'a': 'add null indicator variables',
             'n': 'normalize columns',
+            'i': 'impute missing values in numeric columns',
             'q': 'quit and proceed to next step',
             }
     pipeline = []
@@ -454,6 +489,7 @@ def preprocess_dataset(df):
             'd': delete_values,
             'a': add_null_indicator,
             'n': normalize,
+            'i': numeric_impute,
             }
 
     while True:
