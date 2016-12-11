@@ -13,7 +13,6 @@ TRAINING_ALGORITHMS = {GRADIENT_DESCENT,
 MOMENTUM_DECAY = 0.99
 
 STOP_TRAIN = -1
-cat = np.concatenate
 
 def vect_with_bias(nparr):
     return np.concatenate([nparr, [1]])
@@ -63,14 +62,17 @@ loss_fcns = {
             }
 
 def print_y(y_predict, Y, dec=2):
+
     if y_predict.ndim > 1:
         y_predict = y_predict.flatten()
     print(np.around(y_predict, dec))
 
 
 def get_one_trans(trans):
+
     if trans in trans_fcns:
         return trans_fcns[trans]
+
     else:
         raise ValueError("Error: " + str(trans) + " not known in tran_fcns")
 
@@ -79,15 +81,18 @@ def get_trans_list(trans):
     return [get_one_trans(fcn) for fcn in trans]
 
 def get_trans(trans_fcns, num_layers):
+
     if isinstance(trans_fcns, str):
         return [get_one_trans(trans_fcns)] * num_layers
+
     elif isinstance(trans_fcns, list):
+
         if num_layers != len(trans_fcns):
             raise ValueError("wrong number of trans fcns")
+
         return get_trans_list(trans_fcns)
     else:
-        print('what is transfer fcn?')
-        sys.exit(0)
+        raise ValueError("transfer function must be string or list of strings")
 
 def get_loss(loss_fcn):
     return loss_fcns[loss_fcn]

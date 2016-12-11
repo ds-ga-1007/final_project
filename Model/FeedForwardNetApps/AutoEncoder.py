@@ -29,10 +29,13 @@ class AutoEncoder(object):
         self.hidden_dim = hidden_dim
         self.X = X
         width = X.shape[1]
+
         layer_sizes = [width,(width + hidden_dim) // 2, hidden_dim,
                        (width + hidden_dim) // 2, width]
+
         network = Network(layer_sizes = layer_sizes,
                           trans_fcns="tanh", reg_const=1e-1)
+
         self.neuralnetworklearner = \
             NeuralNetworkLearner(network = network, learning_rate=1e-5)
 

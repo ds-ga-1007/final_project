@@ -241,6 +241,7 @@ class Network(object):
 
         if not isinstance(reg_const, numbers.Number):
             raise ValueError("regularization constant must be a number")
+
         if reg_const < 0:
             raise ValueError("regularization constant must be non-negative")
 
