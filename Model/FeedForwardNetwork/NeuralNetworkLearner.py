@@ -200,6 +200,7 @@ class NeuralNetworkLearner(object):
 
         if not isinstance(learning_rate, numbers.Number):
             raise TypeError("learning rate be a number")
+
         if learning_rate <= 0:
             raise ValueError("learning rate must be non-negative")
 

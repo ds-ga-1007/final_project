@@ -1,7 +1,6 @@
+
 import numpy as np
-
 from Model.FeedForwardNetwork.NetworkLayers.Layer import Layer
-
 
 class FullyConnectedLayer(Layer):
     '''

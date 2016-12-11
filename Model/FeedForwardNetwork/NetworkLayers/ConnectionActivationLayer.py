@@ -1,7 +1,6 @@
-import numpy as np
+
 from Model.FeedForwardNetwork.NetworkLayers.FullyConnectedLayer import FullyConnectedLayer
 from Model.FeedForwardNetwork.NetworkLayers.Layer import Layer
-
 from Model.FeedForwardNetwork.NetworkLayers.ActivationLayer import ActivationLayer
 
 
