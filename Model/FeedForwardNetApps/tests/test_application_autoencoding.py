@@ -5,7 +5,11 @@ from matplotlib import colors
 import unittest
 from Model.FeedForwardNetApps import *
 from Model.FeedForwardNetwork.NetworkLayers import *
-
+"""
+Test the applications ability to autoencode and reconstruct simulated data
+Contains functionality to visualize 2d and 3d encodings that are not
+included in unit tests.
+"""
 def test_encoding_regression(verb=0):
 
     num_x = 100
