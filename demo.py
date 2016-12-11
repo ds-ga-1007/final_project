@@ -294,6 +294,68 @@ def change_column_type(df, pipeline, pipeline_names):
     pipeline_names.append('Change column type: %r' % cols)
 
 
+###############
+# Null values #
+###############
+
+
+def delete_values(df, pipeline, pipeline_names):
+    menu_items = {
+            'a': 'delete certain values in all columns',
+            's': 'select a columnto delete values in',
+            }
+    option = menu(menu_items)
+    if option == 'a':
+        column = None
+    else:
+        print('Enter the name of column you wish to delete values in.')
+        column = input()
+
+    menu_items = {
+            'n': 'delete all negative values in numeric columns',
+            '0': 'delete all zeroes in numeric columns',
+            'x': 'delete all values equal to some value',
+            '?': 'delete all "?"s, "-"s, whitespaces, and "N/A" or "NA" in any case in categorical columns',
+            'q': 'do nothing',
+            }
+    print('Please select the values you want to delete.')
+    print('NOTE: for deleting non-numeric values in a numeric column identified as categorical, you can simply change the type there to numeric.')
+    option = menu(menu_items)
+    if option == 'q':
+        return
+
+    if option == 'n':
+        criteria = lambda x: x < 0
+        criteria_on = 'numeric'
+        criteria_name = 'negative'
+    elif option == '0':
+        criteria = lambda x: x == 0
+        criteria_on = 'numeric'
+        criteria_name = 'zeroes'
+    elif option == '?':
+        criteria = lambda x: ((x.lower() in ['?', '-', 'n/a', 'na']) or x.isspace())
+        criteria_on = 'categorical'
+        criteria_name = 'default n/a values'
+    elif option == 'x':
+        print('Enter the value you wish to delete:')
+        s = input()
+        criteria = lambda x, s=s: x == s
+        criteria_name = str(s)
+        print('Is your value [N]umeric or [C]ategorical?')
+        criteria_on = 'numeric' if input_expect(['c', 'n']) == 'n' else 'categorical'
+
+    pipeline.append(
+            NullValueTransformer(
+                criteria if column is None else {column: criteria},
+                only=criteria_on
+                )
+            )
+    pipeline_names.append(
+            'Delete %s for %s (%s)' %
+            (criteria_name, 'all' if column is None else column, criteria_on)
+            )
+
+
 #########################
 # Putting them together #
 #########################
@@ -305,6 +367,7 @@ def preprocess_dataset(df):
             'v': 'view pipeline',
             'u': 'undo last transformation',
             's': 'view/edit schema',
+            'd': 'delete values',
             'q': 'quit and proceed to next step',
             }
     pipeline = []
@@ -331,6 +394,7 @@ def preprocess_dataset(df):
             'v': view_pipeline,
             'u': undo_last,
             's': edit_schema,
+            'd': delete_values,
             }
 
     while True:
