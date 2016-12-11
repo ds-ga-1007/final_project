@@ -129,15 +129,13 @@ def preview_dataframe(df):
 
 def preview(df, pipeline, pipeline_names, show=True):
     # Tries to apply the transformations into a new DataFrame
-    for tr, name in zip(pipeline, pipeline_names):
-        print('Applying %s...' % name)
-        try:
-            df = tr.transform(df, to_dataframe=True)
-        except (TypeError, ValueError, KeyError, IndexError):
-            print('An error has occurred during the transformation in', name)
-            print('Error type:', sys.exc_info()[0].__name__)
-            print('Error message:', sys.exc_info()[1])
-            return None
+    try:
+        ppl = PipelineTransformer(*pipeline)
+        df = ppl.transform(df, to_dataframe=True)
+    except (TypeError, ValueError, KeyError, IndexError) as e:
+        print(e.args[0])
+        print('Transformer: %s' % pipeline_names[e.args[1]])
+        return None
 
     if show:
         preview_dataframe(df)
@@ -377,6 +375,42 @@ def add_null_indicator(df, pipeline, pipeline_names):
         pipeline_names.append('Add null indicator for %r' % columns)
 
 
+###############
+# Normalizing #
+###############
+
+
+def normalize(df, pipeline, pipeline_names):
+    print('Choose the normalization method:')
+    norm_menu_items = {
+            '0': 'subtracting the mean',
+            'n': 'subtracting the mean and dividing by standard deviation',
+            '1': 'linearly normalizing to 0..1',
+            '-': 'linearly normalizing to -1..1',
+            }
+    normalize_method = {
+            '0': 'zeromean',
+            'n': 'normal',
+            '1': 'zeropos',
+            '-': 'negpos',
+            }
+    method = normalize_method[menu(norm_menu_items)]
+
+    col_menu_items = {
+            'a': 'all numeric columns',
+            's': 'only some of the columns',
+            }
+    option = menu(col_menu_items)
+    if option == 'a':
+        pipeline.append(ColumnNormalizer(method))
+        pipeline_names.append('Normalize by %s for all columns' % method)
+    else:
+        print('Enter the name of the columns you wish to normalize.')
+        cols = input_until_blank()
+        pipeline.append(ColumnNormalizer({col: method for col in cols}))
+        pipeline_names.append('Normalize by %s for %r' % (method, cols))
+
+
 #########################
 # Putting them together #
 #########################
@@ -390,6 +424,7 @@ def preprocess_dataset(df):
             's': 'view/edit schema',
             'd': 'delete values',
             'a': 'add null indicator variables',
+            'n': 'normalize columns',
             'q': 'quit and proceed to next step',
             }
     pipeline = []
@@ -418,6 +453,7 @@ def preprocess_dataset(df):
             's': edit_schema,
             'd': delete_values,
             'a': add_null_indicator,
+            'n': normalize,
             }
 
     while True:
@@ -428,12 +464,9 @@ def preprocess_dataset(df):
             try:
                 ppl = PipelineTransformer(*pipeline)
                 return ppl.transform(df)
-            except (TypeError, ValueError, KeyError, IndexError):
-                # That pretty much covers all the usual errors types pandas
-                # throw around...
-                print('An error of type %s has occurred: %s' %
-                        (sys.exc_info()[0].__name__, sys.exc_info()[1]))
-                print('Preview the result to see which transformer has gone wrong.')
+            except (TypeError, ValueError, KeyError, IndexError) as e:
+                print('%s has occurred: %s' % (e.__class__.__name__, e.args[0]))
+                print('Preview the result and see where it goes wrong.')
         else:
             actions[option](df, pipeline, pipeline_names)
 

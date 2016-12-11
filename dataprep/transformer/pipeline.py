@@ -41,8 +41,17 @@ class PipelineTransformer(Transformer):
         self._transformers = transformers
 
     def _transform(self, dataset):
-        for t in self._transformers:
-            if isinstance(t, LearnableTransformer):
-                t._fit(dataset)
-            dataset = t._transform(dataset)
+        for i, t in enumerate(self._transformers):
+            try:
+                if isinstance(t, LearnableTransformer):
+                    t._fit(dataset)
+                dataset = t._transform(dataset)
+            except (TypeError, ValueError, IndexError) as e:
+                # Add the transformer index for the exception and re-raise it
+                msg = 'Error in transformer %d: %s' % (i, str(e))
+                raise type(e)(msg, i)
+            except KeyError as e:
+                # As above but with a better message
+                msg = 'Error in transformer %d: %s does not exist' % (i, str(e))
+                raise type(e)(msg, i)
         return dataset
