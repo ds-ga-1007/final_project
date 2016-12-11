@@ -445,6 +445,17 @@ def numeric_impute(df, pipeline, pipeline_names):
         pipeline_names.append('Impute by %s for %r' % (method, cols))
 
 
+###########################
+# Dummy variable encoding #
+###########################
+
+
+def dummy(df, pipeline, pipeline_names):
+    print('Dummying out every categorical variables (including null values there)')
+    pipeline.append(DummyTransformer(dummy_unknown=True))
+    pipeline_names.append('Dummy out categorical values')
+
+
 #########################
 # Putting them together #
 #########################
@@ -459,6 +470,7 @@ def preprocess_dataset(df):
             'd': 'delete values',
             'a': 'add null indicator variables',
             'n': 'normalize columns',
+            '1': 'dummy out (one-hot encode) categorical variables',
             'i': 'impute missing values in numeric columns',
             'q': 'quit and proceed to next step',
             }
@@ -490,6 +502,7 @@ def preprocess_dataset(df):
             'a': add_null_indicator,
             'n': normalize,
             'i': numeric_impute,
+            '1': dummy,
             }
 
     while True:
@@ -499,7 +512,15 @@ def preprocess_dataset(df):
             # resulting numpy.ndarray.
             try:
                 ppl = PipelineTransformer(*pipeline)
-                return ppl.transform(df)
+                result = ppl.transform(df)
+                if result.dtype == NP.object:
+                    print('It seems that some categorical values are still left.')
+                    print('Please preview the result or view the schema, and dummy out these values.')
+                elif NP.isnan(result).any():
+                    print('It seems that null values still exist.')
+                    print('Please preview the result and impute those values.')
+                else:
+                    return result
             except (TypeError, ValueError, KeyError, IndexError) as e:
                 print('%s has occurred: %s' % (e.__class__.__name__, e.args[0]))
                 print('Preview the result and see where it goes wrong.')
