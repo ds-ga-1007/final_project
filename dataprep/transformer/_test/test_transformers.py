@@ -113,20 +113,24 @@ class TestTransformer(TestCase):
 
     def test_nullindicate(self):
         df = PD.DataFrame(
-                [[NP.nan, 2, 1], [1, NP.nan, 2]],
+                [[NP.nan, 2, 'A'], [1, NP.nan, NP.nan]],
                 columns=['A', 'B', 'C']
                 )
 
-        ans = NP.array([[NP.nan, 2, 1, 1, 0], [1, NP.nan, 2, 0, 1]])
-        res = NullIndicatorTransformer().transform(df)
+        ans = NP.array([[NP.nan, 2, 'A', 1, 0, 0], [1, NP.nan, NP.nan, 0, 1, 1]], dtype=NP.object)
+        res = NullIndicatorTransformer(only_numeric=False).transform(df)
         self.assertTrue(generic_array_equal(res, ans))
 
-        ans = NP.array([[NP.nan, 2, 1, 1], [1, NP.nan, 2, 0]])
-        res = NullIndicatorTransformer(['A']).transform(df)
+        ans = NP.array([[NP.nan, 2, 'A', 1], [1, NP.nan, NP.nan, 0]], dtype=NP.object)
+        res = NullIndicatorTransformer(['A'], only_numeric=False).transform(df)
         self.assertTrue(generic_array_equal(res, ans))
 
-        ans = NP.array([[NP.nan, 2, 1, 0], [1, NP.nan, 2, 1]])
-        res = NullIndicatorTransformer([1, 2]).transform(df)
+        ans = NP.array([[NP.nan, 2, 'A', 0, 0], [1, NP.nan, NP.nan, 1, 1]], dtype=NP.object)
+        res = NullIndicatorTransformer([1, 2], only_numeric=False).transform(df)
+        self.assertTrue(generic_array_equal(res, ans))
+
+        ans = NP.array([[NP.nan, 2, 'A', 0], [1, NP.nan, NP.nan, 1]], dtype=NP.object)
+        res = NullIndicatorTransformer([1, 2], only_numeric=True).transform(df)
         self.assertTrue(generic_array_equal(res, ans))
 
     def test_column_norm(self):

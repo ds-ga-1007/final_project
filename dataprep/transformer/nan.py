@@ -163,6 +163,8 @@ class NullIndicatorTransformer(Transformer):
     suffix : str (default = '_missing')
         The new column name for these indicator variable is
         original_column_name+suffix
+    only_numeric : bool (default True)
+        Apply this transformation on numeric columns only.
 
     Examples
     --------
@@ -188,7 +190,7 @@ class NullIndicatorTransformer(Transformer):
           [  1.,  nan,   2.,   1.]])
     '''
 
-    def __init__(self, columns=None, suffix='_missing'):
+    def __init__(self, columns=None, suffix='_missing', only_numeric=True):
         if not ((columns is None) or
                 (isinstance(columns, Iterable) and not
                     isinstance(columns, str))):
@@ -210,8 +212,12 @@ class NullIndicatorTransformer(Transformer):
         if not isinstance(suffix, str):
             raise TypeError('suffix is not a string')
 
+        if not isinstance(only_numeric, bool):
+            raise TypeError('only_numeric is not bool')
+
         self._columns = columns
         self._suffix = suffix
+        self._only_numeric = only_numeric
 
     def _transform(self, dataset):
         cols = self._columns if self._columns is not None else dataset.columns
@@ -219,6 +225,8 @@ class NullIndicatorTransformer(Transformer):
         for c in cols:
             series = dataset.ix[:, c]
             newc = str(c) + self._suffix
+            if (series.dtype == NP.object) and (self._only_numeric):
+                continue
             if series.isnull().any():
                 dataset[newc] = series.isnull().astype(int)
 
