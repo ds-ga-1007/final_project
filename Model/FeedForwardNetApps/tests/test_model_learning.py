@@ -7,6 +7,7 @@ from Model.FeedForwardNetwork.NetworkLayers import *
 """
 Tests to ensure that that FeedForwardNetworkUI is capable of learning
 """
+
 def test_xor(verb=0):
 
     NN = FeedForwardNetworkUI([2, 100, 100, 1],
