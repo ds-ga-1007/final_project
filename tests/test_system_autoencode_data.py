@@ -1,12 +1,8 @@
 
 import unittest
 from utils import *
-from Model.FeedForwardNetApps import *
-from Model.FeedForwardNetwork.NetworkLayers import *
-
-
-from dataprep.loader import *
-from dataprep.transformer import *
+from Model import *
+from dataprep import *
 
 
 def process_arrhythmia_supervised():

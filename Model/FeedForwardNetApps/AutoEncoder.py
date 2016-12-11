@@ -53,9 +53,11 @@ class AutoEncoder(object):
         :return: 2D numpy.ndarray of size hidden_dim by number of samples
         '''
         hidden_repr = np.zeros([self.X.shape[0], self._hidden_dim])
+
         for x_idx, xi in enumerate(self.X):
             self.neuralnetworklearner.network._feed_forward(xi)
             hidden_repr[x_idx] = self.neuralnetworklearner.network.layers[1].act_vals
+
         return hidden_repr
 
     def predict(self):
