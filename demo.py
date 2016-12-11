@@ -103,6 +103,7 @@ def menu(menu_items, title=None):
 
     return input_expect(menu_items.keys())
 
+
 ######################
 # General Operations #
 ######################
@@ -177,7 +178,7 @@ def rename_columns(df, pipeline, pipeline_names):
                 break
             namelist.append(s)
         pipeline.append(ColumnRenamer(namelist))
-        pipeline_names.append('Rename columns to %s' % repr(namelist))
+        pipeline_names.append('Rename columns to %r' % namelist)
     else:
         namedict = {}
         while True:
@@ -199,14 +200,18 @@ def rename_columns(df, pipeline, pipeline_names):
 def edit_schema(df, pipeline, pipeline_names):
     menu_items = {
             'c': 'rename columns',
-            'q': 'do nothing',
             'g': 'guess schema',
             's': 'display schema',
+            'd': 'drop columns',
+            #'m': 'change column type',
+            'q': 'do nothing',
             }
     actions = {
             'c': rename_columns,
             'g': guess_schema,
             's': lambda df, pipeline, pipeline_names: display_schema(df),
+            'd': drop_columns,
+            #'m': change_column_type,
             }
 
     option = menu(menu_items)
@@ -242,9 +247,36 @@ def guess_schema(df, pipeline, pipeline_names):
             preview_dataframe(newdf)
 
 
+def drop_columns(df, pipeline, pipeline_names):
+    print('Do you wish to specify the columns to drop in [I]ndices or [N]ames?')
+    option = input_expect(['i', 'n'])
+    if option == 'n':
+        print('Enter the name of column you wish to drop line by line.')
+        print('Enter a blank line to finish.')
+        columns = []
+        while True:
+            s = input()
+            if len(s) == 0:
+                break
+            columns.append(s)
+    else:
+        print('Enter the indices of columns you wish to drop, separated by comma.')
+        while True:
+            try:
+                s = input()
+                columns = [int(x) for x in s.split(',')]
+                break
+            except ValueError as e:
+                print('Invalid input: %s' % str(e))
+
+    pipeline.append(DropColumnTransformer(columns))
+    pipeline_names.append('Drop columns: %r' % columns)
+
+
 #########################
 # Putting them together #
 #########################
+
 
 def preprocess_dataset(df):
     menu_items = {
