@@ -24,6 +24,19 @@ def input_expect(expect, default=None):
         return s
 
 
+def input_until_blank():
+    # Returns a list of user inputs and continue accepting input until
+    # the user enters a blank line.
+    print('Enter a blank line to finish.')
+    l = []
+    while True:
+        s = input()
+        if len(s) == 0:
+            break
+        l.append(s)
+    return l
+
+
 def read_csv():
     # Reads a CSV file.
     print('Enter the filename you want to load the dataset from:')
@@ -35,27 +48,32 @@ def read_csv():
     print('Enter the separator for the CSV file [default ","]:')
     sep = input_with_default(',')
 
-    print('Would you like to specify target variables in terms of [N]ames or [I]ndices?')
-    print('If there is no target variable, enter "N" and enter a blank line in the next step.')
-    s = input_expect(['n', 'i'])
+    print('Is there a header in the first line? [Y/N]')
+    s = input_expect(['y', 'n'])
+    if s == 'y':
+        header = 0
+    else:
+        header = None
 
-    target_list = []
+    if header is not None:
+        print('Would you like to specify target variables in terms of [N]ames or [I]ndices?')
+        s = input_expect(['n', 'i'])
+    else:
+        print('Column names not available in header.')
+        s = 'i'
 
     if s == 'n':
         print('Please specify the names for target column in one line at a time.')
-        print('Enter a blank line to proceed to next step.')
-        s = input()
-        while len(s) > 0:
-            target_list.append(s)
-            s = input()
+        target_list = input_until_blank()
     else:
         while True:
             print('Please specify the indices for target column separated by comma.')
             print('Negative indices indicate columns starting from the right.')
-            print('[Default: -1]')
+            print('Enter a blank line to indicate that there is no target variable.')
             s = input()
             if len(s) == 0:
-                target_list = [-1]
+                target_list = []
+                break       # no target variable
             else:
                 try:
                     target_list = [int(x) for x in s.split(',')]
@@ -67,13 +85,6 @@ def read_csv():
     if len(target_list) == 0:
         print('No target column specified.')
         target_list = None
-
-    print('Is there a header in the first line? [Y/N]')
-    s = input_expect(['y', 'n'])
-    if s == 'y':
-        header = 0
-    else:
-        header = None
 
     # Loads the file or throws error if it fails.
     loader = CSVLoader(target=target_list, delim=sep, header=header)
@@ -170,18 +181,14 @@ def rename_columns(df, pipeline, pipeline_names):
 
     if option == 'o':
         print('Enter new column names line by line.')
-        print('Enter a blank line to finish.')
-        namelist = []
-        while True:
-            s = input()
-            if len(s) == 0:
-                break
-            namelist.append(s)
+        namelist = input_until_blank()
         pipeline.append(ColumnRenamer(namelist))
         pipeline_names.append('Rename columns to %r' % namelist)
     else:
         namedict = {}
         while True:
+            # Actually different from the mechanism of input_until_blank() and
+            # I'm not sure how to reuse that code.
             print('Enter old column name to rename (blank to finish):')
             s = input()
             if len(s) == 0:
@@ -257,13 +264,7 @@ def drop_columns(df, pipeline, pipeline_names):
     option = input_expect(['i', 'n'])
     if option == 'n':
         print('Enter the name of column you wish to drop line by line.')
-        print('Enter a blank line to finish.')
-        columns = []
-        while True:
-            s = input()
-            if len(s) == 0:
-                break
-            columns.append(s)
+        columns = input_until_blank()
     else:
         print('Enter the indices of columns you wish to drop, separated by comma.')
         while True:
@@ -281,6 +282,8 @@ def drop_columns(df, pipeline, pipeline_names):
 def change_column_type(df, pipeline, pipeline_names):
     cols = {}
     while True:
+        # Actually different from the mechanism of input_until_blank() and I'm
+        # not sure how to reuse that code (same as before).
         print('Enter the name of the column you wish to change type.')
         print('Enter a blank line to finish.')
         s = input()
@@ -294,6 +297,86 @@ def change_column_type(df, pipeline, pipeline_names):
     pipeline_names.append('Change column type: %r' % cols)
 
 
+###############
+# Null values #
+###############
+
+
+def delete_values(df, pipeline, pipeline_names):
+    menu_items = {
+            'a': 'delete certain values in all columns',
+            's': 'select a columnto delete values in',
+            }
+    option = menu(menu_items)
+    if option == 'a':
+        column = None
+    else:
+        print('Enter the name of column you wish to delete values in.')
+        column = input()
+
+    menu_items = {
+            'n': 'delete all negative values in numeric columns',
+            '0': 'delete all zeroes in numeric columns',
+            'x': 'delete all values equal to some value',
+            '?': 'delete all "?"s, "-"s, whitespaces, and "N/A" or "NA" in any case in categorical columns',
+            'q': 'do nothing',
+            }
+    print('Please select the values you want to delete.')
+    print('NOTE: for deleting non-numeric values in a numeric column identified as categorical, you can simply change the type there to numeric.')
+    option = menu(menu_items)
+    if option == 'q':
+        return
+
+    if option == 'n':
+        criteria = lambda x: x < 0
+        criteria_on = 'numeric'
+        criteria_name = 'negative'
+    elif option == '0':
+        criteria = lambda x: x == 0
+        criteria_on = 'numeric'
+        criteria_name = 'zeroes'
+    elif option == '?':
+        criteria = lambda x: ((x.lower() in ['?', '-', 'n/a', 'na']) or x.isspace())
+        criteria_on = 'categorical'
+        criteria_name = 'default n/a values'
+    elif option == 'x':
+        print('Enter the value you wish to delete:')
+        s = input()
+        criteria = lambda x, s=s: x == s
+        criteria_name = str(s)
+        print('Is your value [N]umeric or [C]ategorical?')
+        criteria_on = 'numeric' if input_expect(['c', 'n']) == 'n' else 'categorical'
+
+    pipeline.append(
+            NullValueTransformer(
+                criteria if column is None else {column: criteria},
+                only=criteria_on
+                )
+            )
+    pipeline_names.append(
+            'Delete %s for %s (%s)' %
+            (criteria_name, 'all' if column is None else column, criteria_on)
+            )
+
+
+def add_null_indicator(df, pipeline, pipeline_names):
+    print('Do you wish to add null indicator variables for')
+    menu_items = {
+            'a': 'all numeric columns',
+            's': 'some of the columns (not necessarily numeric)',
+            }
+    option = menu(menu_items)
+
+    if option == 'a':
+        pipeline.append(NullIndicatorTransformer())
+        pipeline_names.append('Add null indicator variable for all numeric columns')
+    else:
+        print('Enter the name of columns you wish to add such variables.')
+        columns = input_until_blank()
+        pipeline.append(NullIndicatorTransformer(columns, only_numeric=False))
+        pipeline_names.append('Add null indicator for %r' % columns)
+
+
 #########################
 # Putting them together #
 #########################
@@ -305,6 +388,8 @@ def preprocess_dataset(df):
             'v': 'view pipeline',
             'u': 'undo last transformation',
             's': 'view/edit schema',
+            'd': 'delete values',
+            'a': 'add null indicator variables',
             'q': 'quit and proceed to next step',
             }
     pipeline = []
@@ -331,6 +416,8 @@ def preprocess_dataset(df):
             'v': view_pipeline,
             'u': undo_last,
             's': edit_schema,
+            'd': delete_values,
+            'a': add_null_indicator,
             }
 
     while True:
