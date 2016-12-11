@@ -8,7 +8,7 @@ from Model.FeedForwardNetwork.NetworkLayers import *
 Tests to ensure that that FeedForwardNetworkUI is capable of learning
 """
 
-def test_xor(verb=0):
+def test_xor():
 
     NN = FeedForwardNetworkUI([2, 100, 100, 1],
                               reg_const=1e-4)
@@ -20,15 +20,12 @@ def test_xor(verb=0):
 
     for _ in range(10):
         NN.train(X, Y, epochs=500)
-        if verb > 0:
-            y_predict = NN.predict(X)
-            print(y_predict)
 
     y_predict = NN.predict(X)
     return np.mean(np.square(y_predict - Y))
 
 
-def test_addition(verb=0):
+def test_addition():
 
     NN = FeedForwardNetworkUI([2, 100, 1],
                               trans_fcns=["sigmoid", "purelin"],
@@ -39,20 +36,14 @@ def test_addition(verb=0):
                   [1, 1]])
     Y = np.array([np.array([x[0] + x[1]]) for x in X])
 
-    if verb > -1:
-        pass
-
     for _ in range(10):
         NN.train(X, Y, epochs=100)
-        if verb > 0:
-            y_predict = NN.predict(X)
-            print(y_predict)
 
     y_predict = NN.predict(X)
     return np.mean(np.square(y_predict - Y))
 
 
-def test_sine(verb=0):
+def test_sine():
 
     NN = FeedForwardNetworkUI([1, 200, 1],
                               trans_fcns="tanh", reg_const=1e-5)
@@ -65,9 +56,6 @@ def test_sine(verb=0):
 
     for _ in range(10):
         NN.train(X, Y, epochs=100)
-        if verb > 0:
-            y_predict = NN.predict(X)
-            print(y_predict)
 
     y_predict = NN.predict(X)
     return np.mean(np.square(y_predict - Y))
