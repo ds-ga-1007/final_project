@@ -93,7 +93,7 @@ def test_encode_n_vars_d_dims(num_hidden_dim, d, visualize=0):
     encoding_vals = encoding_vals / np.abs(np.mean(encoding_vals, axis=0))
 
     if visualize > 0:
-        visualize_autoencoding(encoding_vals, d, rgb)
+        visualize_autoencoding(encoding_vals, d, rgb, num_hidden_dim)
 
     return np.mean(np.square(reconstruction - X)), encoding_vals, Xhidden
 
