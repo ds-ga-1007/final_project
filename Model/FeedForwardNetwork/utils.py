@@ -1,7 +1,5 @@
-import sys
 
 import numpy as np
-
 from Model.FeedForwardNetwork.NetworkFunction import NetworkFunction
 
 GRADIENT_DESCENT = 0
