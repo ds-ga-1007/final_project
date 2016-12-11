@@ -197,21 +197,26 @@ def rename_columns(df, pipeline, pipeline_names):
         pipeline_names.append('Rename columns: %s' % '[' + ', '.join(namelist) + ']')
 
 
+def preview_schema(df, pipeline, pipeline_names):
+    newdf = preview(df, pipeline, pipeline_names, show=False)
+    display_schema(newdf)
+
+
 def edit_schema(df, pipeline, pipeline_names):
     menu_items = {
             'c': 'rename columns',
             'g': 'guess schema',
             's': 'display schema',
             'd': 'drop columns',
-            #'m': 'change column type',
+            'm': 'change column type',
             'q': 'do nothing',
             }
     actions = {
             'c': rename_columns,
             'g': guess_schema,
-            's': lambda df, pipeline, pipeline_names: display_schema(df),
+            's': preview_schema,
             'd': drop_columns,
-            #'m': change_column_type,
+            'm': change_column_type,
             }
 
     option = menu(menu_items)
@@ -271,6 +276,22 @@ def drop_columns(df, pipeline, pipeline_names):
 
     pipeline.append(DropColumnTransformer(columns))
     pipeline_names.append('Drop columns: %r' % columns)
+
+
+def change_column_type(df, pipeline, pipeline_names):
+    cols = {}
+    while True:
+        print('Enter the name of the column you wish to change type.')
+        print('Enter a blank line to finish.')
+        s = input()
+        if len(s) == 0:
+            break
+        print('Do you wish to make this column [C]ategorical or [N]umeric?')
+        t = input_expect(['c', 'n'])
+        cols[s] = 'numeric' if t == 'n' else 'categorical'
+
+    pipeline.append(TabularSchemaTransformer(cols))
+    pipeline_names.append('Change column type: %r' % cols)
 
 
 #########################
