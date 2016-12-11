@@ -121,8 +121,13 @@ def menu(menu_items, title=None):
 
 
 def preview_dataframe(df):
+    print('Press Enter to continue...')
+    print('When in tabview, press the arrow keys to explore.')
+    print('Press enter to inspect the cell values.')
+    print('Press q to exit.')
+    input()
     fp = tempfile.NamedTemporaryFile(mode='w+')
-    df.to_csv(fp)
+    df.to_csv(fp.name)
     TV.view(fp.name)
     fp.close()
 
@@ -473,6 +478,7 @@ def preprocess_dataset(df):
             '1': 'dummy out (one-hot encode) categorical variables',
             'i': 'impute missing values in numeric columns',
             'q': 'quit and proceed to next step',
+            'x': 'quit and terminate',
             }
     pipeline = []
     # After some consideration I decided that it's not the responsibility of
@@ -524,6 +530,8 @@ def preprocess_dataset(df):
             except (TypeError, ValueError, KeyError, IndexError) as e:
                 print('%s has occurred: %s' % (e.__class__.__name__, e.args[0]))
                 print('Preview the result and see where it goes wrong.')
+        elif option == 'x':
+            sys.exit(0)
         else:
             actions[option](df, pipeline, pipeline_names)
 
