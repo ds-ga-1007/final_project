@@ -36,7 +36,7 @@ class AutoEncoder(object):
                           trans_fcns="tanh", reg_const=1e-1)
 
         self.neuralnetworklearner = \
-            NeuralNetworkLearner(network = network, learning_rate=1e-5)
+            NeuralNetworkLearner(network = network, learning_rate=1e-4)
 
     def train(self, epochs = 10):
         '''

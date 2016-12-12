@@ -25,7 +25,7 @@ def test_encoding_regression(verb=0):
 
     X = X / 4 + np.random.rand(num_x, size_encoding) / 100
     encoder = AutoEncoder(X)
-    encoder.train(100)
+    encoder.train(20)
     reconstruction = encoder.predict()
 
     return np.mean(np.square(reconstruction - X))
@@ -54,7 +54,7 @@ def prepare_data_autoencoding(num_hidden_dim):
 def get_trained_autoencoder(X, d):
 
     encoder = AutoEncoder(X, hidden_dim=d)
-    encoder.train(10)
+    encoder.train(5)
 
     return encoder
 

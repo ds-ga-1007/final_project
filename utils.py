@@ -13,7 +13,7 @@ def prepare_autoencoding_data(X, Y):
     :return: X = numpy.ndarray of processed input array, rgb = list of color labels.
     """
 
-    X /= 2      # ???
+    #X /= 2      # ???
     color_list = list(six.iteritems(colors.cnames))
 
     if Y is None:
@@ -73,7 +73,7 @@ def process_autoencoding_data(X, visualize, rgb):
 
         # Not neccessary for functionality,
         # but the following makes many dataset visualization look prettier
-        encoder.reg_const = .001
+        encoder.reg_const = .00001
 
         encoder.train(10)
         reconstruction = encoder.predict()
