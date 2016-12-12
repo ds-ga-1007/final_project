@@ -13,10 +13,13 @@ def prepare_autoencoding_data(X, Y):
     :return: X = numpy.ndarray of processed input array, rgb = list of color labels.
     """
 
-    X /= 2
+    X /= 2      # ???
     color_list = list(six.iteritems(colors.cnames))
 
-    if Y.ndim == 1:
+    if Y is None:
+        rgb = [color_list[0][0] for x in X]
+
+    elif Y.ndim == 1:
         rgb = [color_list[y * 2 + 1][0] for y in Y]
 
     elif Y.ndim == 2:
