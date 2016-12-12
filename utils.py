@@ -51,6 +51,13 @@ def visualize_autoencoding_data(encoder, d, rgb, fig):
     plt.title('real data visualized with graphed in ' + str(d) + 'D')
 
 def process_autoencoding_data(X, visualize, rgb):
+    """
+    Perform autoencoding of data. Optionally visualize data using color tags from rgb.
+    :param X: numpy.ndarray 2D array of independent high dimensional variables to be autoencoded.
+    :param visualize: Boolean-like. If evaluates to True, display visualizations.
+    :param rgb: Array of color names for the autoencoding visualizations points.
+    :return: array of reconstruction errors for an embedding dimension of width 2 or 3.
+    """
 
     err = np.empty(2)
 
@@ -61,9 +68,9 @@ def process_autoencoding_data(X, visualize, rgb):
 
         encoder = AutoEncoder(X, hidden_dim=d)
 
-        # Not neccessary, but the following makes many dataset visualization look prettier
+        # Not neccessary for functionality,
+        # but the following makes many dataset visualization look prettier
         encoder.reg_const = .001
-        encoder.neuralnetworklearner.learning_rate = 1e-5
 
         encoder.train(10)
         reconstruction = encoder.predict()
@@ -79,6 +86,14 @@ def process_autoencoding_data(X, visualize, rgb):
     return err
 
 def autoencode_2d_3d_data(X, Y, visualize = 0):
+    """
+    Autoencode data into 2 dimensions and 3 dimensions, report the error to the user
+    Optionally, also visualize the 2D and 3D embedding dimensions
+    :param X: numpy.ndarray 2D array of independent high dimensional variables to be autoencoded
+    :param Y: numpy.ndarray 1D array of response variables for coloring purposes
+    :param visualize: Boolean-like. If evaluates to True, display visualizations.
+    :return: array of reconstruction errors for an embedding dimension of width 2 or 3.
+    """
 
     X, rgb = prepare_autoencoding_data(X, Y)
 
