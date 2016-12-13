@@ -8,6 +8,7 @@ There are three main mathematical computations utilized in this package that the
 Imputation is the process of replacing missing values in a dataset.
 Mean imputation replaces the missing values within a feature with the arithmetic mean of the existing values.
 Median imputation replaces the missing values within a feature with the median of the existing values.
+For a more detailed description of imputation, see https://en.wikipedia.org/wiki/Imputation_(statistics)
 
 Neural Networks are a mathematical representation of a computation graph.
 There are many different optional structures, training algorithms, and other options available within this package
