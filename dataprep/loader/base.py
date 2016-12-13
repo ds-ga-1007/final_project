@@ -60,7 +60,7 @@ class Loader(object, metaclass=ABCMeta):
                     if self._target[i] < 0:
                         self._target[i] += len(df.columns)
                 dfX = df.drop(df.columns[self._target], axis=1)
-            dfY = df.loc[:, self._target]
+            dfY = df.ix[:, self._target]
 
             return [dfX, dfY]
 
