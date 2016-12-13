@@ -13,7 +13,6 @@ def prepare_autoencoding_data(X, Y):
     :return: X = numpy.ndarray of processed input array, rgb = list of color labels.
     """
 
-    #X /= 2      # ???
     color_list = list(six.iteritems(colors.cnames))
 
     if Y is None:

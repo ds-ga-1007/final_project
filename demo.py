@@ -3,6 +3,8 @@ from dataprep import *
 import sys
 import tabview.tabview as TV
 import tempfile
+from utils import *
+
 
 def input_with_default(default):
     # Accepts user input or returns default value if left blank.
@@ -120,12 +122,19 @@ def menu(menu_items, title=None):
 ######################
 
 
+preview_tutorial = True
 def preview_dataframe(df):
-    print('Press Enter to continue...')
-    print('When in tabview, press the arrow keys to explore.')
-    print('Press enter to inspect the cell values.')
-    print('Press q to exit.')
-    input()
+    global preview_tutorial
+    if preview_tutorial:
+        print('When in tabview:')
+        print('Press the arrow keys to explore.')
+        print('Press enter to inspect the cell values.')
+        print('Press q to exit.')
+        print('Press ? for more key-bindings in tabview.')
+        print()
+        print('Press Enter to continue...')
+        input()
+        preview_tutorial = False
     fp = tempfile.NamedTemporaryFile(mode='w+')
     df.to_csv(fp.name)
     TV.view(fp.name)
@@ -456,8 +465,8 @@ def numeric_impute(df, pipeline, pipeline_names):
 
 
 def dummy(df, pipeline, pipeline_names):
-    print('Dummying out every categorical variables (including null values there)')
-    pipeline.append(DummyTransformer(dummy_unknown=True))
+    print('Dummying out every categorical variables (null values are encoded as all zeroes)')
+    pipeline.append(DummyTransformer())
     pipeline_names.append('Dummy out categorical values')
 
 
@@ -543,13 +552,18 @@ def main():
     dflist = read_csv()
     if len(dflist) == 1:
         # one dataset
-        preprocess_dataset(dflist[0])
+        X = preprocess_dataset(dflist[0])
+        Y = None
     elif len(dflist) == 2:
         # a feature set and a label set
         print('Preprocessing feature set')
-        preprocess_dataset(dflist[0])
+        X = preprocess_dataset(dflist[0])
         print('Preprocessing label set')
-        preprocess_dataset(dflist[1])
+        Y = preprocess_dataset(dflist[1])
+
+    print('Visualizing the dataset on 2D and 3D spaces...')
+    err_2d, err_3d = autoencode_2d_3d_data(X, Y, visualize=1)
+    print('Reconstruction error is %f for 2D and %f for 3D.' % (err_2d, err_3d))
 
 
 if __name__ == '__main__':
