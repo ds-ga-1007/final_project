@@ -61,7 +61,7 @@ def process_autoencoding_data(X, visualize, data_color_labels):
     :return: array of reconstruction errors for an embedding dimension of width 2 or 3.
     """
 
-    err = np.empty(2)
+    err_2d_3d = np.empty(2)
 
     if visualize:
         fig = plt.figure(figsize=(20, 15))
@@ -80,12 +80,12 @@ def process_autoencoding_data(X, visualize, data_color_labels):
         if visualize:
             visualize_autoencoding_data(encoder, d, data_color_labels, fig)
 
-        err[d-2] = np.mean(np.square(reconstruction - X))
+        err_2d_3d[d-2] = np.mean(np.square(reconstruction - X))
 
     if visualize:
         plt.show()
 
-    return err
+    return err_2d_3d
 
 def autoencode_2d_3d_data(X, Y, visualize = 0):
     """
@@ -99,6 +99,6 @@ def autoencode_2d_3d_data(X, Y, visualize = 0):
 
     X, data_color_labels = prepare_autoencoding_data(X, Y)
 
-    err = process_autoencoding_data(X, visualize, data_color_labels)
+    err_2d_3d = process_autoencoding_data(X, visualize, data_color_labels)
 
-    return err[0], err[1]
+    return err_2d_3d[0], err_2d_3d[1]
