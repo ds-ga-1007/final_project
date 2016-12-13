@@ -49,6 +49,7 @@ def visualize_autoencoding_data(encoder, d, data_color_labels, fig):
     if d == 2:
         fig.add_subplot(120 + d - 1)
         plt.scatter(encoding_vals[:, 0], encoding_vals[:, 1], color=data_color_labels)
+
     if d == 3:
         ax = fig.add_subplot(120 + d - 1, projection='3d')
         ax.scatter(xs=encoding_vals[:, 0], ys=encoding_vals[:, 1],

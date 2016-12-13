@@ -1,6 +1,30 @@
 # nn-python
 Neural Network implementation in Python
 
+### Background
+
+There are three main mathematical computations utilized in this package that the models are built on.
+
+Imputation is the process of replacing missing values in a dataset.
+Mean imputation replaces the missing values within a feature with the arithmetic mean of the existing values.
+Median imputation replaces the missing values within a feature with the median of the existing values.
+
+Neural Networks are a mathematical representation of a computation graph.
+There are many different optional structures, training algorithms, and other options available within this package
+accessible through NeuralNetworkLearner.
+For a more detailed description of Neural Network models and training algorithms,
+see https://en.wikipedia.org/wiki/Artificial_neural_network
+
+An Autoencoder is an application of a Neural Network to perform dimensionality reduction that can preserve
+large amounts of the true underlying variations within a dataset with a very small encoding dimension.
+Compared to linear dimensionality reduction algorithms like PCA, autoencoders can represent many dimensions
+of variation within a low number of encoded dimensions, such as maintaining upwards of 99% data variation
+from a high dimensional dataset in as little as 2 or 3 dimensions due to the non-linearity of a Neural Network.
+A brief summary of an autoencoder is a neural network that has a narrow hidden layer, and with inputs and outputs
+both equal to the dataset features to be autoencoded.
+For a more detailed description of autoencoders, see https://en.wikipedia.org/wiki/Autoencoder
+
+
 ### System and Dependencies
 
 Only tested on Linux.  Windows and OS/X are not supported.
