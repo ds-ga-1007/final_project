@@ -15,15 +15,19 @@ def prepare_autoencoding_data(X, Y):
 
     color_list = list(six.iteritems(colors.cnames))
 
+    Y_uni = np.unique(Y)
+
+    Y_map = dict(zip(Y_uni,range(len(Y_uni))))
+
     if Y is None:
         data_color_labels = [color_list[0][0] for x in X]
 
     elif Y.ndim == 1:
-        data_color_labels = [color_list[y * 2 + 1][0] for y in Y]
+        data_color_labels = [color_list[Y_map[y] * 2 + 1][0] for y in Y]
 
     elif Y.ndim == 2:
         data_color_labels = [color_list[4 * np.sum(
-            [yi * (2 ** idx) for idx, yi in enumerate(y)])][0] for y in Y]
+            [Y_map[yi] * (2 ** idx) for idx, yi in enumerate(y)])][0] for y in Y]
 
     else:
         raise ValueError("response variables must be 1 or 2 dimensional")
