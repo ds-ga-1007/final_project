@@ -43,6 +43,8 @@ NOTE: this code will **not** work on Python 2.
 
 `demo.py` is an interactive interface in console for mining the latent features in a dataset, and visualizing them in 2D or 3D.
 
+#### Sample walkthrough
+
 One can run the script by following the steps below:
 
 1. Execute the script:
@@ -182,6 +184,58 @@ One can run the script by following the steps below:
     ```
     
 4. After the autoencoding finishes, the program shows a window containing the visualization and projection of the dataset in 2D and 3D graphs, then terminates.  Usually, you are able to observe a perfectly straight line.
+
+#### Documentation
+
+`demo.py` only supports reading, preprocessing, and visualizing datasets in CSV format.
+
+##### Startup
+
+Upon execution it will request a path to the dataset, the separator character, whether it contains the list of column names on the first line, and whether there are any target variables.
+
+###### Target variable specification
+
+Target variable columns can be specified by indices.  If the indices are negative, say `-n`, then it represents the rightmost n-th column.
+
+Target variable columns can also be specified by names, but only if the column names are available in the CSV file.  If they don't have a name, `demo.py` will assign the n-th column with the default name `col<n-1>`.  For instance, the first column would be given the name `col0`.  You can change the name later in data preprocessing step, but it won't have any effect on visualization results.
+
+If there is no target variable, you will only need to preprocess one dataset.  Otherwise, you will have to preprocess two datasets: a *feature* set and a *label* set.  Data preprocessing is done interactively by a menu.
+
+##### Main menu
+
+The main menu provides the following functionalities:
+
+* `p`: Preview the result of preprocessing.  An interactive table will be shown and you can check the result with it.
+* `v`: View the current pipeline of transformations.  Data preprocessing is done by applying transformations sequentially in the pipeline.
+* `u`: Undo last transformation, in case of you made something wrong.  You can undo as many steps as you want until the pipeline becomes empty.
+* `s`: View or edit schema.  A *schema* describes whether each column is categorical or numeric.  By default, `demo.py` treats any columns with non-numeric values (such as "?", "A", etc.) categorical, and numeric otherwise.  Selecting this option gives you a series of sub-options:
+  * `c`: Rename columns.
+  * `g`: Guess schema.  If you select this option, the program would check each column whether a majority of the values there are numeric: if so, then sets the column type to be numeric, deleting any non-numeric values in the process.  This is useful when a small portion of the column is populated by "unknown identifiers" such as "?", "-", etc.
+  * `s`: Display current schema.  Make sure you check the schema before visualization, as the default schema and/or schema guessing would not always do what you exactly want.
+  * `d`: Drop columns.
+  * `m`: Change column type to either numeric or categorical by your own.
+* `d`: Delete values.  You can delete the following values for either all the columns, or some of the columns (and you'll have to specify the name of those columns by your own):
+  * `n`: All negative values.  Useful in datasets where negative values make no sense or indicates unknownness.
+  * `0`: All zeroes.
+  * `x`: All values equal to some value.  You will be asked what value it is, and whether it is numeric or categorical.
+  * `?`: All question marks ("?"), dashes ("-"), whitespaces, and "N/A" or "NA" in uppercase or lowercase.  This should cover most cases of unknown value indication.  Though for numeric values, it is often more straightforward to simply force that column to be numeric (by editing the schema and changing the column type).
+* `a`: Add null indicator variables.  You will be asked whether a null indicator variable should be added for each numeric column, or each of the columns you specified.  A new column would be added for each column with null values, with 1 showing that the corresponding value is missing, or 0 otherwise.  Usually categorical columns does not need null indicator variables.
+* `n`: Normalize columns.  You will be asked whether you want to normalize all numeric columns, or you want to specify some of the columns for normalization.  It gives you four options for normalization:
+  * `0`: Shift the mean to 0.
+  * `n`: Shift the mean to 0 and rescale the values to make the variance 1.
+  * `1`: Linearly normalize all values to those between 0 and 1.
+  * `-`: As above, but to those between -1 and 1.
+* `1` (not the lowercase `l`): Dummy out each categorical variable into n indicator variables, where n is the number of different values in that column.  The program will automatically apply this transformation to all categorical columns.
+* `i`: Impute the empty values.  You can choose to impute all the columns or some of the columns (whose names should be specified) by
+  * `0`: all zeros
+  * `m`: the median of each column
+  * `a`: the average of each column
+* `q`: Quit and proceed with this pipeline.  Upon selection, you should have transformed every categorical value to numeric, and there should not be any missing values, otherwise the program would ask you to deal with them by either dummy out the categorical values, or impute the null values.
+* `x`: Quit and say goodbye.
+
+##### Visualization
+
+After preprocessing the dataset, or feature set and label set, the program will autoencode the data, and visualize every data point by their latent 2D and 3D representations in a 2D and 3D plot.  Usually you can find something interesting.
 
 ### Writing code within this framework
 
