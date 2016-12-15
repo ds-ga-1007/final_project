@@ -88,3 +88,9 @@ ENV/
 
 # Rope project settings
 .ropeproject
+
+# CSV files
+**/*.csv
+
+# PyCharm files
+**/.idea
