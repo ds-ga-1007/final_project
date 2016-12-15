@@ -1,8 +1,0 @@
-# Python compiled modules
-*.pyc
-
-# Hidden files
-.*
-
-# Backups (Vim)
-*~
