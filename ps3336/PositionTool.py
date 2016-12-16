@@ -5,13 +5,12 @@ import matplotlib.pyplot as plt
 class PositionTool:
 
 	def age_distribution(data_interested, input_position, save):
-		fig = plt.figure()
 		plt.hist(data_interested['age'])
 		plt.title('Age Distribution of ' + input_position + ' in Transfer Players of Year 2014, 2015, 2016')
 		plt.xlabel('Age')
 		plt.ylabel('Count')
 		if save == 'y':
-			fig.savefig('Age_Distribution_of_' + input_position + '.pdf')
+			plt.savefig('Age_Distribution_of_' + input_position + '.pdf')
 		plt.show()
 
 	def transfer_fee_box(data_interested, input_position, save):
@@ -20,7 +19,7 @@ class PositionTool:
 		plt.xlabel('Year')
 		plt.ylabel('Transfer Fee')
 		if save == 'y':
-			fig.savefig('Transfer Fee of ' + input_position +'.pdf')
+			plt.savefig('Transfer Fee of ' + input_position +'.pdf')
 		plt.show()
 
 	def num_transfer(data_interested, input_position, save):
@@ -44,6 +43,7 @@ class PositionTool:
 		if save == 'y':
 			fig.savefig('Number of Transfers of ' + input_position +' by clubs.pdf')
 		plt.show()
+		return count 
 
 	def invest_on_return(data_interested, input_position, save):
 		grouped_data_goal = data_interested[data_interested['transfer_status'] == 'in'].groupby(['club', 'year'])['goals'].sum()
@@ -67,3 +67,4 @@ class PositionTool:
 		if save == 'y':
 			fig.savefig('Investment on Return of ' + input_position +' by clubs.pdf')
 		plt.show()
+		return ior 
