@@ -4,6 +4,7 @@ from Sort.yelp_sort import *
 from Data.Read_data import *
 from Search.search import *
 from Plan.trip_plan import *
+import random
 
 class tests_sort(unittest.TestCase):
 
@@ -101,6 +102,61 @@ class tests_sort(unittest.TestCase):
 		for i in range(df1.shape[0]):
 			self.assertTrue(distance(df1.iloc[i]['Lat'], df1.iloc[i]['Lng'], 40.748817, -73.985428) <= 1.5)
 			self.assertTrue(distance(df2.iloc[i]['Lat'], df2.iloc[i]['Lng'], 40.748817, -73.985428) <= 1.5)
+
+	def test_sort_within_radar_chart_for_hotel(self):
+		"""
+		This method test whether we clean hotel data correctly or not, to make sure we can draw the radar chart.
+		"""
+		data_hotel, data_restaurant, data_museum, data_attraction = Read_data()
+		
+		for i in range(100):
+			value = random.randint(1, 3)
+			lat = 40.700 + (40.854 - 40.700) * random.random()
+			lng = -74.018 + (-73.929 - (-74.018)) * random.random()
+
+			#To reduce the time to call a function, we keep this code in here without writing a function
+			if (value == 1):
+				value_list = [1,2]
+			elif (value == 2):
+				value_list = [3,4]
+			elif (value == 3):
+				value_list = [5]
+
+			#this method just test this peice of code work well
+			columns = ['Avgscore', 'Cleanliness', 'Comfort', 'Facilities', 'Free Wifi', 'Location', 'Staff', "Value for money"]
+			for c in columns:
+				data_hotel = data_hotel[data_hotel[c] >= 5]
+				data_hotel = data_hotel[data_hotel[c] <= 10]
+			data_hotel.index = range(data_hotel.shape[0])
+
+			df1 = sort_within(data_hotel, lat, lng, 1.5, 'Price', value_list)
+			for c in columns:
+				#self.assertTrue(all(i >= 5 for i in df1[c]))
+				self.assertTrue((df1[c] >= 5).all() and (df1[c] <= 10).all())
+
+	def test_sort_within_radar_chart_for_restaurant(self):
+		"""
+		This method test whether we clean restaurant data correctly or not, to make sure we can draw the radar chart.
+		"""
+		data_hotel, data_restaurant, data_museum, data_attraction = Read_data()
+
+		for i in range(100):
+			lat = 40.700 + (40.854 - 40.700) * random.random()
+			lng = -74.018 + (-73.929 - (-74.018)) * random.random()
+
+			category = ['Chinese','Japanese','Asian','Italian',
+              'French', 'US', 'European', 'LatinAmerican', 'Cafe_bar', 'African', 'MiddleEastern', 'Other']
+
+			n = random.randint(0, 11)
+			yelp_category(data_restaurant)
+			data_restaurant = data_restaurant[data_restaurant['number_of_price'] >= 1]
+			data_restaurant.index = range(data_restaurant.shape[0])
+			df = sort_within(data_restaurant, lat, lng, 1.5, 'ctg', category[n])
+
+			self.assertTrue((df['number_of_price'] <= 5).all() and (df['number_of_price'] >= 0).all())
+			self.assertTrue((df['Reviews'] <= 5).all() and (df['Reviews'] >= 0).all())
+			self.assertTrue((df['Avgscore'] <= 5).all() and (df['Avgscore'] >= 0).all())
+			self.assertTrue((df['Distance'] <= 10).all() and (df['Distance'] >= 0).all())
 
 	def test_sort_museums_or_attractions_sort_algorithm(self):
 		"""
