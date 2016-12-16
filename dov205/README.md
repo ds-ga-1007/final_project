@@ -1,22 +1,61 @@
-## Commentary
+# Commentary
 
-### Important notes:
+## Table of Contents
+1. [Logistics](#logistics)
+2. [Setup Instructions](instructions)
+3. [Data: Source, Pre-processing, etc.](#data)
 
-Fork: https://github.com/dataframing/reddit-dataset
-Source: https://github.com/linanqiu/reddit-dataset
+## Logistics
+
+*Name:* Danny Vilela
+
+*NetID:* dov205
+
+## Instructions
+
+Building this project is relatively simple. Here's the setup required:
+
+1. After cloning locally, `cd` into the `data` folder. Assuming this project is in the root directory `~`, it'll look like:
+
+		cd ~/final_project/dov205/data
+
+2. You should see many different `.csv` files of the form `comments_*.csv`. Feel free to see my reasoning behind the data processing task [below](#data). These files are essentially split versions of the master comments dataset, so to join them we simply run:
+
+		cat comments_*.csv > comments.csv
+
+Now you're done! You should have a large (~657 MB) dataset that we'll be using for the remaining project.
+
+## Data
+
+[Source -- Linan Qiu](https://github.com/linanqiu/reddit-dataset)
 
 ### Data preprocessing
 
-In directory with all CSV files:
+After cloning Linan Qiu's Reddit dataset source, we have a directory `data` with multiple CSVs. Each CSV corresponds to a category and its specific subreddit (e.g. `gaming_pokemon.csv`, `lifestyle_drunk.csv`, etc.), and each row contains features relating to a top-level thread or thread comment within that subreddit.
 
-  $ cat *.csv > master.csv && awk -F , 'NF==11' < master.csv > comments.csv
+When I first attempted to read in the dataset, there was an obvious discrepancy: rows representing comments were in the same files as rows representing thread posts, which made `pandas.read_csv()` upset (and, more importantly, would impact the interpretability of the dataset).
 
-Broken down: we concatenatve all CSV files into a single file "master.csv".
-Next, we utilize the command-line tool awk to take care of our data preprocessing.
-Our reddit data contains both comments (which are in response to either
-another comment or the original post) and original posts. This presents a
-problem: comments contain 11 fields, whereas original posts contain 13.
-In order to limit the scope of our analysis on strictly comments, we utilize
-awk in order to omit particular rows that contain more than 11 instances of our
-defined comma delimiter, ','. With master.csv as input, we output the lines
-that do not get filtered by awk into 'comments.csv'.
+To preserve the most of our original dataset and focus our analysis, I've chosen to only analyze comments, not comments. From the original README, Linan Qiu noted that comment-level posts would have 11 features, whereas thread-level posts (from both the documentation and my exploration of the data) had anywhere between 11 and 13 features.
+
+Our preprocessing goal was two-fold: join all CSVs into a `master` CSV and keep rows whose feature count is 11. With some trial, error, and research into the appropriate command-line tools I came up with the following command to be run from the `data` directory:
+
+```bash
+cd ~/path/to/data
+cat *.csv > master.csv && awk -F , 'NF==11' < master.csv > comments.csv
+```
+
+Broken down: we concatenate all CSV files into a single file `master.csv`. Next, we utilize the command-line tool `awk` to take care of our data preprocessing. In order to isolate comments, we define the regular expression that separates each field (here, a comma `,`) and set our evaluation condition to whether a row has exactly 11 fields. If so, we redirect those rows into `comments.csv`.
+
+This gives us a reasonably clean, large (~657 MB) dataset for analyzing with pandas.
+
+**However**, GitHub has a strict limit on files above 100 MB. To get under/around this limitation, I have to split the files into 80 MB fragments and commit them that way. I do so with the following command:
+
+	split -b 80m comments.csv comments_
+	
+Decomposed, this command splits `comments.csv` into 80 MB files, prefixed by `comments_`. This gives us a directory with `comments.csv` and `comments_aa`, `comments_ab`, etc. In order to make the filenames a bit nicer, I rename with the following:
+
+	for i in comments_??; do mv "$i" "$i.csv"; done
+
+This gives us `comments_aa.csv`, `comments_ab.csv`, etc. This helps when we want to re-join all the files together with part of our initial processing command:
+
+	cat comments_??.csv > comments.csv
