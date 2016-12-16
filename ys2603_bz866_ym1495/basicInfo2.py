@@ -210,7 +210,7 @@ def boxplotPokestop(dataframe):
         else:
             long_distance.append(distance[i])
 
-    x = [short_istance,medium_distance,long_distance]
+    x = [short_distance,medium_distance,long_distance]
     plt.boxplot(x,labels=('short','medium','long'),showfliers=False)
     plt.title("Pokemons distance from pokestop")
     plt.savefig('Pokemons distance from pokestop', dpi = 300)
@@ -237,7 +237,7 @@ def boxplotGym(dataframe):
         else:
             long_distance.append(gym_distance[i])
 
-    x = [short_istance,medium_distance,long_distance]
+    x = [short_distance,medium_distance,long_distance]
     plt.boxplot(x,labels=('short','medium','long'),showfliers=False)
     plt.title("Pokemons distance from gyms")
     plt.savefig('Pokemons distance from gyms', dpi = 300)
