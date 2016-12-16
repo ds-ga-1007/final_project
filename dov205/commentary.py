@@ -1,3 +1,16 @@
+"""
+    Author: Danny Vilela
+
+    NetID: dov205
+
+    Description:
+        This program (commentary.py) serves as the driver for my final
+        project. It interfaces with the terminal and allows for any given
+        user to interactively explore a large data set of Reddit comments across
+        multiply subreddits.
+
+"""
+
 import sys
 from Explorer.Explorer import *
 from Explorer.InteractionError import *
