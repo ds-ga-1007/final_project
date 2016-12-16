@@ -202,13 +202,13 @@ def boxplotPokestop(dataframe):
     medium_distance = []
     long_distance = []
 
-    for i in distance:
-        if i <=0.5:
-            short_distance.append(i)
-        elif 0.5<i<=1:
-            medium_distance.append(i)
+    for i in range(len(distance)):
+        if distance[i] <=0.5:
+            short_distance.append(distance[i])
+        elif 0.5<distance[i]<=1:
+            medium_distance.append(distance[i])
         else:
-            long_distance.append(i)
+            long_distance.append(distance[i])
 
     x = [short_istance,medium_distance,long_distance]
     plt.boxplot(x,labels=('short','medium','long'),showfliers=False)
@@ -229,13 +229,13 @@ def boxplotGym(dataframe):
     medium_distance = []
     long_distance = []
 
-    for i in gym_distance:
-        if i <=0.5:
-            short_distance.append(i)
-        elif 0.5<i<=1:
-            medium_distance.append(i)
+    for i in range(len(gym_distance)):
+        if gym_distance[i] <=0.5:
+            short_distance.append(gym_distance[i])
+        elif 0.5<gym_distance[i]<=1:
+            medium_distance.append(gym_distance[i])
         else:
-            long_distance.append(i)
+            long_distance.append(gym_distance[i])
 
     x = [short_istance,medium_distance,long_distance]
     plt.boxplot(x,labels=('short','medium','long'),showfliers=False)
