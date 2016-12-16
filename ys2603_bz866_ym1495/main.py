@@ -111,13 +111,13 @@ def main():
                                             '\nD. Show distribution of its appearance time of the day in pie chart'
                                             '\nE. Show World Map of all pokemon occurrence in basemap'
                                             '\nF. Show World Map of %s occurrence in basemap'
-                                            '\nG. Show Box Plot of %s occurrence distance to pokestop'
-                                            '\nH. Show Box Plot of %s occurrence distance to gym'
+                                            '\nG. Show Box Plot of pokemons occurrence distance to pokestop'
+                                            '\nH. Show Box Plot of pokemons occurrence distance to gym'
                                             '\nI. Show Line Chart of all pokemons occurence freq vs hour of day'
                                             '\n\nType \'city\' to select a certain city for more details'
                                             '\nType \'back\' back to previous menu'
                                             '\nType \'quit\' to quit the program'
-                                            '\n\n>  '%(pokemonList[pokemon_selection],pokemonList[pokemon_selection],pokemonList[pokemon_selection],pokemonList[pokemon_selection]))
+                                            '\n\n>  '%(pokemonList[pokemon_selection],pokemonList[pokemon_selection]))
                             if third_input.lower() in ['q','quit','bye']:
                                 return (print('\n till Next Time! Goodbye.'))
                             elif third_input.lower() in ['back']:
@@ -165,11 +165,7 @@ def main():
                                     print('\n %s has not appeared in Pokemon Go world yet.'%pokemonList[pokemon_selection])
                                 continue
                             elif third_input.lower() in ['g','g.','7']:
-                                if hasItAppearedGlobally(largeData, pokemon_selection)==True:
-                                    ans = boxplotPokestop(pokemonwideDataframe(largeData, pokemon_selection))
-                                    continue
-                                else:
-                                    print('\n %s has not appeared in Pokemon Go world yet.'%pokemonList[pokemon_selection])
+                                ans = boxplotPokestop(largeData)
                                 continue
                             elif third_input.lower() in ['h','h.','8']:
                                 ans = boxplotGym(largeData)
@@ -233,14 +229,14 @@ def main():
                                             continue
                                         elif third_input.lower() in ['f','f.','6']:
                                             if hasItAppearedGlobally(citywideDataframe(largeData,city_selection), pokemon_selection)==True:
-                                                ans = boxplotPokestop(pokemonwideDataframe(citywideDataframe(largeData,city_selection), pokemon_selection))
+                                                ans = boxplotPokestop(citywideDataframe(largeData,city_selection), pokemon_selection)
                                                 continue
                                             else:
                                                 print('\n %s has not appeared in %s yet.'%(pokemonList[pokemon_selection],city_selection))
                                             continue
                                         elif third_input.lower() in ['g','g.','7']:
                                             if hasItAppearedGlobally(citywideDataframe(largeData,city_selection), pokemon_selection)==True:
-                                                ans = boxplotGym(pokemonwideDataframe(citywideDataframe(largeData,city_selection), pokemon_selection))
+                                                ans = boxplotGym(citywideDataframe(largeData,city_selection), pokemon_selection)
                                                 continue
                                             else:
                                                 print('\n %s has not appeared in %s yet.'%(pokemonList[pokemon_selection],city_selection))
