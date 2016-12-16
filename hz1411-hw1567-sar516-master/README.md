@@ -52,9 +52,11 @@ This application allows users to,
 
 3. **Overview** certain visualized stats about NYC attractions, museums, restaurants and hotels, including heat map, bar chart, pie chart etc.
 
-**Please DO NOT click the buttons too quickly.**
+4. **Quit** the application by directly closing the window or ```control + C``` on command line.
 
-For detailed description, please see below.
+5. **Please DO NOT click the buttons too quickly.**
+
+6. For detailed description, please see below.
 
 ## Description
 
