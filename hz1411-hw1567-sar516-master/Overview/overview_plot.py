@@ -1,6 +1,9 @@
 from Data.Read_data import *
 from Sort.yelp_sort import *
+import matplotlib
+matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
+from PIL import Image
 
 class overview_plot:
     '''
@@ -38,8 +41,9 @@ class overview_plot:
         plt.title(filename+'_reviews_density_plot')
         path = os.path.abspath('Results')
         plt.savefig(path + '/' + filename + '_reviews_density.png')
-        plt.show()
-        plt.close()
+        plt.clf()
+        img = Image.open(path + '/' + filename + '_reviews_density.png')
+        img.show()
 
     def plot_rating_bar(self, filename):
         """
@@ -69,9 +73,11 @@ class overview_plot:
         plt.title(filename + ' ratings')
         path = os.path.abspath('Results')
         plt.savefig(path + '/' +filename + '_ratings_bar.png')
-        plt.show()
-        plt.close()
+        plt.clf()
+        img = Image.open(path + '/' +filename + '_ratings_bar.png')
+        img.show()
 
+        
     def plot_pie(self, filename):
         '''
         plot pie chart for 'restaurant' and 'hotel'
@@ -87,8 +93,9 @@ class overview_plot:
             plt.title('Pie chart for restaurants by category')
             path = os.path.abspath('Results')
             plt.savefig(path + '/pie_chart_' + filename + '.png')
-            plt.show()
-            plt.close()
+            plt.clf()
+            img = Image.open(path + '/pie_chart_' + filename + '.png')
+            img.show()
         if filename == 'hotel':
             df = self.hotel
             df['category'] = df['Price'].apply(self.price_transform)
@@ -97,8 +104,9 @@ class overview_plot:
             plt.title('Pie chart for hotels by category')
             path = os.path.abspath('Results')
             plt.savefig(path + '/pie_chart_' + filename + '.png')
-            plt.show()
-            plt.close()
+            plt.clf()
+            img = Image.open(path + '/pie_chart_' + filename + '.png')
+            img.show()
 
     def price_transform(self, price):
         """
@@ -145,8 +153,9 @@ class overview_plot:
 
             path = os.path.abspath('Results')
             plt.savefig(path + '/' + filename + '_rating_scores_bar.png')
-            plt.show()        
-            plt.close()
+            plt.clf()
+            img = Image.open(path + '/' + filename + '_rating_scores_bar.png')
+            img.show()
 
         elif (filename == 'restaurant'):
             df = self.restaurant
@@ -172,7 +181,8 @@ class overview_plot:
 
             path = os.path.abspath('Results')
             plt.savefig(path + '/' + filename + '_rating_scores_bar.png')  
-            plt.show()  
-            plt.close()
+            plt.clf()
+            img = Image.open(path + '/' + filename + '_rating_scores_bar.png')
+            img.show()
 
       
