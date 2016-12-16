@@ -114,11 +114,10 @@ def main():
                                             '\nG. Show Box Plot of %s occurrence distance to pokestop'
                                             '\nH. Show Box Plot of %s occurrence distance to gym'
                                             '\nI. Show Line Chart of all pokemons occurence freq vs hour of day'
-                                            '\nJ. Show Line Chart of %s occurence freq vs hour of day'
-                                            '\nType \'city\' to select a certain city for more details'
+                                            '\n\nType \'city\' to select a certain city for more details'
                                             '\nType \'back\' back to previous menu'
                                             '\nType \'quit\' to quit the program'
-                                            '\n>  '%(pokemonList[pokemon_selection],pokemonList[pokemon_selection],pokemonList[pokemon_selection],pokemonList[pokemon_selection],pokemonList[pokemon_selection]))
+                                            '\n\n>  '%(pokemonList[pokemon_selection],pokemonList[pokemon_selection],pokemonList[pokemon_selection],pokemonList[pokemon_selection],pokemonList[pokemon_selection]))
                             if third_input.lower() in ['q','quit','bye']:
                                 return (print('\n till Next Time! Goodbye.'))
                             elif third_input.lower() in ['back']:
@@ -181,13 +180,6 @@ def main():
                                 continue
                             elif third_input.lower() in ['i','i.','9']:
                                 ans = appearline_according_hour(largeData)
-                                continue
-                            elif third_input.lower() in ['j','j.','10']:
-                                if hasItAppearedGlobally(largeData, pokemon_selection)==True:
-                                    ans = appearline_according_hour(pokemonwideDataframe(largeData, pokemon_selection))
-                                    continue
-                                else:
-                                    print('\n %s has not appeared in Pokemon Go world yet.'%pokemonList[pokemon_selection])
                                 continue
                             elif third_input.lower() in ['city']:                                
                                 city_selection = userChoice.select_city(cityList)
