@@ -58,6 +58,8 @@ def city_ID_freq(dataframe, city_input):
     plt.ylabel('Frequency')
     plt.title('Frequencies of pokemons appear in ' + str(city_input))
     plt.savefig('Frequencies of pokemons appear in ' + str(city_input), dpi=300)
+    plt.show()
+    plt.close()
     return ID_freq_count_upten
 
 def ID_city_freq(dataframe, ID_input):
@@ -78,6 +80,8 @@ def ID_city_freq(dataframe, ID_input):
     plt.ylabel('Frequency')
     plt.title('Frequncy of pokemon ' + str(ID_input) + ' appears in different cities')
     plt.savefig('Frequency of pokemon ' + str(ID_input) + 'appears in different cities', dpi=300)
+    plt.show()
+    plt.close()
     return city_freq_count_upten
 
 def appeared_incity(dataframe, ID_input, city_input):
@@ -106,11 +110,13 @@ def appeared_time(dataframe, ID_input):
     time_df = pd.DataFrame({'time':time_array})
     time_freq_count = time_df['time'].value_counts()
     #pie chart
-    labels = 'night', 'morning', 'afternoon'
+    labels = 'night', 'morning', 'afternoon','evening'
     pie(time_freq_count, labels =labels ,autopct='%1.1f%%')
     plt.title("Percentage of pokemon's daily appearances' periods")
     #save figure as png
     plt.savefig('pie chart of pokemon ' + str(ID_input) + ' showing up periods')
+    plt.show()
+    plt.close()
     return time_freq_count
 
 def co_occurance (dataframe, ID_input):
@@ -128,8 +134,30 @@ def co_occurance (dataframe, ID_input):
         freq = sum(data[col_name])
         freq_list.append(freq)
     maxfive = sort(freq_list)[-5:]
+    freq_list = np.array(freq_list)
     for i in range(1,6):
-        a = freq_list.index(maxfive[-i])
-        result.append(a)
+        item_index = np.where(freq_list==maxfive[-i])
+        result.append(int(item_index[0]))
     return result
+
+def temp_windspeed_relation(city_input):
+    '''
+    input:
+        city name
+    return:
+        The image of relationship between temperature and windspeed of the given city'''
+    data = data_origin.loc[data_origin['city'] == city_input]
+    feature_1 = np.array(data['temperature'])
+    feature_2 = np.array(data['windSpeed'])
+    plt.figure(figsize = (10,8))
+    plt.scatter(x = feature_1, y = feature_2)
+    plt.xlabel('Temperature')
+    plt.ylabel('Windspeed')
+    plt.title('Relationship between temperature and windspeed of ' + str(city_input))
+    plt.savefig('Relationship between temperature and windspeed of ' + str(city_input), dpi = 300)
+    plt.show()
+    plt.close()
+    return print('The image of relationship between temperature and windspeed is saved as'
+                 + 'Relationship between temperature and windspeed of ' + str(city_input))
+
 
