@@ -40,9 +40,9 @@ class Data:
     def split_income(self):
         # The conrinc variable does not appear to have a linear relation with the predictors
         # because the variable is calculated based on ordinal data, and the interval was different
-        # after 100000
+        # after 80000
         self.data.loc[:,'high_inc'] = pd.Series(np.zeros(len(self.data)), index=self.data.index)
-        li = list(self.data.loc[:,'conrinc'] >= 100000)
+        li = list(self.data.loc[:,'conrinc'] >= 80000)
         self.data.loc[li,'high_inc'] = 1
     
     def set_categorical(self):
