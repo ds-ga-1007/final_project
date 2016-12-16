@@ -11,7 +11,7 @@
 
 *NetID:* dov205
 
-## Instructions
+## Installation Instructions
 
 Building this project is relatively simple. Here's the setup required:
 
@@ -23,7 +23,36 @@ Building this project is relatively simple. Here's the setup required:
 
 		cat comments_*.csv > comments.csv
 
-Now you're done! You should have a large (~657 MB) dataset that we'll be using for the remaining project.
+You should have a large (~657 MB) dataset that we'll be using for the remaining project. Halfway done!
+
+### Environment
+
+When installing dependencies, I make relatively basic assumptions that the user has [miniconda](http://conda.pydata.org/miniconda.html) – a leaner alternative to Python's *Anaconda* package manager – installed. To make things as smooth as possible, I suggest creating a new conda environment (note, the syntax differences between setting up an environment for `conda` is similar to `pip`). The required commands are as follow:
+
+```bash
+# Set up working environment called 'reddit'
+conda create --name reddit python=3 jupyter ipython matplotlib pandas numpy
+
+# Activate reddit environment
+# Windows: activate reddit
+source activate reddit
+```
+
+This keeps your (the grader) package management state isolated from this project's and ensures we don't worry about dependency hell :)
+
+**Once you're done grading, feel free to use the following commands to clean up:**
+
+```bash
+# Exit conda environment
+source deactivate reddit
+
+# Delete conda environment
+conda remove --name reddit --all
+```
+
+We're done setting things up! What a relief.
+
+### 
 
 ## Data
 
