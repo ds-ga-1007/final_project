@@ -248,7 +248,7 @@ def boxplotGym(dataframe):
 def appearline_according_hour(dataframe):
     '''
     Output:
-        Image of Distribution of pokemons all over the day
+        Image of Distribution of pokemons all over the day in line chart
     '''
     datatime = dataframe['appearedLocalTime']
     linechart_xvalue = np.arange(1,25)
