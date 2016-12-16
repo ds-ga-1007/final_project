@@ -111,9 +111,8 @@ def main():
                                             '\nD. Show distribution of its appearance time of the day in pie chart'
                                             '\nE. Show World Map of all pokemon occurrence in basemap'
                                             '\nF. Show World Map of %s occurrence in basemap'
-                                            '\nG. Show Box Plot of pokemons occurrence distance to pokestop'
-                                            '\nH. Show Box Plot of pokemons occurrence distance to gym'
-                                            '\nI. Show Line Chart of all pokemons occurence freq vs hour of day'
+                                            '\nG. Show Box Plot of pokemons occurrence distance to gym'
+                                            '\nH. Show Line Chart of all pokemons occurence freq vs hour of day'
                                             '\n\nType \'city\' to select a certain city for more details'
                                             '\nType \'back\' back to previous menu'
                                             '\nType \'quit\' to quit the program'
@@ -165,12 +164,9 @@ def main():
                                     print('\n %s has not appeared in Pokemon Go world yet.'%pokemonList[pokemon_selection])
                                 continue
                             elif third_input.lower() in ['g','g.','7']:
-                                ans = boxplotPokestop(largeData)
-                                continue
-                            elif third_input.lower() in ['h','h.','8']:
                                 ans = boxplotGym(largeData)
                                 continue
-                            elif third_input.lower() in ['i','i.','9']:
+                            elif third_input.lower() in ['h','h.','8']:
                                 ans = appearline_according_hour(largeData)
                                 continue
                             elif third_input.lower() in ['city']:                                
@@ -191,7 +187,7 @@ def main():
                                             '\nE. Show scatterplot of windspeed and temperature relationship, in %s'
                                             '\nType \'back\' back to previous menu'
                                             '\nType \'quit\' to quit the program'
-                                            '\n>  '%(pokemonList[pokemon_selection],city_selection,city_selection, city_selection,city_selection,city_selection,city_selection,pokemonList[pokemon_selection],city_selection,pokemonList[pokemon_selection],city_selection, city_selection))
+                                            '\n>  '%(pokemonList[pokemon_selection],city_selection,city_selection, city_selection,city_selection,city_selection,city_selection))
                                         if fourth_input.lower() in ['q','quit','bye']:
                                             return (print('\n till Next Time! Goodbye.'))
                                         elif fourth_input.lower() in ['back']:
