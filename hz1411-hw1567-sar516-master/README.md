@@ -27,7 +27,7 @@ $ pip install <package>
 ```
 Or you can specify the verision:
 ```sh
-$ pip install <<package>==<version>
+$ pip install <package>==<version>
 ```
 
 ## How to run
