@@ -154,7 +154,7 @@ def temp_windspeed_relation(dataframe, city_input):
     plt.scatter(x = feature_1, y = feature_2)
     plt.xlabel('Temperature')
     plt.ylabel('Windspeed')
-    plt.title('Relationship between temperature and windspeed of ' + str(city_input))
+    plt.title("Relationship between temperature and windspeed of " + str(city_input))
     plt.savefig('Relationship between temperature and windspeed of ' + str(city_input), dpi = 300)
     plt.show()
     plt.close()
@@ -188,3 +188,32 @@ def worldmap(dataframe):
     plt.show()
     plt.close()
     return print('\n The World Map of pokemon appearance around the world is saved in \n World Map of pokemons occurence.png')
+
+def boxplotPokestop(dataframe):
+    '''
+    input: 
+        dataframe could be the whole dataframe or a citywideDataframe, or a pokemonwideDataframe
+    return:
+        a box plot of distance to pokestop vs distance classes
+    '''
+    
+    distance = dataframe['pokestopDistanceKm']
+    short_distance = []
+    medium_distance = []
+    long_distance = []
+
+    for i in distance:
+        if i <=0.5:
+            short_distance.append(i)
+        elif 0.5<i<=1:
+            medium_distance.append(i)
+        else:
+            long_distance.append(i)
+
+    x = [short_istance,medium_distance,long_distance]
+    plt.boxplot(x,labels=('short','medium','long'),showfliers=False)
+    plt.title("Pokemons distance from pokestop")
+    plt.savefig('Pokemons distance from pokestop', dpi = 300)
+    plt.show()
+    plt.close()
+
