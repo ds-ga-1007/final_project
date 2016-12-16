@@ -41,13 +41,6 @@ class Page_creator:
 		elif (value == 3):
 			value_list = [5]
 
-		#clean data, get all hotel information such that the following scores are larger or equal to 5
-		columns = ['Avgscore', 'Cleanliness', 'Comfort', 'Facilities', 'Free Wifi', 'Location', 'Staff', "Value for money"]
-		for c in columns:
-			self.hotel = self.hotel[self.hotel[c] >= 5]
-			self.hotel = self.hotel[self.hotel[c] <= 10]
-		self.hotel.index = range(self.hotel.shape[0])
-
 		df = sort_within(self.hotel, lat, lng, 1.5, price, value_list)
 		if (df.empty):
 			return df
@@ -66,8 +59,6 @@ class Page_creator:
 			df: Dataframe
 		"""
 		yelp_category(self.restaurant)
-		self.restaurant = self.restaurant[self.restaurant['number_of_price'] >= 0]
-		self.restaurant.index = range(self.restaurant.shape[0])
 		df = sort_within(self.restaurant, lat, lng, 1.5, category, value)
 		if (df.empty):
 			return df
@@ -98,8 +89,6 @@ class Page_creator:
 			df: Dataframe		
 		"""
 		yelp_category(self.restaurant)
-		self.restaurant = self.restaurant[self.restaurant['number_of_price'] >= 0]
-		self.restaurant.index = range(self.restaurant.shape[0])
 		df = sort_within(self.restaurant, lat, lng, 1.5, category, value)
 		if (df.empty):
 			return df
@@ -120,14 +109,6 @@ class Page_creator:
 		Return:
 			df: Dataframe
 		"""
-
-		#clean data, get all hotel information such that the following scores are larger or equal to 5
-		columns = ['Avgscore', 'Cleanliness', 'Comfort', 'Facilities', 'Free Wifi', 'Location', 'Staff', "Value for money"]
-		for c in columns:
-			self.hotel = self.hotel[self.hotel[c] >= 5]
-			self.hotel = self.hotel[self.hotel[c] <= 10]
-		self.hotel.index = range(self.hotel.shape[0])
-
 		if (value == 1):
 			value_list = [1,2]
 		elif (value == 2):

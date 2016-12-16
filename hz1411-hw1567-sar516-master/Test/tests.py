@@ -32,16 +32,16 @@ class tests_sort(unittest.TestCase):
 		"""
 		data_hotel, data_restaurant, data_museum, data_attraction = Read_data()
 
-		hotel_columns = ['Unnamed: 0', 'Address', 'Avgscore', 'Cleanliness', 'Comfort', \
+		hotel_columns = ['Avgscore', 'Cleanliness', 'Comfort', \
 				'Facilities', 'Free Wifi', 'Location', 'Price', 'Staff', 'Total_review', \
-				'Value for money', 'Lat', 'Lng', 'Name']
+				'Value for money', 'Address', 'Lat', 'Lng', 'Name']
 		restaurant_columns = ['Address', 'category', 'Lat', 'Lng', 'number_of_price', \
 				'Total_review', 'Name', 'Avgscore']
 
-		museum_columns = ['Unnamed: 0', 'Address', 'description', 'detail', 'Lat', 'Lng', 'Name', \
+		museum_columns = ['Address', 'description', 'detail', 'Lat', 'Lng', 'Name', \
 				'Avgscore', 'Total_review']
 
-		attraction_columns = ['Unnamed: 0', 'Address', 'description', 'detail', 'Lat', 'Lng', 'Name', \
+		attraction_columns = ['Address', 'description', 'detail', 'Lat', 'Lng', 'Name', \
 				'Avgscore', 'Total_review']
 		
 		self.assertEqual(hotel_columns, data_hotel.columns.tolist())
@@ -122,14 +122,8 @@ class tests_sort(unittest.TestCase):
 			elif (value == 3):
 				value_list = [5]
 
-			#this method just test this peice of code work well
-			columns = ['Avgscore', 'Cleanliness', 'Comfort', 'Facilities', 'Free Wifi', 'Location', 'Staff', "Value for money"]
-			for c in columns:
-				data_hotel = data_hotel[data_hotel[c] >= 5]
-				data_hotel = data_hotel[data_hotel[c] <= 10]
-			data_hotel.index = range(data_hotel.shape[0])
-
 			df1 = sort_within(data_hotel, lat, lng, 1.5, 'Price', value_list)
+			columns = ['Avgscore', 'Cleanliness', 'Comfort', 'Facilities', 'Free Wifi', 'Location', 'Staff', "Value for money"]
 			for c in columns:
 				#self.assertTrue(all(i >= 5 for i in df1[c]))
 				self.assertTrue((df1[c] >= 5).all() and (df1[c] <= 10).all())
@@ -149,11 +143,9 @@ class tests_sort(unittest.TestCase):
 
 			n = random.randint(0, 11)
 			yelp_category(data_restaurant)
-			data_restaurant = data_restaurant[data_restaurant['number_of_price'] >= 1]
-			data_restaurant.index = range(data_restaurant.shape[0])
 			df = sort_within(data_restaurant, lat, lng, 1.5, 'ctg', category[n])
 
-			self.assertTrue((df['number_of_price'] <= 5).all() and (df['number_of_price'] >= 0).all())
+			self.assertTrue((df['number_of_price'] <= 5).all() and (df['number_of_price'] >= 1).all())
 			self.assertTrue((df['Reviews'] <= 5).all() and (df['Reviews'] >= 0).all())
 			self.assertTrue((df['Avgscore'] <= 5).all() and (df['Avgscore'] >= 0).all())
 			self.assertTrue((df['Distance'] <= 10).all() and (df['Distance'] >= 0).all())
