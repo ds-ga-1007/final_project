@@ -3,8 +3,8 @@ import ExpenseAnalyzer.DataHandler as DH
 import ExpenseAnalyzer.utiltools as ut
 from datetime import datetime
 
-expensedata = ut.load_expense_data('all_house_senate_2010.csv')
-resultdata = ut.load_result_data('result_2010.csv')
+expensedata = ut.load_expense_data('data/all_house_senate_2010.csv')
+resultdata = ut.load_result_data('data/result_2010.csv')
 mergeddata = ut.merge_expense_result(expensedata, resultdata)
 mergeddata.RESULT.fillna('L', inplace=True)
 
