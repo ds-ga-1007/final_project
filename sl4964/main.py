@@ -62,7 +62,7 @@ If you want to provide your own midi file, type 2 and enter.')
 option = input()
 while True:
     if option == '1':
-        baudout('Provide a number between 1 to 28 for your lucky pick from our song library.\n')
+        baudout('Provide a number between 1 to 28 for your lucky pick from our song library. For example, number 8 is a good start.\n')
         input1 = input()
         if input1 == 'quit':
             exit()

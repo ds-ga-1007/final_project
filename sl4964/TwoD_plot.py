@@ -131,11 +131,7 @@ class plot():
         plt.show()
 
         # produce a global list for popluating top channels
-        if int(len(self.channel_list_sorted) * 0.2) < 4:
 
-            self.global_channel_list = self.channel_list_sorted[0:4]
-        else:
-            self.global_channel_list = self.channel_list_sorted[0:int(len(self.channel_list_sorted) * 0.2) + 1]
     def plot4(self):
         # Plotting pie chart for instrutment
 
@@ -166,37 +162,7 @@ class plot():
         plt.title("Total Time by Instrument")
         plt.savefig(self.midi_name + "Total Time by Instrument.png")
         plt.show()
-    def plot5(self):
-        # plotting note wave
-        self.dy = pd.DataFrame()
-        fig = plt.figure(figsize=(20, 10))
 
-        for i in self.global_channel_list:
-            self.dloop = self.clean_df[self.clean_df.Channel == i]
-            self.dloop["Time_CumSum"] = self.dloop.Real_time.cumsum()
-            self.dy = self.dy.append(self.dloop)
-            plt.plot(self.dloop["Time_CumSum"], self.dloop["Note"], label="Channel" + str(i))
-            plt.legend(loc="lower right")
-
-        plt.title("Note Wave by Top Channels")
-
-        plt.savefig(self.midi_name + "Note Wave by Top Channels.png")
-        plt.show()
-    def plot6(self):
-        # plotting wave of the midi volume
-        self.dy = pd.DataFrame()
-        fig = plt.figure(figsize=(20, 10))
-        for i in self.global_channel_list:
-            self.dloop = self.clean_df[self.clean_df.Channel == i]
-            self.dloop["Time_CumSum"] = self.dloop.Real_time.cumsum()
-            self.dy = self.dy.append(self.dloop)
-            plt.plot(self.dloop["Time_CumSum"], self.dloop["Velocity"], label="Channel: " + str(i))
-            plt.legend(loc="lower right")
-
-        plt.title("Volume Wave by Top Channels")
-
-        plt.savefig(self.midi_name + "Volume Wave by Top Channels.png")
-        plt.show()
 
 
 
