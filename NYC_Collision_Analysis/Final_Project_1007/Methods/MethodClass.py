@@ -451,21 +451,7 @@ class SituationMethods(FundamentalMethods):
         demanded by the user. Each indicator variable refers to a collision measure,
         such as the number of people injured, the number of people killed
         '''
-        '''
-        self.TableDICT_Init()
-        print(self.Table_Dict[level](Indicator,name))
-        df = self.Table_Dict[level](Indicator,name)
-        if name == 'null':        
-            rowSum = df.sum(axis = 1)
-            totalSum = rowSum.sum(axis = 0)
-            print(self.IndicatorPrint[Indicator] + ' on the ' + level + ' level ' + ' is ' + str(totalSum))
-            print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
-            
-        else:
-            totalSum = df.sum(axis = 0)
-            print(self.IndicatorPrint[Indicator] + ' in ' + name + ' is ' + str(totalSum.ix[0]))
-            print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
-        '''
+        
         self.TableDICT_Init()
         sum=self.GetSum(Indicator,level,name)
         if name == 'null':        
@@ -529,9 +515,7 @@ class SituationMethods(FundamentalMethods):
             ax.set_xlabel('Time')
             ax.set_ylabel(self.IndicatorPrint[Indicator])
             figure.subplots_adjust(bottom=0.20)
-            #figure.title('Time Series analysis for ' + name)
-            #figure.ylabel(self.IndicatorPrint[Indicator])
-            #figure.xlabel('Time')
+            
             figure.show()
             
             self.CloseFigure()
@@ -716,40 +700,13 @@ class SituationMethods(FundamentalMethods):
         figure = ax.get_figure()
         ax.set_xlabel('Boroughs')
         ax.set_ylabel(self.IndicatorPrint[Indicator])
-        #figure.ylabel(self.IndicatorPrint[Indicator])
-        #figure.xlabel('Boroughs')
         figure.show()
         self.CloseFigure()
         figure.savefig(self.savepath+'/Borough_comp_by ' + self.Indicator[Indicator])
         print("Figure has been saved.")
         print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
         self.ContinueALL()
-    '''    
-    def RankTop10(self, Indicator, level, name='null'):    
-        
-        This method returns the the number of top 10 of a Collision statistic demanded by user.
-        
-        self.TableDICT_Init()
-        df = self.Table_Dict[level](Indicator,name)
-        if name == 'null':
-            rowSum = df.sum(axis = 1)
-            rowSumFrame = pd.DataFrame(rowSum, columns = [self.Indicator[Indicator]])
-            sortedFrame = rowSumFrame.sort(columns = self.Indicator[Indicator], ascending =False)
-            if int(len(sortedFrame.index)) >= 10:
-                print(sortedFrame.head(n = 10))
-            else:
-                print(sortedFrame)
-                
-        else:
-            sortedFrame = df.sort(columns = name, ascending = False)
-            if int(len(df.index)) >= 10:
-                print(sortedFrame.head(n = 10))
-                print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
-            else:
-                print(sortedFrame)
-                print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
-        self.ContinueALL()
-    '''    
+    
 class ContributingMethods(FundamentalMethods):
     '''
     This class is for analysis of the contributing factors of all collision.
