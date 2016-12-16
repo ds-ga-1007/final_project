@@ -217,3 +217,29 @@ def boxplotPokestop(dataframe):
     plt.show()
     plt.close()
 
+def boxplotGym(dataframe):
+    '''
+    input: 
+        dataframe could be the whole dataframe or a citywideDataframe, or a pokemonwideDataframe
+    return:
+        a box plot of distance to pokestop vs distance classes
+    '''
+    gym_distance = dataframe['gymDistanceKm']
+    short_distance = []
+    medium_distance = []
+    long_distance = []
+
+    for i in gym_distance:
+        if i <=0.5:
+            short_distance.append(i)
+        elif 0.5<i<=1:
+            medium_distance.append(i)
+        else:
+            long_distance.append(i)
+
+    x = [short_istance,medium_distance,long_distance]
+    plt.boxplot(x,labels=('short','medium','long'),showfliers=False)
+    plt.title("Pokemons distance from gyms")
+    plt.savefig('Pokemons distance from gyms', dpi = 300)
+    plt.show()
+    plt.close()
