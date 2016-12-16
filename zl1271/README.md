@@ -23,7 +23,7 @@ On each step, the program will output instructions and prompt for user input. Wh
 2. On the second level, there are 'describe' and 'regression'.
    1. Entering 'describe' lets you see a boxplot of income of all cases ('all'), or boxplots of income's distribution across the different values of your entered variable ('sex', 'race', 'age', and 'educ').
    2. Entering 'regression' leads you to the third level.
-3. On the third level, you can choose one predictor to predict income of all cases ('all'), if the predictor is continuous, a plot will be created in addition to the text results; or choose one predictor to predict income of a specific group (e.g., all female participants, all male participants, white people, black, and others)
+3. On the third level, you can choose one predictor to predict income of all cases (enter 'all'), if the predictor is continuous, a plot will be created in addition to the text results. Or, by entering 'part', you can predict income of a specific group (e.g., all female participants, all male participants, white people, black, or other)
 
 ## Background
 
