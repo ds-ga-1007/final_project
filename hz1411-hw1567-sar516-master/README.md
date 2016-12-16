@@ -52,7 +52,7 @@ This application allows users to,
 
 3. **Overview** certain visualized stats about NYC attractions, museums, restaurants and hotels, including heat map, bar chart, pie chart etc.
 
-**DO NOT click the buttons too quickly**
+**Please DO NOT click the buttons too quickly.**
 
 For detailed description, please see below.
 

@@ -97,7 +97,7 @@ class Search(tk.Frame):
         root = tk.Frame.__init__(self,parent)
 
         label = tk.Label(self, text="Search Nearby Locations", font=("Verdana", 20))
-        label.pack(pady=50,padx=100)
+        label.pack(pady=30,padx=100)
 
         label = tk.Label(self, text="Please Enter Your Location: ", font=("Verdana", 16))
         label.pack(pady=10,padx=10)
@@ -584,7 +584,7 @@ class Restaurant(tk.Frame):
         label = tk.Label(self, text="Find Nearby Restaurants", font=("Verdana", 20))
         label.pack(pady=100,padx=100)
 
-        label1 = tk.Label(self, text="Please choose a category, then click 'search'", font=("Verdana", 16), anchor='w')
+        label1 = tk.Label(self, text="Please choose a category", font=("Verdana", 16), anchor='w')
         label1.pack(pady=40,padx=40)
 
         w = tk.Listbox(self)
@@ -889,7 +889,6 @@ def main():
         app.protocol("WM_DELETE_WINDOW", on_closing)
         app.mainloop()        
                 
-
     except KeyboardInterrupt:
         print('Control-C exiting')
         sys.exit()
