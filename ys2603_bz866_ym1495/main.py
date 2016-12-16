@@ -172,11 +172,7 @@ def main():
                                     print('\n %s has not appeared in Pokemon Go world yet.'%pokemonList[pokemon_selection])
                                 continue
                             elif third_input.lower() in ['h','h.','8']:
-                                if hasItAppearedGlobally(largeData, pokemon_selection)==True:
-                                    ans = boxplotGym(pokemonwideDataframe(largeData, pokemon_selection))
-                                    continue
-                                else:
-                                    print('\n %s has not appeared in Pokemon Go world yet.'%pokemonList[pokemon_selection])
+                                ans = boxplotGym(largeData)
                                 continue
                             elif third_input.lower() in ['i','i.','9']:
                                 ans = appearline_according_hour(largeData)
