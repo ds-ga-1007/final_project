@@ -17,12 +17,12 @@ $ git clone [git-repo-url]
 $ cd 1007_project
 ```
 
-2. You can directly use our sample data in the repo if you just want to function the system. Otherwise, for example, for Testing, please download data from the dropbox, click [here](https://www.dropbox.com/sh/lk7ec8gjanuwnhk/AADyjXYQw-8imLqCsw3N8PZaa?dl=0)
+2. Please don't use sample data in the repo, to run the system, please download data from the dropbox first, click [here](https://www.dropbox.com/sh/lk7ec8gjanuwnhk/AADyjXYQw-8imLqCsw3N8PZaa?dl=0)
 to download.
 
-3. If you choose to dowload the complete data, please decompressing the file and move the folder **DataBase** into our repo 1007_project to replace the original **DataBase** folder.
+3. After downloaded the data sets, please decompressing the file and move the folder **DataBase** into our repo 1007_project to replace the original **DataBase** folder.
 
-4. Make sure that 'chorogrid', 'DataBase', 'h1b_exploring' and main_new.py are in the repo.
+4. Make sure that 'chorogrid', 'DataBase' (the one you download), 'h1b_exploring' and main_new.py are in the repo.
 
 
 ### Part 2 : Usage of the Application
