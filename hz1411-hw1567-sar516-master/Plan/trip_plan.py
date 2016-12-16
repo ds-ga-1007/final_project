@@ -121,7 +121,8 @@ class trip_plan:
 
 	def revised_kmeans(self, index_list, order_list, cordinate_data, center_points, time, degree):
 		"""
-		This method revises the Kmeans method to return k nearest neighboorhoods that each clusters have the same number of elements.
+		This method revises the Kmeans method to return k nearest neighboorhoods, such that the number of elements in each cluster to be as close as possible.
+		In some situation, an attraction is far away to all other attractions, then we let this attraction as a single cluster.
 		
 		Parameters:
 			index_list: list of list of int
