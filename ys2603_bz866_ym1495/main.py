@@ -177,7 +177,8 @@ def main():
                                 else:
                                     print('\n %s has not appeared in Pokemon Go world yet.'%pokemonList[pokemon_selection])
                                 continue
-                            elif third_input.lower() in ['city']:                                city_selection = userChoice.select_city(cityList)
+                            elif third_input.lower() in ['city']:                                
+                                city_selection = userChoice.select_city(cityList)
                                 if city_selection == 'Wish you luck in pokemon world, goodbye':
                                     return (print('\n till Next Time! Goodbye.'))
                                 else:
