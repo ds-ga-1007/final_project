@@ -31,6 +31,7 @@ class overview_plot:
         mean = np.mean(reviews)
         std = np.std(reviews)
         median = np.median(reviews)
+        plt.figure(figsize=(15,15))
         ax = reviews.plot(kind='kde')
         ax.set_xlim([0,max(reviews)])
         text = 'mean=%.2f \n std=%.2f \n median=%.2f'%(mean, std, median)
@@ -61,6 +62,7 @@ class overview_plot:
         mean = np.mean(rating)
         std = np.std(rating)
         median = np.median(rating)
+        plt.figure(figsize=(15,15))
         ax = rating.value_counts().plot(kind='bar')
         counts = ax.get_yticks()  
         tot = sum(counts)
@@ -87,7 +89,7 @@ class overview_plot:
         '''
         if filename == 'restaurant':
             yelp_category(self.restaurant)
-            plt.figure(figsize=(8,8))
+            plt.figure(figsize=(15,15))
             self.restaurant['ctg'].value_counts().plot(kind='pie',autopct='%1.1f%%')
             plt.axis('equal')
             plt.title('Pie chart for restaurants by category')
@@ -100,6 +102,7 @@ class overview_plot:
             df = self.hotel
             df['category'] = df['Price'].apply(self.price_transform)
             df['category'].value_counts().plot(kind='pie',autopct='%1.1f%%')
+            plt.figure(figsize=(15,15))
             plt.axis('equal')
             plt.title('Pie chart for hotels by category')
             path = os.path.abspath('Results')
@@ -145,6 +148,7 @@ class overview_plot:
             value_column = ['Avgscore', 'Cleanliness', 'Comfort', 'Facilities', 'Free Wifi', 'Location', 'Staff', 'Value for money']
             df_mean = df[value_column].groupby(df['category']).mean().T
 
+            plt.figure(figsize=(15,15))
             df_mean.plot(kind = 'bar', alpha = 0.7)
             plt.legend(bbox_to_anchor=(0.85, 1.05), loc=2, borderaxespad=0.)
             plt.xlabel('Rating Category')
@@ -164,6 +168,7 @@ class overview_plot:
             value_column = ['Total_review', 'Avgscore']
             df_mean = df[value_column].groupby(df['ctg']).mean()  
 
+            plt.figure(figsize=(15,15))
             f, axarr = plt.subplots(2, sharex=True)
 
             ind = np.arange(12)
