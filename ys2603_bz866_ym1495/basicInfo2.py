@@ -161,3 +161,26 @@ def temp_windspeed_relation(dataframe, city_input):
                  + 'Relationship between temperature and windspeed of ' + str(city_input))
 
 
+# --- Build Map ---
+from mpl_toolkits.basemap import Basemap
+import matplotlib.pyplot as plt
+import numpy as np
+def worldmap(dataframe):
+    lats = np.array(data_origin['latitude'])
+    lons = np.array(data_origin['longitude'])                                        
+
+    eq_map = Basemap(projection='robin', resolution = 'l', area_thresh = 1000.0,
+                  lat_0=0, lon_0=-130)
+    eq_map.drawcoastlines()
+    eq_map.drawcountries()
+    eq_map.fillcontinents(color = 'gray')
+    eq_map.drawmapboundary()
+    eq_map.drawmeridians(np.arange(0, 360, 30))
+    eq_map.drawparallels(np.arange(-90, 90, 30))
+
+    x,y = eq_map(lons, lats)
+    eq_map.plot(x, y, 'ro', markersize=6)
+
+    plt.show()
+    plt.close()
+    return print('')
