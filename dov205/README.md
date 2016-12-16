@@ -1,9 +1,12 @@
 # Commentary
 
 ## Table of Contents
-1. [Logistics](#logistics)
-2. [Setup Instructions](instructions)
-3. [Data: Source, Pre-processing, etc.](#data)
+1. [Logistics](#logistics) (start here!)
+2. [About](#about)
+2. [Setup Instructions](#instructions)
+3. [Interaction](#interaction)
+4. [Requirements](#requirements)
+4. [Data: Source, Pre-processing, etc.](#data)
 
 ## Logistics
 
@@ -11,7 +14,13 @@
 
 *NetID:* dov205
 
-## Installation Instructions
+## About
+
+This project serves as an interactive approach to analyzing Reddit comment data gathered over a two-day period. Despite the seemingly short amount of time, comments across ~30 subreddits generated over half a gigabyte of data. Reddit is home to many, many more subreddits — many of which are much more active than our queried subreddits.
+
+This dataset allows us to understand commentator behavior and analyze the differences (and similarities!) between thematically-distant but behaviorally-similar subreddits.
+
+## Instructions
 
 Building this project is relatively simple. Here's the setup required:
 
@@ -52,11 +61,34 @@ conda remove --name reddit --all
 
 We're done setting things up! What a relief.
 
-### 
+## Interaction
+
+
+## Requirements
+
+The [final project instructions](https://docs.google.com/document/d/1y-bkl-7pmlv1KN6yaMCInSWyoeINH39ZWzlDjT0cvnU/edit#) list a few requirements for our project that I thought may prove useful to list here, as well as where I fulfilled those requirements:
+
+1. **Loading a non-trivial dataset into pandas objects (DataFrame and Series)** Yes! Please see the [data preprocessing](#data) work I've done, as well as the `load_reddit_data()` data ingestion method in `commentary.py`.
+
+2. **Perform some kind of meaningful analysis of the data using pandas and/or NumPy computational and data analysis tools.** 
+
+3. **Display the results of the analysis using matplotlib.**
+
+4. **Allow the user to interactively control the analysis and display of the data.**
+
+5. **The project must include a user guide that describes how to install, configure, and run the program.** Yes! Please see the above [installation instructions](#instructions) which takes care of installation, data and environment configuration, and running the program `commentary.py`.
+
+6. **The final project source code, datasets, and documentation must be uploaded to the final_project repository on GitHub in the same manner as the assignments (fork the repository and send a pull request). The NetID used for the directory should be correspond to one of the students in the team for that project.** Yes! The one by one: 
+
+	- Source code is housed in `commentary.py` and the `Plotter` class directory. 
+	- Datasets are under the project's `data` directory. Again, please see the [next section](#data) to learn more about data sourcing, preparation, and processing.
+	- Documentation takes the form of this `README` and the inline code comments used to clarify what any particular code block is doing.
+	- I'm a team of one, so that takes care of the NetID situation :)
+
 
 ## Data
 
-[Source -- Linan Qiu](https://github.com/linanqiu/reddit-dataset)
+[Dataset source – Linan Qiu](https://github.com/linanqiu/reddit-dataset)
 
 ### Data preprocessing
 
