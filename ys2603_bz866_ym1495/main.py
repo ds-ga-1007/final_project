@@ -189,9 +189,6 @@ def main():
                                             '\nC. Show the pokemons whom it was often observed together with, in %s'
                                             '\nD. Show distribution of its appearance time of the day in pie chart, in %s'
                                             '\nE. Show scatterplot of windspeed and temperature relationship, in %s'
-                                            '\nF. Show Box Plot of %s occurrence distance to pokestop in %s'
-                                            '\nG. Show Box Plot of %s occurrence distance to gym in %s'
-                                            '\nH. Show Line Chart of all pokemons occurence freq vs hour of day in %s'
                                             '\nType \'back\' back to previous menu'
                                             '\nType \'quit\' to quit the program'
                                             '\n>  '%(pokemonList[pokemon_selection],city_selection,city_selection, city_selection,city_selection,city_selection,city_selection,pokemonList[pokemon_selection],city_selection,pokemonList[pokemon_selection],city_selection, city_selection))
@@ -226,23 +223,6 @@ def main():
                                             continue
                                         elif fourth_input.lower() in ['e','e.','5']:
                                             ans = temp_windspeed_relation(largeData, city_selection)
-                                            continue
-                                        elif third_input.lower() in ['f','f.','6']:
-                                            if hasItAppearedGlobally(citywideDataframe(largeData,city_selection), pokemon_selection)==True:
-                                                ans = boxplotPokestop(citywideDataframe(largeData,city_selection), pokemon_selection)
-                                                continue
-                                            else:
-                                                print('\n %s has not appeared in %s yet.'%(pokemonList[pokemon_selection],city_selection))
-                                            continue
-                                        elif third_input.lower() in ['g','g.','7']:
-                                            if hasItAppearedGlobally(citywideDataframe(largeData,city_selection), pokemon_selection)==True:
-                                                ans = boxplotGym(citywideDataframe(largeData,city_selection), pokemon_selection)
-                                                continue
-                                            else:
-                                                print('\n %s has not appeared in %s yet.'%(pokemonList[pokemon_selection],city_selection))
-                                            continue
-                                        elif third_input.lower() in ['h','h.','8']:
-                                            ans = appearline_according_hour(citywideDataframe(largeData,city_selection))
                                             continue
                         continue
                     else:
