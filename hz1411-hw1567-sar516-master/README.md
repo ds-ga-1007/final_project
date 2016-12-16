@@ -15,12 +15,17 @@ Storm Avery Ross [https://github.com/sar516] (https://github.com/sar516) Netid: 
 - [geopy](https://pypi.python.org/pypi/geopy/1.11.0) == 1.11.0
 - [gmplot](https://pypi.python.org/pypi/gmplot/1.1.1) == 1.1.1
 - [seaborn](https://pypi.python.org/pypi/seaborn/) == 0.7.1
+- [pillow](http://pillow.readthedocs.io/en/3.4.x/installation.html) >= 2.0.0
 - [numpy](https://pypi.python.org/pypi/numpy/1.11.1) == 1.11.1
 - [pandas](http://pandas.pydata.org/pandas-docs/version/0.18.1/) == 0.18.1
 - [matplotlib](http://matplotlib.org/) == 1.5.3
 - [sklearn](http://scikit-learn.org/stable/) == 0.18.1
 
 if any of the packages are missing, type in your command line(MAC OS X)
+```sh
+$ pip install <package>
+```
+Or you can specify the verision:
 ```sh
 $ pip install <package>==<version>
 ```
@@ -59,9 +64,9 @@ It consists of 3 main functions that you can select on Home Page - `Search`, `Pl
 
 Firstly, You can “`search`” nearby locations that fall in 4 categories: restaurants, hotels, attractions and museums. You need to enter your current `latitude` and `longitude`, and select what kind of locations you are interested in. Your coordinate should be within NYC or an error message will be raised. We also have specific filters for certain locations. For *restaurants*, you can choose from 12 different categories, including Italian, Chinese, Cafe & bar etc. For *hotels*, you can choose from 3 price levels based on your budget. Our program will search for all nearby locations that satisfy your filter, and sort by their rating and number of reviews. To see our recommendations for you, you can click “`show the map`” to see them marked on a Google Map. If you prefer a written version, simply click “`show the recommendations`”, and a PDF file will pop up and also be saved under “*Results*” folder. It contains the name of each recommended locations, each with a *radar chart* showing their ratings from different angles. For *museums* and *attrations*, as they are relatively more scattered, the recommendation will only be based on a combination of ratings and reviews. You can always go back to the search main page by “`Back to Search`”. 
 
-Second, you can “`plan`” a trip to New York. Just choose how many days you want to stay (from 1 day to 7 days) , how much money you could spend, and how you would arrange your time (whether you prefer a tight schedule to see as many as places of interest as possible, or you like to be more flexible and just enjoy yourself). You can reset your choice by clicking “`Back to previous page`”. And finally, click “`Build your travel plan`”. Et voilà! Now you can see your travel plan which is also saved under “*Results*” folder in rtf format. You will see our arrangement for your each day, including attractions and museums to visit, and recommendations of hotels and restaurants. Our algorithm utilizes sorting, permutation, and clustering(revised K-means algorithm that return K clusters with the same number of elements) by distance. So you can have incredible amount of different plans, each highlights most loved travel spots, and you won’t waste too much time on traffic. You can click “`Back to previous page`” to reset your preference and get a whole new plan.
+Second, you can “`plan`” a trip to New York. Just choose how many days you want to stay (from 1 day to 7 days) , how much money you could spend, and how you would arrange your time (whether you prefer a tight schedule to see as many as places of interest as possible, or you like to be more flexible and just enjoy yourself). You can reset your choice by clicking “`Back to previous page`”. And finally, click “`Build your travel plan`”. Et voilà! Now you can see your travel plan which is also saved under “*Results*” folder in rtf format. You will see our arrangement for your each day, including attractions and museums to visit, and recommendations of hotels and restaurants. Our algorithm utilizes sorting, permutation, and clustering (revised K-means algorithm that return K clusters with almost the same number of elements) by distance. So you can have incredible amount of different plans, each highlights most loved travel spots, and you won’t waste too much time on traffic. You can click “`Back to previous page`” to reset your preference and get a whole new plan.
 
-And finally, we also provide an “`overview`” section. Here you can have a look at our visualizations of overall stats of New York restaurants, hotels, attractions and museums. Just select a type and click “`Show plots`”. Then on next page you can select what kind of plot you would like to see. We have *heatmap* on Google map, *density plot for reviews*, *pie plot by price or category*, *bar plot for ratings as well as mean, variance and median*. On clicking the relevant button, a figure will pop up and also be saved to ”*Results*“ folder. 
+And finally, we also provide an “`overview`” section. Here you can have a look at our visualizations of overall stats of New York restaurants, hotels, attractions and museums. Just select a type and click “`Show plots`”. Then on next page you can select what kind of plot you would like to see. We have *heatmap* on Google map, *density plot for reviews*, *pie plot by price or category*, *bar plot for ratings* with mean, variance and median. On clicking the relevant button, a figure will pop up and also be saved to ”*Results*“ folder. 
 
 Enjoy your trip in New York!
 
