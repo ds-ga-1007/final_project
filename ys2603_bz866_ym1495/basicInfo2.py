@@ -216,7 +216,7 @@ def boxplotPokestop(dataframe):
     plt.savefig('Pokemons distance from pokestop', dpi = 300)
     plt.show()
     plt.close()
-
+    return print('\n The png file is saved in \n Pokemons distance from pokestop.png')
 def boxplotGym(dataframe):
     '''
     input: 
@@ -243,3 +243,4 @@ def boxplotGym(dataframe):
     plt.savefig('Pokemons distance from gyms', dpi = 300)
     plt.show()
     plt.close()
+    return print('\n The png file is saved in \n Pokemons distance from gym.png')
