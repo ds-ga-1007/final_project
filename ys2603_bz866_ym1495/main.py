@@ -117,7 +117,7 @@ def main():
                                             '\n\nType \'city\' to select a certain city for more details'
                                             '\nType \'back\' back to previous menu'
                                             '\nType \'quit\' to quit the program'
-                                            '\n\n>  '%(pokemonList[pokemon_selection],pokemonList[pokemon_selection],pokemonList[pokemon_selection],pokemonList[pokemon_selection],pokemonList[pokemon_selection]))
+                                            '\n\n>  '%(pokemonList[pokemon_selection],pokemonList[pokemon_selection],pokemonList[pokemon_selection],pokemonList[pokemon_selection]))
                             if third_input.lower() in ['q','quit','bye']:
                                 return (print('\n till Next Time! Goodbye.'))
                             elif third_input.lower() in ['back']:
@@ -200,10 +200,9 @@ def main():
                                             '\nF. Show Box Plot of %s occurrence distance to pokestop in %s'
                                             '\nG. Show Box Plot of %s occurrence distance to gym in %s'
                                             '\nH. Show Line Chart of all pokemons occurence freq vs hour of day in %s'
-                                            '\nI. Show Line Chart of %s occurence freq vs hour of day in %s'
                                             '\nType \'back\' back to previous menu'
                                             '\nType \'quit\' to quit the program'
-                                            '\n>  '%(pokemonList[pokemon_selection],city_selection,city_selection, city_selection,city_selection,city_selection,city_selection,pokemonList[pokemon_selection],city_selection,pokemonList[pokemon_selection],city_selection, city_selection,pokemonList[pokemon_selection],city_selection))
+                                            '\n>  '%(pokemonList[pokemon_selection],city_selection,city_selection, city_selection,city_selection,city_selection,city_selection,pokemonList[pokemon_selection],city_selection,pokemonList[pokemon_selection],city_selection, city_selection))
                                         if fourth_input.lower() in ['q','quit','bye']:
                                             return (print('\n till Next Time! Goodbye.'))
                                         elif fourth_input.lower() in ['back']:
@@ -252,13 +251,6 @@ def main():
                                             continue
                                         elif third_input.lower() in ['h','h.','8']:
                                             ans = appearline_according_hour(citywideDataframe(largeData,city_selection))
-                                            continue
-                                        elif third_input.lower() in ['i','i.','9']:
-                                            if hasItAppearedGlobally(citywideDataframe(largeData,city_selection), pokemon_selection)==True:
-                                                ans = appearline_according_hour(pokemonwideDataframe(citywideDataframe(largeData,city_selection), pokemon_selection))
-                                                continue
-                                            else:
-                                                print('\n %s has not appeared in Pokemon Go world yet.'%pokemonList[pokemon_selection])
                                             continue
                         continue
                     else:
