@@ -12,20 +12,23 @@ from userInput import *
 from basicInfo import *
 from basicInfo2 import *
 def main():
-    a = loadData('pokemonGo.csv', 'cleanedData.csv')
-    b = UserChoice()
-    pokemonList = a.nameList
-    cityList = a.cityList
-    basicData = a.basicData
-    largeData = a.largeData
+    Data = loadData('pokemonGo.csv', 'cleanedData.csv')
+    userChoice = UserChoice()
+    pokemonList = Data.nameList
+    cityList = Data.cityList
+    basicData = Data.basicData
+    largeData = Data.largeData
     while True:
+        '''
+        To start
+            '''
         main_input = input('\nPlease enter \'pokemon\' to start main program.\n'
                             'Please enter \'quit\' at anytime to quit the program.'
                            '\n>  ')
         if main_input.lower() in ['q','quit','bye']:
             break
         elif main_input.lower() in ['pokemon']:
-            pokemon_selection = b.select_pokemon(pokemonList)
+            pokemon_selection = userChoice.select_pokemon(pokemonList)
             if pokemon_selection =='Wish you luck in pokemon world. Goodbye':
                 return (print('\n till Next Time! Goodbye.'))
             else:
@@ -93,10 +96,12 @@ def main():
                                             '\nB. Show the cities where it was often observed in histogram'
                                             '\nC. Show the pokemons whom it was often observed together with'
                                             '\nD. Show distribution of its appearance time of the day in pie chart'
+                                            '\nE. Show World Map of all pokemon occurrence in basemap'
+                                            '\nF. Show World Map of %s occurrence in basemap'
                                             '\nType \'city\' to select a certain city for more details'
                                             '\nType \'back\' back to previous menu'
                                             '\nType \'quit\' to quit the program'
-                                            '\n>  '%(pokemonList[pokemon_selection]))
+                                            '\n>  '%(pokemonList[pokemon_selection],pokemonList[pokemon_selection]))
                             if third_input.lower() in ['q','quit','bye']:
                                 return (print('\n till Next Time! Goodbye.'))
                             elif third_input.lower() in ['back']:
@@ -133,8 +138,18 @@ def main():
                                 else:
                                     print('\n %s has not appeared in Pokemon Go world yet.'%pokemonList[pokemon_selection])
                                 continue
+                            elif third_input.lower() in ['e','e.','5']:
+                                ans = worldmap(largeData)
+                                continue
+                            elif third_input.lower() in ['f','f.','6']:
+                                if hasItAppearedGlobally(largeData, pokemon_selection)==True:
+                                    ans = worldmap(pokemonwideDataframe(largeData, pokemon_selection))
+                                    continue
+                                else:
+                                    print('\n %s has not appeared in Pokemon Go world yet.'%pokemonList[pokemon_selection])
+                                continue
                             elif third_input.lower() in ['city']:
-                                city_selection = b.select_city(cityList)
+                                city_selection = userChoice.select_city(cityList)
                                 if city_selection == 'Wish you luck in pokemon world, goodbye':
                                     return (print('\n till Next Time! Goodbye.'))
                                 else:
@@ -145,9 +160,10 @@ def main():
                                             '\nB. Show the pokemons which were often observed in %s in histogram'
                                             '\nC. Show the pokemons whom it was often observed together with, in %s'
                                             '\nD. Show distribution of its appearance time of the day in pie chart, in %s'
+                                            '\nE. Show scatterplot of windspeed and temperature relationship, in %s'
                                             '\nType \'back\' back to previous menu'
                                             '\nType \'quit\' to quit the program'
-                                            '\n>  '%(pokemonList[pokemon_selection],city_selection,city_selection, city_selection,city_selection,city_selection))
+                                            '\n>  '%(pokemonList[pokemon_selection],city_selection,city_selection, city_selection,city_selection,city_selection,city_selection))
                                         if fourth_input.lower() in ['q','quit','bye']:
                                             return (print('\n till Next Time! Goodbye.'))
                                         elif fourth_input.lower() in ['back']:
@@ -176,6 +192,9 @@ def main():
                                                       '\n pie chart of pokemon %d showing up periods.png'%(pokemonList[pokemon_selection],city_selection,pokemon_selection))          
                                             else:
                                                 print('\n %s has not appeared in %s yet.'%(pokemonList[pokemon_selection],city_selection))
+                                            continue
+                                        elif fourth_input.lower() in ['e','e.','5']:
+                                            ans = temp_windspeed_relation(largeData, city_selection)
                                             continue
                         continue
                     else:
