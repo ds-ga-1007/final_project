@@ -140,13 +140,13 @@ def co_occurance (dataframe, ID_input):
         result.append(int(item_index[0]))
     return result
 
-def temp_windspeed_relation(city_input):
+def temp_windspeed_relation(dataframe, city_input):
     '''
     input:
-        city name
+        city name(str)
     return:
-        The image of relationship between temperature and windspeed of the given city'''
-    data = data_origin.loc[data_origin['city'] == city_input]
+        The scatterplot of relationship between temperature and windspeed of the given city'''
+    data = dataframe.loc[dataframe['city'] == city_input]
     feature_1 = np.array(data['temperature'])
     feature_2 = np.array(data['windSpeed'])
     plt.figure(figsize = (10,8))
