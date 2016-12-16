@@ -63,4 +63,4 @@ class InvalidContinuityResponse(InteractionError):
         pass
 
     def __str__(self):
-        return "\nPlease enter one of: 'y', 'n', 'yes', 'no'."
+        return "\n* Please enter one of: 'y', 'n', 'yes', 'no'. *"

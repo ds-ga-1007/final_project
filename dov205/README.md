@@ -30,7 +30,7 @@ Building this project is relatively simple. Here's the setup required:
 
 2. You should see many different `.csv` files of the form `comments_*.csv`. Feel free to see my reasoning behind the data processing task [below](#data). These files are essentially split versions of the master comments dataset, so to join them we simply run:
 
-		cat comments_*.csv > comments.csv
+		cat comments_??.csv > comments.csv
 
 You should have a large (~657 MB) dataset that we'll be using for the remaining project. Halfway done!
 
