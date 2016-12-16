@@ -70,7 +70,7 @@ class FundamentalMethods():
         self.TimeEnd=TimeEnd # [2015,1]
         start=datetime.date(self.TimeBegin[0],self.TimeBegin[1],20)
         end=datetime.date(self.TimeEnd[0],self.TimeEnd[1],20)
-        ALLDATE=pd.date_range(start,end,freq='30D')
+        ALLDATE=pd.date_range(start,end,freq='27D')
         self.TimeList=list(map(lambda date:str(date.year)+str(date.month).zfill(2), ALLDATE))
     def ContinueALL(self):
         '''

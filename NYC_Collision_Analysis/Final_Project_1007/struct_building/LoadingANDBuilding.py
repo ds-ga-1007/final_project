@@ -43,7 +43,8 @@ def TimeInterval(TimeBegin,TimeEnd):
     '''
     start=datetime.date(TimeBegin[0],TimeBegin[1],20)
     end=datetime.date(TimeEnd[0],TimeEnd[1],20)
-    return pd.date_range(start,end,freq='30D')
+    return pd.date_range(start,end,freq='27D')
+
 def load_data(path,TimeBegin,TimeEnd):
     '''
     Main function in loading data.
