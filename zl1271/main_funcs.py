@@ -119,7 +119,7 @@ def get_a_category(cat_list):
     temp_str = ''
     for a_str in cat_list:
         temp_str = temp_str + ', \'' + a_str + '\''
-    prompt_str = 'Choose a category from the following: ' + temp_str[1:]
+    prompt_str = 'Choose one from the following: ' + temp_str[1:]
     regression_instructions3(prompt_str)
     cat_list.append('quit')
     user_input_str = get_valid_user_input(cat_list)
