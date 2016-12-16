@@ -89,7 +89,7 @@ class overview_plot:
         '''
         if filename == 'restaurant':
             yelp_category(self.restaurant)
-            plt.figure(figsize=(15,15))
+            plt.figure(figsize=(8,8))
             self.restaurant['ctg'].value_counts().plot(kind='pie',autopct='%1.1f%%')
             plt.axis('equal')
             plt.title('Pie chart for restaurants by category')
@@ -101,8 +101,8 @@ class overview_plot:
         if filename == 'hotel':
             df = self.hotel
             df['category'] = df['Price'].apply(self.price_transform)
+            plt.figure(figsize=(8,8))
             df['category'].value_counts().plot(kind='pie',autopct='%1.1f%%')
-            plt.figure(figsize=(15,15))
             plt.axis('equal')
             plt.title('Pie chart for hotels by category')
             path = os.path.abspath('Results')
