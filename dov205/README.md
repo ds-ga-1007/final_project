@@ -36,7 +36,7 @@ You should have a large (~657 MB) dataset that we'll be using for the remaining 
 
 ### Environment
 
-When installing dependencies, I make relatively basic assumptions that the user has [miniconda](http://conda.pydata.org/miniconda.html) – a leaner alternative to Python's *Anaconda* package manager – installed. To make things as smooth as possible, I suggest creating a new conda environment (note, the syntax differences between setting up an environment for `conda` is similar to `pip`). The required commands are as follow:
+When installing dependencies, I make relatively basic assumptions that the user has at least [miniconda](http://conda.pydata.org/miniconda.html) – a leaner alternative to Python's *Anaconda* package manager – or the standard [pip](https://pypi.python.org/pypi/pip) installed. To make things as smooth as possible, I suggest creating a new conda environment (**note:** the syntax differences between setting up an environment for `conda` is similar to `pip`). The required commands are as follow:
 
 ```bash
 # Set up working environment called 'reddit'
@@ -69,9 +69,9 @@ The interactive component is designed to (ideally) be fairly self-explanatory, h
 
 1. **Selecting what variables/features our user is interested in exploring/analyzing.** This allows us to isolate the most relevant parts of the problem and, along with reducing the computational overhead of moving data around, can give us insight as to what the user is expecting to explore.
 
-2. **Performing transformations, aggregations, and summarizations on our data.** *TODO*
+2. **Performing transformations, aggregations, and summarizations on our data.** I didn't get much time to iron this part out. I have some analysis in `exploration/Explore.ipynb`, but unfortunately I ran low on time.
 
-3. **Visualizing or otherwise communicating to the analysis driver the results of their analysis.** *TODO*
+3. **Visualizing or otherwise communicating to the analysis driver the results of their analysis.** The `interactive_analysis()` routine in `commentary.py` provides outputs to the `results` directory. It's a bit odd at times and could use some development in order to convery more relevant information.
 
 ## Requirements
 
@@ -79,17 +79,17 @@ The [final project instructions](https://docs.google.com/document/d/1y-bkl-7pmlv
 
 1. **Loading a non-trivial dataset into pandas objects (DataFrame and Series)** Yes! Please see the [data preprocessing](#data) work I've done, as well as the `load_reddit_data()` data ingestion method in `commentary.py`.
 
-2. **Perform some kind of meaningful analysis of the data using pandas and/or NumPy computational and data analysis tools.** TODO
+2. **Perform some kind of meaningful analysis of the data using pandas and/or NumPy computational and data analysis tools.** I have some preliminary analysis results in the `exploration` subdirectory.
 
-3. **Display the results of the analysis using matplotlib.** TODO
+3. **Display the results of the analysis using matplotlib.** I have some preliminary plot results in the `exploration` subdirectory.
 
-4. **Allow the user to interactively control the analysis and display of the data.**
+4. **Allow the user to interactively control the analysis and display of the data.** Yes! Please see `interactive_analysis()` in `commentary.py`
 
 5. **The project must include a user guide that describes how to install, configure, and run the program.** Yes! Please see the above [installation instructions](#instructions) which takes care of installation, data and environment configuration, and running the program `commentary.py`.
 
 6. **The final project source code, datasets, and documentation must be uploaded to the final_project repository on GitHub in the same manner as the assignments (fork the repository and send a pull request). The NetID used for the directory should be correspond to one of the students in the team for that project.** Yes! The one by one: 
 
-	- Source code is housed in `commentary.py` and the `Plotter` class directory. 
+	- Source code is housed in `commentary.py` and the `Explorer` class directory. 
 	- Datasets are under the project's `data` directory. Again, please see the [next section](#data) to learn more about data sourcing, preparation, and processing.
 	- Documentation takes the form of this `README` and the inline code comments used to clarify what any particular code block is doing.
 	- I'm a team of one, so that takes care of the NetID situation :)

@@ -21,8 +21,7 @@ class Explorer:
         :return outputs plot to `results` directory.
         """
 
-        self.data.plot(title='Result of applying {} onto data set')
-        plt.tight_layout()
+        self.data.plot(title='Result of applying {} onto data set'.format(self.transformations[-1]))
         plt.savefig("results/{}.png".format(filename))
         plt.close()
 
@@ -32,10 +31,10 @@ class Explorer:
         potential_feature = response[-1]
         on_all = potential_feature == action
 
-        apply_to_features = potential_feature if not on_all else \
+        apply_to_features = [potential_feature] if not on_all else \
             [feature for feature in self.data.columns.values]
 
-        self.transformations.append({action: apply_to_features})
+        self.transformations.append(action)
 
         # Attempt to match our provided :action on one of our
         # implemented functions below.
@@ -78,49 +77,58 @@ class Explorer:
 
     # Define functions for interactive data analysis task.
 
-    def summarize(self, features: [str, List[str]]):
-        return self.data[[features]].describe()
+    def summarize(self, features: List[str]):
+        return self.data[features].describe()
 
     def groupby(self, feature: str):
         return self.data.groupby(by=feature)
 
-    def sum(self, features: [str, List[str]]):
-        return self.data[[features]].sum()
+    def sum(self, features: List[str]):
+        return self.data[features].sum()
 
-    def count(self, features: [str, List[str]]):
-        return self.data[[features]].count()
+    def count(self, features: List[str]):
+        return self.data[features].count()
 
-    def mean(self, features: [str, List[str]]):
-        return self.data[[features]].mean()
+    def mean(self, features: List[str]):
+        return self.data[features].mean()
 
-    def median(self, features: [str, List[str]]):
-        return self.data[[features]].median()
+    def median(self, features: List[str]):
+        return self.data[features].median()
 
-    def min(self, features: [str, List[str]]):
-        return self.data[[features]].min()
+    def min(self, features: List[str]):
+        return self.data[features].min()
 
-    def max(self, features: [str, List[str]]):
-        return self.data[[features]].max()
+    def max(self, features: List[str]):
+        return self.data[features].max()
 
-    def sort(self, features: [str, List[str]]):
-        return self.data[[features]].sort_values(inplace=True,
-                                                 ascending=False)
+    def sort(self, features: List[str]):
+        return self.data[features].sort_values(inplace=True,
+                                               ascending=False)
 
 
 def build_dataset_prompt():
+    """Provide informative first output to user.
+
+    :return print to console.
+    """
 
     print("")
     print("Let's start by choosing what features you'd like to look at/explore!")
 
 
 def list_all_columns(data):
+    """List all columns if requested by user.
 
+    :param data: our dataframe of reddit comments
+    :return prints column information to the user
+    """
+
+    # Print columns to user.
     print("\nFeatures in our original dataset include (one at a time, please!):")
     print("-" * 30)
     print("")
 
+    # Print each column in our DataFrame.
     for index, column in enumerate(data.columns.values):
         print("[{}] {}".format(index, column))
         time.sleep(0.20)
-
-    # print("Alternatively, you can define a new calculated feature with `:new`.\n")

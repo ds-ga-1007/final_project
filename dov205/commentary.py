@@ -163,7 +163,7 @@ def help_prompt():
           "\nHere are some keywords to get you started:",
           "\n\t:help  -- access this help page!",
           "\n\t:start -- begin the task of identifying what features you'd like to use",
-          "\n\t:abort -- abort your current plot/visualization and start over",
+          "\n\t:reset -- abort your current plot/visualization and start over",
           "\n\t:exit  -- exit the interactive portion of this program", sep=""
           )
 
@@ -320,14 +320,7 @@ def transform_and_visualize(subset_data: pd.DataFrame):
         elif action == ':exit':
             raise UserExitError()
 
-        # Reset state to initial configurations by
-        # re-printing the prompt/actions, and re-creating
-        # the Explorer object.
-        elif action == ':abort':
-            build_transformations_prompt()
-            list_all_actions()
-            explorer = Explorer(subset_data)
-
+        # Break from loop if user wishes to.
         elif action == ':done':
             break
 
@@ -368,10 +361,21 @@ def transform_and_visualize(subset_data: pd.DataFrame):
             except InvalidGroupbyCombinator as igc:
                 print(igc, file=sys.stderr)
 
+            # Gracefully handle bad exceptions
+            except (TypeError, AttributeError, KeyError):
+                print("Error raised when attempting to do so.")
+
             # Handle termination errors and interrupts.
             except (EOFError, KeyboardInterrupt, SystemExit):
                 print("")
                 sys.exit(1)
+
+        # Reset state to initial configurations by
+        # re-printing the prompt/actions, and re-creating
+        # the Explorer object.
+        build_transformations_prompt()
+        list_all_actions()
+        explorer = Explorer(subset_data)
 
 
 def build_transformations_prompt():
@@ -513,15 +517,26 @@ def validate_feature(response: List[str], explorer: Explorer):
 
 
 def plotting_subroutine(explorer: Explorer):
+    """Offer user an interface for producing plots to results directory.
+
+    :param explorer: interactive data analysis object guide
+    :return: outputs PNG plot to the `results` directory
+    """
 
     # Offer to plot/output these results
-    want_to_plot = input("Would you like to output your intermediate analysis?").lower()
+    want_to_plot = input("Would you like to output your intermediate analysis? ").lower().strip()
 
+    # If user does want to plot
     if want_to_plot in ['y', 'yes']:
 
-        filename = input("Please enter a filename (no extension -- .png, .pdf, etc. -- required): ").lower()
+        # Provide filename as well.
+        filename = input("Please enter a filename (no extension -- .png, .pdf, etc. -- required): ").lower().strip()
 
+        # Plot results
         explorer.output_results(filename)
+
+        # Inform user of successful output.
+        print("Saved file {}.png in results directory!".format(filename))
 
 
 def continue_prompt():
