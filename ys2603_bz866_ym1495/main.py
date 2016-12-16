@@ -111,10 +111,12 @@ def main():
                                             '\nD. Show distribution of its appearance time of the day in pie chart'
                                             '\nE. Show World Map of all pokemon occurrence in basemap'
                                             '\nF. Show World Map of %s occurrence in basemap'
+                                            '\nG. Show Box Plot of %s occurrence distance to pokestop'
+                                            '\nH. Show Box Plot of %s occurrence distance to gym'
                                             '\nType \'city\' to select a certain city for more details'
                                             '\nType \'back\' back to previous menu'
                                             '\nType \'quit\' to quit the program'
-                                            '\n>  '%(pokemonList[pokemon_selection],pokemonList[pokemon_selection]))
+                                            '\n>  '%(pokemonList[pokemon_selection],pokemonList[pokemon_selection],pokemonList[pokemon_selection],pokemonList[pokemon_selection]))
                             if third_input.lower() in ['q','quit','bye']:
                                 return (print('\n till Next Time! Goodbye.'))
                             elif third_input.lower() in ['back']:
@@ -161,6 +163,20 @@ def main():
                                 else:
                                     print('\n %s has not appeared in Pokemon Go world yet.'%pokemonList[pokemon_selection])
                                 continue
+                            elif third_input.lower() in ['g','g.','7']:
+                                if hasItAppearedGlobally(largeData, pokemon_selection)==True:
+                                    ans = boxplotPokestop(pokemonwideDataframe(largeData, pokemon_selection))
+                                    continue
+                                else:
+                                    print('\n %s has not appeared in Pokemon Go world yet.'%pokemonList[pokemon_selection])
+                                continue
+                            elif third_input.lower() in ['h','h.','8']:
+                                if hasItAppearedGlobally(largeData, pokemon_selection)==True:
+                                    ans = boxplotGym(pokemonwideDataframe(largeData, pokemon_selection))
+                                    continue
+                                else:
+                                    print('\n %s has not appeared in Pokemon Go world yet.'%pokemonList[pokemon_selection])
+                                continue
                             elif third_input.lower() in ['city']:                                city_selection = userChoice.select_city(cityList)
                                 if city_selection == 'Wish you luck in pokemon world, goodbye':
                                     return (print('\n till Next Time! Goodbye.'))
@@ -176,9 +192,11 @@ def main():
                                             '\nC. Show the pokemons whom it was often observed together with, in %s'
                                             '\nD. Show distribution of its appearance time of the day in pie chart, in %s'
                                             '\nE. Show scatterplot of windspeed and temperature relationship, in %s'
+                                            '\nF. Show Box Plot of %s occurrence distance to pokestop in %s'
+                                            '\nG. Show Box Plot of %s occurrence distance to gym in %s'
                                             '\nType \'back\' back to previous menu'
                                             '\nType \'quit\' to quit the program'
-                                            '\n>  '%(pokemonList[pokemon_selection],city_selection,city_selection, city_selection,city_selection,city_selection,city_selection))
+                                            '\n>  '%(pokemonList[pokemon_selection],city_selection,city_selection, city_selection,city_selection,city_selection,city_selection,pokemonList[pokemon_selection],city_selection,pokemonList[pokemon_selection],city_selection))
                                         if fourth_input.lower() in ['q','quit','bye']:
                                             return (print('\n till Next Time! Goodbye.'))
                                         elif fourth_input.lower() in ['back']:
@@ -210,6 +228,20 @@ def main():
                                             continue
                                         elif fourth_input.lower() in ['e','e.','5']:
                                             ans = temp_windspeed_relation(largeData, city_selection)
+                                            continue
+                                        elif third_input.lower() in ['f','f.','6']:
+                                            if hasItAppearedGlobally(citywideDataframe(largeData,city_selection), pokemon_selection)==True:
+                                                ans = boxplotPokestop(pokemonwideDataframe(citywideDataframe(largeData,city_selection), pokemon_selection))
+                                                continue
+                                            else:
+                                                print('\n %s has not appeared in %s yet.'%(pokemonList[pokemon_selection],city_selection))
+                                            continue
+                                        elif third_input.lower() in ['g','g.','7']:
+                                            if hasItAppearedGlobally(citywideDataframe(largeData,city_selection), pokemon_selection)==True:
+                                                ans = boxplotGym(pokemonwideDataframe(citywideDataframe(largeData,city_selection), pokemon_selection))
+                                                continue
+                                            else:
+                                                print('\n %s has not appeared in %s yet.'%(pokemonList[pokemon_selection],city_selection))
                                             continue
                         continue
                     else:
