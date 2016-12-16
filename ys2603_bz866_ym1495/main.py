@@ -20,7 +20,7 @@ def main():
     largeData = Data.largeData
     while True:
         '''
-        To start
+        The first level input tells the program to start or quit
             '''
         main_input = input('\nPlease enter \'pokemon\' to start main program.\n'
                             'Please enter \'quit\' at anytime to quit the program.'
@@ -28,6 +28,9 @@ def main():
         if main_input.lower() in ['q','quit','bye']:
             break
         elif main_input.lower() in ['pokemon']:
+            '''
+            To start with, select a pokemon of your choice. And print basic statistics about this pokemon
+            '''
             pokemon_selection = userChoice.select_pokemon(pokemonList)
             if pokemon_selection =='Wish you luck in pokemon world. Goodbye':
                 return (print('\n till Next Time! Goodbye.'))
@@ -36,6 +39,9 @@ def main():
                 print('\n You have selected No.%d %s. Its a %s and %s type pokemon.'
                     'Its Combat Power is %d and its Health Power is %d.'%(pokemon_selection, pokemonList[pokemon_selection],basic_info.pokemonType1,basic_info.pokemonType2,basic_info.pokemonMaxCP,basic_info.pokemonMaxHP))
                 while True:
+                    '''
+                    The second menu asks user to select basic info or pokemon go info
+                    '''
                     secondary_input = input('\nYou have selected No.%d %s.'
                                             '\nWhat do you want to know about it?'
                                             '\nPlease enter \'basic info\' for basic info,'
@@ -48,6 +54,9 @@ def main():
                         break
                     elif secondary_input.lower() in ['basic info','basicinfo','basic information','information']:                    
                         while True:
+                            '''
+                            The Basic Info menu asks user to select basic info function
+                            '''
                             third_input = input('\nYou have selected basic info about %s'
                                             '\nPlease select a function we have here'
                                             '\nA. Show its overall CP ranking/percentile/mean' 
@@ -90,6 +99,10 @@ def main():
                                 continue
                     elif secondary_input.lower() in ['go','pokemongo','pokemon go','game info']:
                         while True:
+                            '''
+                            The Pokemon Go Info menu asks user to select pokemon go info function
+                            Moreover, user can select a certain city for info about this city
+                            '''
                             third_input = input('\nYou have selected pokemon go info about %s'
                                             '\nPlease select a function we have here'
                                             '\nA. Show whether people have seen it in pokemon go' 
@@ -148,12 +161,14 @@ def main():
                                 else:
                                     print('\n %s has not appeared in Pokemon Go world yet.'%pokemonList[pokemon_selection])
                                 continue
-                            elif third_input.lower() in ['city']:
-                                city_selection = userChoice.select_city(cityList)
+                            elif third_input.lower() in ['city']:                                city_selection = userChoice.select_city(cityList)
                                 if city_selection == 'Wish you luck in pokemon world, goodbye':
                                     return (print('\n till Next Time! Goodbye.'))
                                 else:
                                     while True:
+                                        '''
+                                            After selecting a city, offer functions user can use
+                                            '''
                                         fourth_input = input('\nYou have selected pokemon go info about %s and %s'
                                             '\nPlease select a function we have here'
                                             '\nA. Show whether people have seen it, in %s' 
