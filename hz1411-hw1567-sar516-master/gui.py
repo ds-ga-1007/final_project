@@ -883,7 +883,13 @@ class Museums(tk.Frame):
 def main():
     try:
         app = GUI()
+        def on_closing():
+            if messagebox.askokcancel("Quit", "Do you want to quit?"):
+                #app.destroy()
+                quit()
+        app.protocol("WM_DELETE_WINDOW", on_closing)
         app.mainloop()
+        #app.mainloop()
     except KeyboardInterrupt:
         print('Control-C exiting')
         sys.exit()
