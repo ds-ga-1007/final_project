@@ -113,10 +113,12 @@ def main():
                                             '\nF. Show World Map of %s occurrence in basemap'
                                             '\nG. Show Box Plot of %s occurrence distance to pokestop'
                                             '\nH. Show Box Plot of %s occurrence distance to gym'
+                                            '\nI. Show Line Chart of all pokemons occurence freq vs hour of day'
+                                            '\nJ. Show Line Chart of %s occurence freq vs hour of day'
                                             '\nType \'city\' to select a certain city for more details'
                                             '\nType \'back\' back to previous menu'
                                             '\nType \'quit\' to quit the program'
-                                            '\n>  '%(pokemonList[pokemon_selection],pokemonList[pokemon_selection],pokemonList[pokemon_selection],pokemonList[pokemon_selection]))
+                                            '\n>  '%(pokemonList[pokemon_selection],pokemonList[pokemon_selection],pokemonList[pokemon_selection],pokemonList[pokemon_selection],pokemonList[pokemon_selection]))
                             if third_input.lower() in ['q','quit','bye']:
                                 return (print('\n till Next Time! Goodbye.'))
                             elif third_input.lower() in ['back']:
@@ -177,6 +179,16 @@ def main():
                                 else:
                                     print('\n %s has not appeared in Pokemon Go world yet.'%pokemonList[pokemon_selection])
                                 continue
+                            elif third_input.lower() in ['i','i.','9']:
+                                ans = appearline_according_hour(largeData)
+                                continue
+                            elif third_input.lower() in ['j','j.','10']:
+                                if hasItAppearedGlobally(largeData, pokemon_selection)==True:
+                                    ans = appearline_according_hour(pokemonwideDataframe(largeData, pokemon_selection))
+                                    continue
+                                else:
+                                    print('\n %s has not appeared in Pokemon Go world yet.'%pokemonList[pokemon_selection])
+                                continue
                             elif third_input.lower() in ['city']:                                
                                 city_selection = userChoice.select_city(cityList)
                                 if city_selection == 'Wish you luck in pokemon world, goodbye':
@@ -195,9 +207,11 @@ def main():
                                             '\nE. Show scatterplot of windspeed and temperature relationship, in %s'
                                             '\nF. Show Box Plot of %s occurrence distance to pokestop in %s'
                                             '\nG. Show Box Plot of %s occurrence distance to gym in %s'
+                                            '\nH. Show Line Chart of all pokemons occurence freq vs hour of day in %s'
+                                            '\nI. Show Line Chart of %s occurence freq vs hour of day in %s'
                                             '\nType \'back\' back to previous menu'
                                             '\nType \'quit\' to quit the program'
-                                            '\n>  '%(pokemonList[pokemon_selection],city_selection,city_selection, city_selection,city_selection,city_selection,city_selection,pokemonList[pokemon_selection],city_selection,pokemonList[pokemon_selection],city_selection))
+                                            '\n>  '%(pokemonList[pokemon_selection],city_selection,city_selection, city_selection,city_selection,city_selection,city_selection,pokemonList[pokemon_selection],city_selection,pokemonList[pokemon_selection],city_selection, city_selection,pokemonList[pokemon_selection],city_selection))
                                         if fourth_input.lower() in ['q','quit','bye']:
                                             return (print('\n till Next Time! Goodbye.'))
                                         elif fourth_input.lower() in ['back']:
@@ -243,6 +257,16 @@ def main():
                                                 continue
                                             else:
                                                 print('\n %s has not appeared in %s yet.'%(pokemonList[pokemon_selection],city_selection))
+                                            continue
+                                        elif third_input.lower() in ['h','h.','8']:
+                                            ans = appearline_according_hour(citywideDataframe(largeData,city_selection))
+                                            continue
+                                        elif third_input.lower() in ['i','i.','9']:
+                                            if hasItAppearedGlobally(citywideDataframe(largeData,city_selection), pokemon_selection)==True:
+                                                ans = appearline_according_hour(pokemonwideDataframe(citywideDataframe(largeData,city_selection), pokemon_selection))
+                                                continue
+                                            else:
+                                                print('\n %s has not appeared in Pokemon Go world yet.'%pokemonList[pokemon_selection])
                                             continue
                         continue
                     else:
