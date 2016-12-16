@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html>
+<title>W3.CSS</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+body, h1,h2,h3,h4,h5,h6 {font-family: "Montserrat", sans-serif}
+.w3-row-padding img {margin-bottom: 12px}
+/* Set the width of the sidenav to 120px */
+.w3-sidenav {width: 120px;background: #255;}
+/* Add a left margin to the "page content" that matches the width of the sidenav (120px) */
+#main {margin-left: 120px}
+/* Remove margins from "page content" on small screens */
+@media only screen and (max-width: 600px) {#main {margin-left: 0}}
+</style>
+<body class="w3-light-grey">
+
+<!-- Icon Bar (Sidenav - hidden on small screens) -->
+<nav class="w3-sidenav w3-yellow w3-center w3-small w3-hide-small">
+  <!-- Avatar image in top left corner -->
+  <a class="w3-padding-large w3-hover-light-grey" href="#home">
+    <i class="fa fa-home w3-xxlarge w3-text-dark-grey"></i>
+    <p class="w3-text-dark-grey">HOME</p>
+  <a class="w3-padding-large w3-hover-light-grey" href="#chart">
+    <i class="fa fa-area-chart w3-xxlarge w3-text-dark-grey"></i>
+    <p class="w3-text-dark-grey">HEAT CHART</p>
+  </a>
+  <a class="w3-padding-large w3-hover-light-grey" href="#map">
+    <i class="fa fa-map w3-xxlarge w3-text-dark-grey"></i>
+    <p class="w3-text-dark-grey">GEO HEAT MAP</p>
+  </a>
+  <a class="w3-padding-large w3-hover-light-grey " href="#about">
+    <i class="fa fa-info-circle w3-xxlarge w3-text-dark-grey"></i>
+    <p class="w3-text-dark-grey">ABOUT</p>
+  </a>
+</nav>
+
+<!-- Page Content -->
+<div class="w3-padding-large" id="main">
+  <!-- Header/Home -->
+  <header class="w3-container w3-padding-32 w3-center w3-light-grey" id="home">
+    <h1 class="w3-xxlarge w3-text-orange">Visualizing the effects of vaccines</h1>
+    <p class="w3-text-dark-grey">On the prevalence of infectious diseases in America</p>
+    <img src="vaccine_icon.png" class="w3-image" width="700" height="782">
+  </header>
+
+  <!-- Heat Chart Section -->
+  <div class="w3-content w3-justify w3-text-grey w3-padding-64" id="chart">
+    <h2 class="w3-text-dark-grey">Visualizing through heat chart</h2>
+    <p>
+    Vaccinations greatly reduced the prevalence of diseases and the low price of vaccines continues to improve the
+    health of millions around the world. To see how we are benefiting from vaccinations it is necessary to compare the
+    suffering before and after the introduction of the vaccine. This is why we have created visualizations of the prevalence of
+    six different infectious diseases in each state before and after the introduction of vaccine. Click on each tab to view a
+    heat chart of the distribution of the disease in the 20th century. The black line represents the year in which the vaccine was introduced.
+    </p>
+    <!-- Grid for choosing diseases -->
+    <div class="w3-row">
+      <div class="w3-col w3-third w3-white w3-container">
+        <center><button class="w3-btn w3-white" onclick="hc1('heatchart');" id="myBtn">Measles</button></center>
+      </div>
+      <div class="w3-col w3-third w3-grey w3-container">
+        <center><button class="w3-btn w3-grey" onclick="hc2('heatchart');" id="myBtn">Hepatitis A</button></center>
+      </div>
+      <div class="w3-col w3-third w3-white w3-container">
+       <center><button class="w3-btn w3-white" onclick="hc3('heatchart');" id="myBtn">Mumps</button></center>
+      </div>
+    </div>
+    <div class="w3-row">
+      <div class="w3-col w3-third w3-grey w3-container">   
+        <center><button class="w3-btn w3-grey" onclick="hc4('heatchart');" id="myBtn">Poliomyelitis</button></center>
+      </div>
+      <div class="w3-col w3-third w3-white w3-container">
+        <center><button class="w3-btn w3-white" onclick="hc5('heatchart');" id="myBtn">Rubella</button></center>
+      </div>
+      <div class="w3-col w3-third w3-grey w3-container">
+        <center><button class="w3-btn w3-grey" onclick="hc6('heatchart');" id="myBtn">Smallpox</button></center>
+      </div>
+    </div>
+    <!-- End Grid for choosing diseases -->
+    <div class="w3-row w3-padding-bottom" >
+      <center><img id="heatchart" src="Measles_c.jpg" class="w3-image" width="992" height="1107"></center>
+    </div>
+  </div>   
+  <!-- End Heat Chart Section -->
+    
+    
+  <!-- Geo Map Section -->
+  <div class="w3-content w3-justify w3-text-grey w3-padding-64" id="map">
+    <h2 class="w3-text-dark-grey">Visualizing through geo heat maps</h2>
+    <p>
+       Another way of visualizing the prevalence of infectious diseases is through geographical maps that are colored
+    with respect to the density of infected population in each state. Deeper color represents higher density. The maps that
+    represent pre-vaccine density and post-vaccine density are shown together to illustrate the difference made by the introduction of the vaccine.
+    </p>
+    <!-- Grid for choosing diseases -->
+    <div class="w3-row">
+      <div class="w3-col w3-third w3-white w3-container">
+        <center><button class="w3-btn w3-white" onclick="gm1('prevac','postvac');" id="myBtn">Measles</button></center>
+      </div>
+      <div class="w3-col w3-third w3-grey w3-container">
+        <center><button class="w3-btn w3-grey" onclick="gm2('prevac','postvac');" id="myBtn">Hepatitis A</button></center>
+      </div>
+      <div class="w3-col w3-third w3-white w3-container">
+       <center><button class="w3-btn w3-white" onclick="gm3('prevac','postvac');" id="myBtn">Mumps</button></center>
+      </div>
+    </div>
+    <div class="w3-row">
+      <div class="w3-col w3-third w3-grey w3-container">   
+        <center><button class="w3-btn w3-grey" onclick="gm4('prevac','postvac');" id="myBtn">Poliomyelitis</button></center>
+      </div>
+      <div class="w3-col w3-third w3-white w3-container">
+        <center><button class="w3-btn w3-white" onclick="gm5('prevac','postvac');" id="myBtn">Rubella</button></center>
+      </div>
+      <div class="w3-col w3-third w3-grey w3-container">
+        <center><button class="w3-btn w3-grey" onclick="gm6('prevac','postvac');" id="myBtn">Smallpox</button></center>
+      </div>
+    </div>
+    <!-- End Grid for choosing diseases -->
+    <div class="w3-row">
+     <div class="w3-col w3-half w3-lightgrey w3-container">
+      <div class="w3-light-grey w3-padding-24">
+        <center><p class="w3-text-grey">Pre-vaccine</p></center>
+      </div>
+      <center><img id="prevac" src="measles_pre.png" class="w3-image" width="992" height="1107"></center>
+     </div>
+     <div class="w3-col w3-half w3-lightgrey w3-container">
+      <div class="w3-light-grey w3-padding-24">
+        <center><p class="w3-text-grey">Post-vaccine</p></center>
+      </div>
+      <center><img id="postvac" src="measles_post.png" class="w3-image" width="992" height="1107"></center>
+     </div>
+    </div>
+    
+    
+    
+    
+    
+  </div>
+  <!-- End Geo Map Section -->
+  
+  
+  <!-- About Section -->
+  <div class="w3-padding-64 w3-content w3-text-grey" id="about">
+    <h2 class="w3-text-dark-grey">About this team</h2>
+    <hr style="width:200px" class="w3-opacity">
+
+    <div class="w3-section">
+      <p><i class="fa fa-users fa-fw w3-text-white w3-xxlarge w3-margin-right"></i> Team members: Zhiqi Guo (zg475), Lei Xu (lx557), Yanli Zhou (yz1349)</p>
+      <p><i class="fa fa-envelope fa-fw w3-text-white w3-xxlarge w3-margin-right"> </i> Email us: yanlizhou@nyu.edu</p>
+    </div>
+  </div> 
+  <!-- End About Section -->
+  
+  
+    <!-- Footer -->
+  <footer class="w3-content w3-padding-64 w3-text-grey w3-xlarge">
+    <i class="fa fa-facebook-official w3-hover-text-indigo"></i>
+    <i class="fa fa-instagram w3-hover-text-purple"></i>
+    <i class="fa fa-snapchat w3-hover-text-yellow"></i>
+    <i class="fa fa-pinterest-p w3-hover-text-red"></i>
+    <i class="fa fa-twitter w3-hover-text-light-blue"></i>
+    <i class="fa fa-linkedin w3-hover-text-indigo"></i>
+  <!-- End footer -->
+  </footer>
+
+<!-- END PAGE CONTENT -->
+</div>
+<script>
+// Toggle between hiding and showing blog replies/comments
+document.getElementById("myBtn").click();
+function hc1(id) {
+    var x = document.getElementById(id);
+    x.src = "Measles_c.jpg";
+    if (x.className.indexOf("w3-show") == -1) {
+        x.className += " w3-show";
+        }
+}
+function hc2(id) {
+    var x = document.getElementById(id);
+    x.src = "Hepatitis_A_c.jpg";
+    if (x.className.indexOf("w3-show") == -1) {
+        x.className += " w3-show";
+        }
+}
+function hc3(id) {
+    var x = document.getElementById(id);
+    x.src = "Mumps_c.jpg";
+    if (x.className.indexOf("w3-show") == -1) {
+        x.className += " w3-show";
+        }
+}
+function hc4(id) {
+    var x = document.getElementById(id);
+    x.src = "Polio_c.jpg";
+    if (x.className.indexOf("w3-show") == -1) {
+        x.className += " w3-show";
+        }
+}
+function hc5(id) {
+    var x = document.getElementById(id);
+    x.src = "Rubella_c.jpg";
+    if (x.className.indexOf("w3-show") == -1) {
+        x.className += " w3-show";
+        }
+}
+function hc6(id) {
+    var x = document.getElementById(id);
+    x.src = "Smallpox_c.jpg";
+    if (x.className.indexOf("w3-show") == -1) {
+        x.className += " w3-show";
+        }
+}
+function gm1(id1,id2) {
+    var x = document.getElementById(id1);
+    var y = document.getElementById(id2);
+    x.src = "measles_pre.png";
+    y.src = "measles_post.png";
+    if (x.className.indexOf("w3-show") == -1) {
+        x.className += " w3-show";
+        }
+    if (y.className.indexOf("w3-show") == -1) {
+        y.className += " w3-show";
+        }
+}
+function gm2(id1,id2) {
+    var x = document.getElementById(id1);
+    var y = document.getElementById(id2);
+    x.src = "hepa_pre.png";
+    y.src = "hepa_post.png";
+    if (x.className.indexOf("w3-show") == -1) {
+        x.className += " w3-show";
+        }
+    if (y.className.indexOf("w3-show") == -1) {
+        y.className += " w3-show";
+        }
+}
+function gm3(id1,id2) {
+    var x = document.getElementById(id1);
+    var y = document.getElementById(id2);
+    x.src = "mumps_pre.png";
+    y.src = "mumps_post.png";
+    if (x.className.indexOf("w3-show") == -1) {
+        x.className += " w3-show";
+        }
+    if (y.className.indexOf("w3-show") == -1) {
+        y.className += " w3-show";
+        }
+}
+function gm4(id1,id2) {
+    var x = document.getElementById(id1);
+    var y = document.getElementById(id2);
+    x.src = "polio_pre.png";
+    y.src = "polio_post.png";
+    if (x.className.indexOf("w3-show") == -1) {
+        x.className += " w3-show";
+        }
+    if (y.className.indexOf("w3-show") == -1) {
+        y.className += " w3-show";
+        }
+}
+function gm5(id1,id2) {
+    var x = document.getElementById(id1);
+    var y = document.getElementById(id2);
+    x.src = "rubella_pre.png";
+    y.src = "rubella_post.png";
+    if (x.className.indexOf("w3-show") == -1) {
+        x.className += " w3-show";
+        }
+    if (y.className.indexOf("w3-show") == -1) {
+        y.className += " w3-show";
+        }
+}
+function gm6(id1,id2) {
+    var x = document.getElementById(id1);
+    var y = document.getElementById(id2);
+    x.src = "smallpox_pre.png";
+    y.src = "smallpox_post.png";
+    if (x.className.indexOf("w3-show") == -1) {
+        x.className += " w3-show";
+        }
+    if (y.className.indexOf("w3-show") == -1) {
+        y.className += " w3-show";
+        }
+}
+</script>
+</body>
+</html>
+
