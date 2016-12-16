@@ -63,6 +63,15 @@ We're done setting things up! What a relief.
 
 ## Interaction
 
+The top-level `commentary.py` serves as our program's driver. After my own data analysis and visualization on the Reddit comments dataset, program control state is handed to the user via interactive prompts.
+
+The interactive component is designed to (ideally) be fairly self-explanatory, however, the general idea is that we repeat a loop (until our user has had enough) that cycles through:
+
+1. **Selecting what variables/features our user is interested in exploring/analyzing.** This allows us to isolate the most relevant parts of the problem and, along with reducing the computational overhead of moving data around, can give us insight as to what the user is expecting to explore.
+
+2. **Performing transformations, aggregations, and summarizations on our data.** *TODO*
+
+3. **Visualizing or otherwise communicating to the analysis driver the results of their analysis.** *TODO*
 
 ## Requirements
 
@@ -70,9 +79,9 @@ The [final project instructions](https://docs.google.com/document/d/1y-bkl-7pmlv
 
 1. **Loading a non-trivial dataset into pandas objects (DataFrame and Series)** Yes! Please see the [data preprocessing](#data) work I've done, as well as the `load_reddit_data()` data ingestion method in `commentary.py`.
 
-2. **Perform some kind of meaningful analysis of the data using pandas and/or NumPy computational and data analysis tools.** 
+2. **Perform some kind of meaningful analysis of the data using pandas and/or NumPy computational and data analysis tools.** TODO
 
-3. **Display the results of the analysis using matplotlib.**
+3. **Display the results of the analysis using matplotlib.** TODO
 
 4. **Allow the user to interactively control the analysis and display of the data.**
 
@@ -84,7 +93,6 @@ The [final project instructions](https://docs.google.com/document/d/1y-bkl-7pmlv
 	- Datasets are under the project's `data` directory. Again, please see the [next section](#data) to learn more about data sourcing, preparation, and processing.
 	- Documentation takes the form of this `README` and the inline code comments used to clarify what any particular code block is doing.
 	- I'm a team of one, so that takes care of the NetID situation :)
-
 
 ## Data
 
