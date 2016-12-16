@@ -127,7 +127,7 @@ def co_occurance (dataframe, ID_input):
     return:
         top five pokemons that co-occur with the user-requested pokemon' ID(list)
     '''
-    data = pokemonwideDataframe(dataframe, ID_input)
+    data = dataframe.loc[dataframe['pokemonId']==ID_input]
     freq_list = []
     result = []
     for i in range(1,152):
@@ -135,10 +135,9 @@ def co_occurance (dataframe, ID_input):
         freq = sum(data[col_name])
         freq_list.append(freq)
     maxfive = sort(freq_list)[-5:]
-    freq_list = np.array(freq_list)
     for i in range(1,6):
-        item_index = np.where(freq_list==maxfive[-i])
-        result.append(int(item_index[0]))
+        a = freq_list.index(maxfive[-i])
+        result.append(a)
     return result
 
 def temp_windspeed_relation(dataframe, city_input):
