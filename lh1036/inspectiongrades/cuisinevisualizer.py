@@ -89,10 +89,10 @@ class CuisineGrades(Visualizer):
     def timeseries_best_and_worst(self):
         '''
         Timeseries of inspection scores for the best and worst restaurants in this zip
-        Restricted to restaurants with at least 10 inspections (to exclude outliers)
+        Restricted to restaurants with at least 12 inspections (to exclude outliers)
         Remember, lower is better! Higher score = more violations = dirty restaurant
         '''
-        min_inspections = 10
+        min_inspections = 12
         
         best_data, worst_data, = self.get_best_and_worst_data(min_inspections)
         best_name, worst_name = self.get_best_and_worst_names(min_inspections)

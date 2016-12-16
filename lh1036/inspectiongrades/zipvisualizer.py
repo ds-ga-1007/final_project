@@ -60,6 +60,8 @@ class ZipGrades(Visualizer):
         '''
         grouped = self.group_scores_by_category()
         grouped.score.plot(kind = "barh")
+        plt.subplots_adjust(left = 0.3)
+        
         plt.xlabel("Inspection Violation Scores")
         plt.ylabel("Cuisine")
         plt.title("Mean Inspection Violations for Cuisine Categories in {}".format(self.zipcode))

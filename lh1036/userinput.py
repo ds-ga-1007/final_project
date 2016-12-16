@@ -129,7 +129,8 @@ def validate_restaurant_name(input_name, restaurant_data, min_rows = 2):
     Validate that user input is a valid restaurant that appears in restaurant_data
     Raises InvalidRestaurantNameError if (1) input is not in data or 
     (2) input is invalid type (e.g. an int)
-    Note: I exclude restaurants that have only had 1 inspection
+    Note: I exclude restaurants that have had fewer than 2 inspection records
+    (multiple inspection records are sometimes generated in a single inspection)
     '''
     
     try:
