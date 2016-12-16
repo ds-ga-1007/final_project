@@ -250,7 +250,7 @@ def appearline_according_hour(dataframe):
     Output:
         Image of Distribution of pokemons all over the day
     '''
-    datatime = data_origin['appearedLocalTime']
+    datatime = dataframe['appearedLocalTime']
     linechart_xvalue = np.arange(1,25)
     linechart_yvalue = []
     hourdata = [] 
@@ -268,4 +268,4 @@ def appearline_according_hour(dataframe):
     plt.savefig('Distribution of pokemons all over the day',dpi = 300)
     plt.show()
     plt.close()
-    return print('Image is saved as Distribution of pokemons all over the day')
+    return print('\n Image is saved as Distribution of pokemons all over the day \n Distribution of pokemons all over the day.png')
