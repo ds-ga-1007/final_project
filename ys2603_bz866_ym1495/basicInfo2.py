@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 from pylab import *
 from collections import Counter
 import collections
+from mpl_toolkits.basemap import Basemap
 
 
 '''
@@ -157,18 +158,20 @@ def temp_windspeed_relation(dataframe, city_input):
     plt.savefig('Relationship between temperature and windspeed of ' + str(city_input), dpi = 300)
     plt.show()
     plt.close()
-    return print('The image of relationship between temperature and windspeed is saved as'
-                 + 'Relationship between temperature and windspeed of ' + str(city_input))
+    return print('\n The image of relationship between temperature and windspeed is saved in'
+                 '\n Relationship between temperature and windspeed of %s.png' %str(city_input))
 
 
 # --- Build Map ---
-from mpl_toolkits.basemap import Basemap
-import matplotlib.pyplot as plt
-import numpy as np
 def worldmap(dataframe):
-    lats = np.array(data_origin['latitude'])
-    lons = np.array(data_origin['longitude'])                                        
-
+    '''
+    input:
+        dataframe could be the whole dataframe, or a pokemonwideDataframe
+    return:
+        the world map of pokemon occurrence in the past records
+    '''
+    lats = np.array(dataframe['latitude'])
+    lons = np.array(dataframe['longitude'])                                        
     eq_map = Basemap(projection='robin', resolution = 'l', area_thresh = 1000.0,
                   lat_0=0, lon_0=-130)
     eq_map.drawcoastlines()
@@ -180,7 +183,8 @@ def worldmap(dataframe):
 
     x,y = eq_map(lons, lats)
     eq_map.plot(x, y, 'ro', markersize=6)
-
+    plt.title('World Map of pokemons occurence')
+    plt.savefig('World Map of pokemons occurence', dpi = 300)
     plt.show()
     plt.close()
-    return print('')
+    return print('\n The World Map of pokemon appearance around the world is saved in \n World Map of pokemons occurence.png')
