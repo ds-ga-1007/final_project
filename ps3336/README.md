@@ -40,6 +40,6 @@ This is easy!
 ```bash
 python final_project.py
 ```
-After entering into the program, it will allow you to input and interact to conduct your own analysis. The main menu will allow you to choose from Year, Club and Position to start your analysis. Then you can follow the pop-up hint to input your query. Each time you want to visualize the result, you will be asked if you want to save the plots of result. If you enter 'y', then the plot will be saved to your working directory automatically. Each time you finish a analysis task or enter a wrong input, you will be braught back to the main menu and you can start all over again. You can type "quit" or use any key board interruption to quit the entire program any time you want. 
+After entering into the program, it will allow you to input and interact to conduct your own analysis. The main menu will allow you to choose from Year, Club and Position to start your analysis. Then you can follow the pop-up hint to input your query. Each time you want to visualize the result, you will be asked if you want to save the plots of result. If you enter 'y', then the plot will be saved to your working directory automatically. Remember to close the plot window so that you can move on with your other explorations. Each time you finish a analysis task or enter a wrong input, you will be given a chance to input another again until your input is accepted. Remember to follow the instrction shown. You can type "quit" or use any key board interruption to quit the entire program any time you want. 
 
 ## Enjoy our tools!
