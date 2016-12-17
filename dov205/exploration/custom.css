@@ -1,0 +1,95 @@
+<style>
+
+    /*
+        This file defines any custom CSS we would like to apply towards
+        a Jupyter markdown cell. This is helpful when we want to make
+        a clear visual distinction between different text boxes and
+        regular ol' code. Feel free to change it/distribute as you'd like.
+
+        Note: I am, most likely, the worst web designer to ever touch
+        a stylesheet. You have been warned.
+
+        Sources:
+
+            OpenIntro's custom.css file
+            URL: https://github.com/andrewpbray/oiLabs-base-R/blob/master/lab.css
+
+            TODO proper Bootstrap colors!
+            URL: http://mdbootstrap.com/css/colors/
+
+            TODO inspect Bootstrap-theme.css
+    */
+
+    div.bootstrap.button {
+        text-shadow: 0 1px 0 #fff;
+    }
+
+    div.lean-success {
+        background-color: #fcf2f2;
+        border-color: #ff0000;
+        border-left: 5px solid #dfb5b4;
+        padding: 0.5em;
+        /*color: #0000ff;*/
+    }
+
+    div.lean-alert {
+        background-color: #fcf2f2;
+        border-color: #dFb5b4;
+        border-left: 5px solid #dfb5b4;
+        padding: 0.5em;
+    }
+
+    div.box-success {
+        /*margin-top: 30px;*/
+        /*margin-bottom: 30px;*/
+        color: rgba(76, 114, 29, 0.8);
+        border:1px solid rgba(76, 114, 29, 0.2);
+        /*padding: 10px 10px;*/
+        padding: 0.5em;
+        background: rgba(76, 114, 29, 0.1);
+        border-radius: 5px;
+    }
+
+    ol {
+        margin-left:0; /* Remove the default left margin */
+        padding-left:0; /* Remove the default left padding */
+    }
+    ol > li {
+        position:relative; /* Create a positioning context */
+        margin:0 0 10px 2em; /* Give each list item a left margin to make room for the numbers */
+        padding:10px 80px; /* Add some spacing around the content */
+        list-style:none; /* Disable the normal item numbering */
+        border-top:2px solid #317EAC;
+        background:rgba(49, 126, 172, 0.1);
+    }
+
+    ol > li:before {
+        content:"Note: ";
+        /*counter(li); !* Use the counter as content *!*/
+        /*counter-increment:li; !* Increment the counter by 1 *!*/
+        /* Position and style the number */
+        position:absolute;
+        top:-2px;
+        left:-2em;
+        -moz-box-sizing:border-box;
+        -webkit-box-sizing:border-box;
+        box-sizing:border-box;
+        width:7em;
+        /* Some space between the number and the content in browsers that support
+           generated content but not positioning it (Camino 2 is one example) */
+        margin-right:8px;
+        padding:4px;
+        border-top:2px solid #317EAC;
+        color:#fff;
+        background:#317EAC;
+        font-weight:bold;
+        font-family:"Helvetica Neue", Arial, sans-serif;
+        text-align:center;
+    }
+
+    li ol,
+    li ul {margin-top:6px;}
+    ol ol li:last-child {margin-bottom:0;}
+
+
+</style>
