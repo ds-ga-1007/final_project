@@ -1,0 +1,33 @@
+Data Analytics and Visualization of NYPD Vehicle Collisions
+User guide
+
+
+Members
+Weiwei Xu (wx433)
+Xinyan Yang (xy975)
+Yaohan Ke (yk1587)
+
+
+Description
+Our program is used to analyze the data of motor vehicle collisions from NYPD. The data set contains 29 features including data, time, borough, etc.
+Our program has 3 part: Overview, Sorting and Casualty Analysis. Use it by clicking on what you want!
+The heatmap function is based on tweets heatmap by Kelsey Jordahl, Enthought in Scipy 2013 geospatial tutorial. See more in github page: https://github.com/kjordahl/SciPy2013.
+
+
+Install
+Please download the final_project repository. In the repository you will find these python files:
+* AccidentAnalysis.py
+* AccidentTrackerApp.py
+* testAnalysis.py
+And 1 data document we need to analyze:
+*NYPD_Motor_Vehicle_Collisions.csv
+The data document may be too large to upload into github. If you can not find it in this repository, you can also download it in https://data.cityofnewyork.us/Public-Safety/NYPD-Motor-Vehicle-Collisions/h9gi-nx95. Please download the csv document.
+
+
+Configure
+To make sure plotting the heatmap successfully, please check whether mpl_toolkits.heatmap are installed. If not, try nconda install basemap in Terminal.
+
+
+Run
+Open AccidentTrackerApp.py. Click ‘load the data’. If you load it successfully, you can see the homepage. Otherwise, please check again if the data NYPD_Motor_Vehicle_Collisions.csv is in the repository.
+Choose what you would like to find by clicking. For example, you can see a heatmap for selected year based on the frequency of the accidents in Overview - Heatmap. You can back to homepage by clicking ‘Back to home’ under the page. You can also exit by clicking ‘Exit’ on the homepage.
