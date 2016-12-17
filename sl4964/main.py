@@ -62,84 +62,70 @@ If you want to provide your own midi file, type 2 and enter.')
 option = input()
 while True:
     if option == '1':
-        baudout('Provide a number between 1 to 28 for your lucky pick from our song library. For example, number 8 is a good start.\n')
+        baudout('Provide a number between 1 to 26 for your lucky pick from our song library.\n')
         input1 = input()
         if input1 == 'quit':
             exit()
         else:
-            #try:
-            song = int(input1) - 1
-            songname = namemap.iloc[song]['MidiName']
-            artist = df_toplot[df_toplot['MidiName']==songname]['Artist'].unique()[0]
-            if namemap.iloc[song]['Prediction'] == 1:
+            try:
+                song = int(input1) - 1
+                songname = namemap.iloc[song]['MidiName']
+                artist = df_toplot[df_toplot['MidiName']==songname]['Artist'].unique()[0]
+                if namemap.iloc[song]['Prediction'] == 1:
         
-                prediction = 'The song you picked is {} by {}. It is influenced more heavily by Jazz than Classical mucic.\n\n'.\
-                format(songname, artist)
-                baudout(prediction)
-                visual_Vel(df_toplot[df_toplot.MidiName == songname], 1)
-                try:
-                    plot(df_toplot[df_toplot['MidiName']==songname]).plot1()
-                except:
-                    pass
-                try:
-                    plot(df_toplot[df_toplot['MidiName']==songname]).plot2()
-                except:
-                    pass
-                try:
-                    plot(df_toplot[df_toplot['MidiName']==songname]).plot3()
-                except:
-                    pass
-                try:
-                    plot(df_toplot[df_toplot['MidiName']==songname]).plot4()
-                except:
-                    pass
-                try:
-                    plot(df_toplot[df_toplot['MidiName']==songname]).plot5()
-                except:
-                    pass
-                try:
-                    plot(df_toplot[df_toplot['MidiName']==songname]).plot6()
-                except:
-                    pass
+                    prediction = 'The song you picked is {} by {}. It is influenced more heavily by Jazz than Classical mucic.\n\n'.\
+                    format(songname, artist)
+                    baudout(prediction)
+                    visual_Vel(df_toplot[df_toplot.MidiName == songname], 1)
+                    try:
+                        plot(df_toplot[df_toplot['MidiName']==songname]).plot1()
+                    except:
+                        pass
+                    try:
+                        plot(df_toplot[df_toplot['MidiName']==songname]).plot2()
+                    except:
+                        pass
+                    try:
+                        plot(df_toplot[df_toplot['MidiName']==songname]).plot3()
+                    except:
+                        pass
+                    try:
+                        plot(df_toplot[df_toplot['MidiName']==songname]).plot4()
+                    except:
+                        pass
+                
                     #Insert plotting function here. Incorporate the prediction  in the plot, using matplotlib.text.Text.
                     #df_to_plot[df_to_plot.MidiName == songname] will give you the dataframe slice for the chosen song.
-                option = letscontinue()
+                    option = letscontinue()
                     
-            else:
-                prediction = 'The song you picked is {} by {}. It is influenced more heavily by Classical than Jazz mucic.\n\n'.\
-                format(songname, artist)
-                baudout(prediction)
-                visual_Vel(df_toplot[df_toplot.MidiName == songname], 0)
-                try:
-                    plot(df_toplot[df_toplot['MidiName']==songname]).plot1() 
-                except:
-                    pass
-                try:
-                    plot(df_toplot[df_toplot['MidiName']==songname]).plot2() 
-                except:
-                    pass
-                try:
-                    plot(df_toplot[df_toplot['MidiName']==songname]).plot3() 
-                except:
-                    pass
-                try:
-                    plot(df_toplot[df_toplot['MidiName']==songname]).plot4() 
-                except:
-                    pass
-                try:
-                    plot(df_toplot[df_toplot['MidiName']==songname]).plot5() 
-                except:
-                    pass
-                try:
-                    plot(df_toplot[df_toplot['MidiName']==songname]).plot6() 
-                except:
-                    pass
+                else:
+                    prediction = 'The song you picked is {} by {}. It is influenced more heavily by Classical than Jazz mucic.\n\n'.\
+                    format(songname, artist)
+                    baudout(prediction)
+                    visual_Vel(df_toplot[df_toplot.MidiName == songname], 0)
+                    try:
+                        plot(df_toplot[df_toplot['MidiName']==songname]).plot1() 
+                    except:
+                        pass
+                    try:
+                        plot(df_toplot[df_toplot['MidiName']==songname]).plot2() 
+                    except:
+                        pass
+                    try:
+                        plot(df_toplot[df_toplot['MidiName']==songname]).plot3() 
+                    except:
+                        pass
+                    try:
+                        plot(df_toplot[df_toplot['MidiName']==songname]).plot4() 
+                    except:
+                        pass
+                
                     #Insert plotting function here. Incorporate the prediction  in the plot, using matplotlib.text.Text.
-                option = letscontinue()
+                    option = letscontinue()
 
 
-            #except:
-                #print(InputError('Invalid input. You have to put in a number from 1 through 28 to pick one out of the 28 songs\
+            except:
+                print(InputError('Invalid input. You have to put in a number from 1 through 26 to pick one out of the 28 songs\
 #included in the library. Type any number from 1 through 28, and hit enter.\n').message)
             
                 
@@ -153,49 +139,45 @@ while True:
             
             if directory == 'quit':
                 break
-            #try:   
-            df_user = midi_to_dataframe(directory, 0).result() #This is the df for plotting
-            feature_user = featureExtract(df_user)
-            if toPredict(feature_user)[0] == 0:
-                prediction = 'The song you picked is influenced more heavily by Classical than Jazz mucic.\n\n'#prediction is the classification result for user input midi file. 1 is Jazz
+            
+            try:
+                  
+                df_user = midi_to_dataframe(directory, 0).result() #This is the df for plotting
+                feature_user = featureExtract(df_user)
+                predict = toPredict(feature_user)[0]
+                if predict == 0:
+                    prediction = 'The song you picked is influenced more heavily by Classical than Jazz mucic.\n\n'#prediction is the classification result for user input midi file. 1 is Jazz
                    #0 is classical.
-            if toPredict(feature_user)[0] == 1:
-                prediction = 'The song you picked is influenced more heavily by Jazz than Classical mucic.\n\n'#
-                       
-            baudout(prediction)
-            visual_Vel(df_user, toPredict(feature_user)[0])
-            try:
-                plot(df_user).plot1()
-            except:
-                pass
-            try:
-                plot(df_user).plot2()
-            except:
-                pass
-            try:
-                plot(df_user).plot3()
-            except:
-                pass
-            try:
-                plot(df_user).plot4()
-            except:
-                pass
-            try:
-                plot(df_user).plot5()
-            except:
-                pass
-            try:
-                plot(df_user).plot6()
-            except:
-                pass
+                if predict == 1:
+                    prediction = 'The song you picked is influenced more heavily by Jazz than Classical mucic.\n\n'#
+                           
+                baudout(prediction)
+                visual_Vel(df_user, toPredict(feature_user)[0])
+                try:
+                    plot(df_user).plot1()
+                except:
+                    pass
+                try:
+                    plot(df_user).plot2()
+                except:
+                    pass
+                try:
+                    plot(df_user).plot3()
+                except:
+                    pass
+                try:
+                    plot(df_user).plot4()
+                except:
+                    pass
+            
                     #Insert plotting function here. Incorporate the prediction  in the plot, using matplotlib.text.Text.
                     #Use df_user as the df for plotting
-            option = letscontinue()
-            if option == 'quit':
-                break
+                option = letscontinue()
+                if option == 'quit':
+                    break
 
-            #except:
-                #baudout(FileError('Unfortunately, the unlikely event happened that your midi file is encoded in a way that cannot be parsed by the program. \n Try entering another midi file path for prediction.\n').message)
+            except:
+                    baudout(FileError('Unfortunately, the unlikely event happened that your midi file is encoded in a way that cannot be parsed by the program. \n Try entering another midi file path for prediction.\n').message)
     elif option == 'quit':
             break
     else: 
