@@ -96,9 +96,9 @@ def gbt_analysis(df):
     if str(key) == 'q':
         print ('program shut down! bye!')
         sys.exit()
-    if not int(key) in np.arange(11):
+    if not int(key) in np.arange(1,11):
         raise wrong_option_exception
-    if int(key) in np.arange(11):
+    if int(key) in np.arange(1,11):
         result = GBT_model(df,key)
         result.gbt_model()
         result.gbt_feat_importance()
